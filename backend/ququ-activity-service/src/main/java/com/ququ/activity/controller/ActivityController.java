@@ -56,20 +56,20 @@ public class ActivityController {
         return Result.success(activityService.create(requireUser(currentUser).getUserId(), request));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:\\d+}")
     public Result<ActivityCreateResponse> updateDraft(@AuthenticationPrincipal CurrentUser currentUser,
                                                       @PathVariable Long id,
                                                       @Valid @RequestBody ActivityUpdateRequest request) {
         return Result.success(activityService.updateDraft(id, requireUser(currentUser).getUserId(), request));
     }
 
-    @PostMapping("/{id}/submit")
+    @PostMapping("/{id:\\d+}/submit")
     public Result<ActivityCreateResponse> submit(@AuthenticationPrincipal CurrentUser currentUser,
                                                  @PathVariable Long id) {
         return Result.success(activityService.submit(id, requireUser(currentUser).getUserId()));
     }
 
-    @PostMapping("/{id}/clone")
+    @PostMapping("/{id:\\d+}/clone")
     public Result<ActivityCreateResponse> cloneActivity(@AuthenticationPrincipal CurrentUser currentUser,
                                                         @PathVariable Long id) {
         return Result.success(activityService.cloneActivity(id, requireUser(currentUser).getUserId()));
@@ -95,7 +95,7 @@ public class ActivityController {
         return Result.success(activityService.registeredActivities(requireUser(currentUser).getUserId(), page, size));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public Result<ActivityDetailResponse> detail(@PathVariable Long id) {
         return Result.success(activityService.detail(id));
     }
@@ -112,25 +112,25 @@ public class ActivityController {
         return Result.success(activityService.tags(category, limit));
     }
 
-    @PostMapping("/{id}/register")
+    @PostMapping("/{id:\\d+}/register")
     public Result<ActivityRegistrationStatusResponse> register(@AuthenticationPrincipal CurrentUser currentUser,
                                                                @PathVariable Long id) {
         return Result.success(activityService.register(id, requireUser(currentUser).getUserId()));
     }
 
-    @DeleteMapping("/{id}/register")
+    @DeleteMapping("/{id:\\d+}/register")
     public Result<ActivityRegistrationStatusResponse> cancelRegistration(@AuthenticationPrincipal CurrentUser currentUser,
                                                                          @PathVariable Long id) {
         return Result.success(activityService.cancelRegistration(id, requireUser(currentUser).getUserId()));
     }
 
-    @GetMapping("/{id}/registration/me")
+    @GetMapping("/{id:\\d+}/registration/me")
     public Result<ActivityRegistrationStatusResponse> myRegistrationStatus(@AuthenticationPrincipal CurrentUser currentUser,
                                                                            @PathVariable Long id) {
         return Result.success(activityService.myRegistrationStatus(id, requireUser(currentUser).getUserId()));
     }
 
-    @GetMapping("/{id}/registrations")
+    @GetMapping("/{id:\\d+}/registrations")
     public Result<List<ActivityRegistrationItemResponse>> registrations(@AuthenticationPrincipal CurrentUser currentUser,
                                                                         @PathVariable Long id) {
         return Result.success(activityService.registrations(id, requireUser(currentUser).getUserId()));
@@ -144,39 +144,39 @@ public class ActivityController {
         return Result.success(Map.of("imageUrl", imageUrl));
     }
 
-    @GetMapping("/{id}/checkin/qrcode")
+    @GetMapping("/{id:\\d+}/checkin/qrcode")
     public Result<ActivityCheckinQrcodeResponse> checkinQrcode(@AuthenticationPrincipal CurrentUser currentUser,
                                                                @PathVariable Long id) {
         return Result.success(activityService.generateCheckinQrcode(id, requireUser(currentUser).getUserId()));
     }
 
-    @PostMapping("/{id}/checkin")
+    @PostMapping("/{id:\\d+}/checkin")
     public Result<ActivityCheckinResponse> checkin(@AuthenticationPrincipal CurrentUser currentUser,
                                                    @PathVariable Long id,
                                                    @Valid @RequestBody ActivityCheckinRequest request) {
         return Result.success(activityService.checkin(id, requireUser(currentUser).getUserId(), request));
     }
 
-    @PostMapping("/{id}/summary")
+    @PostMapping("/{id:\\d+}/summary")
     public Result<ActivitySummaryResponse> publishSummary(@AuthenticationPrincipal CurrentUser currentUser,
                                                           @PathVariable Long id,
                                                           @Valid @RequestBody ActivitySummaryRequest request) {
         return Result.success(activityService.publishSummary(id, requireUser(currentUser).getUserId(), request));
     }
 
-    @GetMapping("/{id}/summary")
+    @GetMapping("/{id:\\d+}/summary")
     public Result<ActivitySummaryResponse> summary(@PathVariable Long id) {
         return Result.success(activityService.summary(id));
     }
 
-    @PostMapping("/{id}/comments")
+    @PostMapping("/{id:\\d+}/comments")
     public Result<ActivityCommentResponse> publishComment(@AuthenticationPrincipal CurrentUser currentUser,
                                                           @PathVariable Long id,
                                                           @Valid @RequestBody ActivityCommentRequest request) {
         return Result.success(activityService.publishComment(id, requireUser(currentUser).getUserId(), request));
     }
 
-    @GetMapping("/{id}/comments")
+    @GetMapping("/{id:\\d+}/comments")
     public Result<PageResult<ActivityCommentResponse>> comments(@PathVariable Long id,
                                                                 @RequestParam(defaultValue = "1") Integer page,
                                                                 @RequestParam(defaultValue = "10") Integer size) {

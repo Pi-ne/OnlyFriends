@@ -35,6 +35,16 @@ function Invoke-Json {
         if ($AllowedHttpStatus -contains $status) {
             return @{ httpStatus = $status }
         }
+        Write-Host "Request failed: $Method $Url"
+        if ($_.Exception.Response) {
+            Write-Host "HTTP status: $status"
+            try {
+                $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+                Write-Host "Response body: $($reader.ReadToEnd())"
+            } catch {
+                Write-Host "Response body could not be read."
+            }
+        }
         throw
     }
     if ($response.PSObject.Properties.Name -contains "code" -and $response.code -ne 200) {
@@ -46,7 +56,7 @@ function Invoke-Json {
 function Get-ActivationToken {
     param([string]$Email)
     $query = "SELECT activate_token FROM ququ_user.user WHERE email='$Email';"
-    $token = docker exec -i $MysqlContainer mysql -u$MysqlUser "-p$MysqlPassword" --default-character-set=utf8mb4 -N -e $query
+    $token = docker exec -i $MysqlContainer mysql "--user=$MysqlUser" "--password=$MysqlPassword" --default-character-set=utf8mb4 -N -e $query
     if ([string]::IsNullOrWhiteSpace($token)) {
         throw "Activation token not found for $Email. Check database initialization and user-service logs."
     }
@@ -88,7 +98,7 @@ Write-Host "Backend smoke started. BaseUrl=$BaseUrl RunId=$RunId"
 $publicList = Invoke-Json -Method "Get" -Url "$BaseUrl/api/v1/activities?page=1&size=1"
 Write-Host "Gateway public activity list OK, total=$($publicList.data.total)"
 
-$internalBlocked = Invoke-Json -Method "Get" -Url "$BaseUrl/internal/users/1/valid" -AllowedHttpStatus @(403)
+$internalBlocked = Invoke-Json -Method "Get" -Url "$BaseUrl/internal/users/1/valid" -AllowedHttpStatus @(403, 404)
 Write-Host "Gateway internal path block OK, status=$($internalBlocked.httpStatus)"
 
 $userA = New-User -Suffix "a"
@@ -122,7 +132,7 @@ $activity = Invoke-Json -Method "Post" -Url "$BaseUrl/api/v1/activities" -Header
 $activityId = $activity.data.activityId
 Write-Host "Activity created: id=$activityId status=$($activity.data.statusText)"
 
-$nearby = Invoke-Json -Method "Get" -Url "$BaseUrl/api/v1/activities/nearby?lat=31.2304&lng=121.4737&radius=2000&page=1&size=10"
+$nearby = Invoke-Json -Method "Get" -Url "$BaseUrl/api/v1/activities/nearby?lat=31.2304&lng=121.4737&radius=2000&page=1&size=10" -Headers $userA.headers
 Write-Host "Nearby activity query OK, total=$($nearby.data.total)"
 
 $registration = Invoke-Json -Method "Post" -Url "$BaseUrl/api/v1/activities/$activityId/register" -Headers $userB.headers

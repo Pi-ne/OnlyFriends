@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OnlyFriends 开发管理台</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">OF</span>
+        <div>
+          <strong>OnlyFriends</strong>
+          <small>开发管理台</small>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="管理模块">
+        <button class="active" data-view="dashboard" type="button">概览</button>
+        <button data-view="users" type="button">用户管理</button>
+        <button data-view="activities" type="button">活动管理</button>
+        <button data-view="teams" type="button">兴趣组/小队</button>
+        <button data-view="seed" type="button">测试造数</button>
+        <button data-view="api" type="button">接口调试</button>
+      </nav>
+
+      <section class="login-card">
+        <h2>管理员登录</h2>
+        <label>
+          账号
+          <input id="adminUsername" value="admin" autocomplete="username">
+        </label>
+        <label>
+          密码
+          <input id="adminPassword" value="Admin123456" type="password" autocomplete="current-password">
+        </label>
+        <button id="adminLoginBtn" class="primary" type="button">登录管理员</button>
+        <button id="adminLogoutBtn" class="secondary" type="button">清除 Token</button>
+        <p id="loginState" class="hint">未登录</p>
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Gateway</p>
+          <h1 id="pageTitle">概览</h1>
+        </div>
+        <label class="base-url">
+          API Base
+          <input id="baseUrlInput" value="http://localhost:8080/api/v1">
+        </label>
+      </header>
+
+      <section class="status-grid">
+        <article class="metric">
+          <span>管理员</span>
+          <strong id="adminName">未登录</strong>
+        </article>
+        <article class="metric">
+          <span>用户 Token</span>
+          <strong id="userTokenState">未准备</strong>
+        </article>
+        <article class="metric">
+          <span>最近操作</span>
+          <strong id="lastAction">等待操作</strong>
+        </article>
+      </section>
+
+      <section class="view active" id="view-dashboard" data-title="概览">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>快速检查</h2>
+              <p>用于确认网关、管理员登录和核心列表接口是否正常。</p>
+            </div>
+            <button id="refreshDashboardBtn" class="secondary" type="button">刷新概览</button>
+          </div>
+          <div class="cards" id="dashboardCards"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-users" data-title="用户管理">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>用户列表</h2>
+              <p>支持查询、封禁、解封。后端当前没有公开删除用户和重置普通用户密码接口。</p>
+            </div>
+            <button id="loadUsersBtn" class="secondary" type="button">查询用户</button>
+          </div>
+          <div class="toolbar">
+            <input id="userKeyword" placeholder="邮箱 / 昵称 / 关键字">
+            <select id="userStatus">
+              <option value="">全部状态</option>
+              <option value="0">未激活</option>
+              <option value="1">正常</option>
+              <option value="2">封禁</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>邮箱</th>
+                  <th>昵称</th>
+                  <th>类型</th>
+                  <th>状态</th>
+                  <th>信誉</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-activities" data-title="活动管理">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>活动列表</h2>
+              <p>支持审核、下架、恢复，便于课程演示和数据修正。</p>
+            </div>
+            <button id="loadActivitiesBtn" class="secondary" type="button">查询活动</button>
+          </div>
+          <div class="toolbar">
+            <input id="activityKeyword" placeholder="活动标题 / 关键字">
+            <select id="activityStatus">
+              <option value="">全部状态</option>
+              <option value="0">草稿</option>
+              <option value="1">审核中</option>
+              <option value="2">已发布</option>
+              <option value="3">报名中</option>
+              <option value="6">已结束</option>
+              <option value="7">已下架</option>
+              <option value="8">审核驳回</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>标题</th>
+                  <th>发起人</th>
+                  <th>时间</th>
+                  <th>人数</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="activitiesBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-teams" data-title="兴趣组/小队">
+        <div class="panel two-column">
+          <div>
+            <div class="panel-head compact">
+              <div>
+                <h2>小队列表</h2>
+                <p>查询、停用、恢复兴趣组/小队。</p>
+              </div>
+              <button id="loadTeamsBtn" class="secondary" type="button">查询小队</button>
+            </div>
+            <div class="toolbar">
+              <input id="teamKeyword" placeholder="小队名称 / 标签">
+              <select id="teamStatus">
+                <option value="">全部状态</option>
+                <option value="1">正常</option>
+                <option value="0">停用</option>
+              </select>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>成员</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="teamsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <form id="createTeamForm" class="form-card">
+            <h2>建立新的兴趣组</h2>
+            <label>创建者用户 Token<input id="teamCreatorToken" placeholder="先在测试造数里登录一个普通用户"></label>
+            <label>名称<input name="name" value="开发测试兴趣组"></label>
+            <label>介绍<textarea name="description" rows="3">用于开发测试的小队。</textarea></label>
+            <label>标签<input name="tags" value="开发,测试"></label>
+            <label>人数上限<input name="maxMembers" type="number" value="30"></label>
+            <label>加入方式
+              <select name="joinType">
+                <option value="0">直接加入</option>
+                <option value="1">需要审核</option>
+              </select>
+            </label>
+            <button class="primary" type="submit">创建兴趣组</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="view" id="view-seed" data-title="测试造数">
+        <div class="panel two-column">
+          <form id="createUserForm" class="form-card">
+            <h2>创建测试用户</h2>
+            <label>邮箱<input name="email" id="seedEmail"></label>
+            <label>昵称<input name="nickname" id="seedNickname"></label>
+            <label>密码<input name="password" value="Abc123456"></label>
+            <button class="primary" type="submit">注册用户</button>
+            <p class="hint">注册后仍需按后端规则激活账号。开发时可从数据库或日志获取激活 token。</p>
+          </form>
+
+          <form id="loginUserForm" class="form-card">
+            <h2>普通用户登录</h2>
+            <label>邮箱<input name="email" id="normalEmail"></label>
+            <label>密码<input name="password" value="Abc123456" type="password"></label>
+            <button class="primary" type="submit">登录并保存用户 Token</button>
+            <p class="hint">该 Token 用于创建活动、小队等普通用户接口。</p>
+          </form>
+
+          <form id="createActivityForm" class="form-card wide">
+            <h2>创建测试活动</h2>
+            <label>用户 Token<input id="activityCreatorToken" placeholder="普通用户 Token"></label>
+            <div class="field-grid">
+              <label>标题<input name="title" value="开发测试活动"></label>
+              <label>标签<input name="tags" value="开发,测试"></label>
+              <label>开始时间<input name="startTime" value="2026-07-20T09:00:00"></label>
+              <label>结束时间<input name="endTime" value="2026-07-20T11:00:00"></label>
+              <label>报名截止<input name="regDeadline" value="2026-07-19T18:00:00"></label>
+              <label>地点<input name="locationName" value="开发测试公园"></label>
+              <label>纬度<input name="locationLat" value="31.2304"></label>
+              <label>经度<input name="locationLng" value="121.4737"></label>
+              <label>人数上限<input name="maxParticipants" type="number" value="20"></label>
+              <label>费用<input name="fee" type="number" value="0"></label>
+            </div>
+            <label>说明<textarea name="description" rows="3">用于开发管理台快速造数。</textarea></label>
+            <button class="primary" type="submit">创建并提交审核</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="view" id="view-api" data-title="接口调试">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>原始接口调试</h2>
+              <p>用于临时调用任意网关接口，便于排查问题。</p>
+            </div>
+          </div>
+          <div class="api-grid">
+            <label>Method
+              <select id="apiMethod">
+                <option>GET</option>
+                <option>POST</option>
+                <option>PUT</option>
+                <option>DELETE</option>
+              </select>
+            </label>
+            <label>Path
+              <input id="apiPath" value="/activities?page=1&size=5">
+            </label>
+          </div>
+          <label class="block-label">Body JSON
+            <textarea id="apiBody" rows="8" placeholder='{"key":"value"}'></textarea>
+          </label>
+          <label class="check-line">
+            <input id="apiUseAdminToken" type="checkbox" checked>
+            使用管理员 Token
+          </label>
+          <button id="apiSendBtn" class="primary" type="button">发送请求</button>
+        </div>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="panel-head compact">
+          <h2>响应日志</h2>
+          <button id="clearLogBtn" class="secondary" type="button">清空</button>
+        </div>
+        <pre id="logOutput">Ready.</pre>
+      </section>
+    </main>
+  </div>
+
+  <template id="emptyRowTemplate">
+    <tr><td colspan="7" class="empty-cell">暂无数据</td></tr>
+  </template>
+
+  <script src="./app.js"></script>
+</body>
+</html>
