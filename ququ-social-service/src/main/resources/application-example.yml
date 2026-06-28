@@ -1,0 +1,30 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SOCIAL_DB_URL:jdbc:mysql://localhost:3306/ququ_social?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SOCIAL_DB_USERNAME:your_mysql_username}
+    password: ${SOCIAL_DB_PASSWORD:your_mysql_password}
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  secret: ${JWT_SECRET:replace-with-at-least-32-bytes-random-secret}
+  access-token-expire: ${JWT_ACCESS_TOKEN_EXPIRE:7200000}
+  refresh-token-expire: ${JWT_REFRESH_TOKEN_EXPIRE:604800000}
+
+user-service:
+  base-url: ${USER_SERVICE_BASE_URL:http://localhost:8081}
+
+redis:
+  enabled: false
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+
+nacos:
+  enabled: false
+  server-addr: ${NACOS_SERVER_ADDR:localhost:8848}

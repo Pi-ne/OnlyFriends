@@ -1,0 +1,2 @@
+-- Admin service schema is currently maintained by sql/admin-service-schema.sql.
+-- This baseline lets Flyway be enabled safely on existing databases.

@@ -71,6 +71,8 @@ spring-boot-devtools.properties
 **/src/main/resources/application-local.yaml
 **/src/main/resources/application-dev.yml
 **/src/main/resources/application-dev.yaml
+!ququ-user-service/src/main/resources/application-dev.yml
+!ququ-activity-service/src/main/resources/application-dev.yml
 **/src/main/resources/application-prod.yml
 **/src/main/resources/application-prod.yaml
 

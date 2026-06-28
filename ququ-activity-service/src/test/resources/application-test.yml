@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:ququ_activity_test;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-h2.sql
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+jwt:
+  secret: test-secret-change-me-change-me-32bytes
+  access-token-expire: 7200000
+  refresh-token-expire: 604800000
+
+user-service:
+  base-url: http://localhost:8081
+
+ai:
+  mode: local
+  service:
+    url: http://localhost:8001
+    timeout-seconds: 30
+    retry-times: 1
+
+app:
+  redis:
+    enabled: false
+  ai:
+    cache:
+      enabled: true
+      ttl-hours: 24
+  checkin:
+    secret: test-checkin-secret-change-me-32bytes
+  storage:
+    type: local
+    local-dir: target/test-uploads
