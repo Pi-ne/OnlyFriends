@@ -1,0 +1,35 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ququ_user?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: your_mysql_username
+    password: your_mysql_password
+  mail:
+    host: ${MAIL_HOST:smtp.example.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:your_mail_username}
+    password: ${MAIL_PASSWORD:your_mail_authorization_code}
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+
+jwt:
+  secret: replace-with-at-least-32-bytes-random-secret
+  access-token-expire: 7200000
+  refresh-token-expire: 604800000
+
+app:
+  activation-base-url: http://localhost:8081/api/v1/auth/activate
+  upload-dir: data/uploads
+  redis:
+    enabled: false
+
+nacos:
+  enabled: false
+  server-addr: ${NACOS_SERVER_ADDR:localhost:8848}

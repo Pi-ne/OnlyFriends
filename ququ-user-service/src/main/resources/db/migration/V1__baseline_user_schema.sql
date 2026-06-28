@@ -1,0 +1,2 @@
+-- User service schema is currently maintained by sql/user-service-schema.sql.
+-- This baseline lets Flyway be enabled safely on existing databases.
