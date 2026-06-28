@@ -1,0 +1,14 @@
+{
+  "description": "OnlyFriends 趣聚微信小程序前端",
+  "appid": "touristappid",
+  "projectname": "OnlyFriends",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": false
+  }
+}

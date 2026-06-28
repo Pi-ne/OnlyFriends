@@ -1,0 +1,8 @@
+<view class="map-page">
+  <map class="map" latitude="{{lat}}" longitude="{{lng}}" markers="{{markers}}" bindmarkertap="onMarkerTap"></map>
+  <view wx:if="{{selected}}" class="selected">
+    <view class="name">{{selected.title}}</view>
+    <view class="subtitle">{{selected.locationName}}</view>
+    <button class="btn primary" bindtap="goDetail">查看详情</button>
+  </view>
+</view>

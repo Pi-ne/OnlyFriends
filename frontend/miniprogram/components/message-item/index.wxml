@@ -1,0 +1,11 @@
+<view class="item" bindtap="handleTap">
+  <user-avatar src="{{conversation.peerAvatarUrl}}" name="{{title}}" size="{{72}}"></user-avatar>
+  <view class="main">
+    <view class="top">
+      <text class="title">{{title}}</text>
+      <text class="time">{{timeText}}</text>
+    </view>
+    <view class="preview">{{conversation.lastMsgPreview || '暂无消息'}}</view>
+  </view>
+  <text wx:if="{{conversation.unreadCount}}" class="unread">{{conversation.unreadCount}}</text>
+</view>

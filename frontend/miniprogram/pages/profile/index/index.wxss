@@ -1,0 +1,58 @@
+.login-panel,
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.profile {
+  flex-direction: row;
+  align-items: center;
+}
+
+.profile-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14rpx;
+  margin: 20rpx 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.stat text:first-child {
+  color: #111827;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.stat text:last-child {
+  color: #667085;
+  font-size: 24rpx;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.menu button {
+  min-height: 88rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 8rpx;
+  background: #ffffff;
+  color: #111827;
+  font-size: 28rpx;
+  text-align: left;
+}

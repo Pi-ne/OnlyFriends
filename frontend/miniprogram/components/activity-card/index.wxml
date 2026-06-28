@@ -1,0 +1,20 @@
+<view class="card" bindtap="handleDetail">
+  <view class="cover">
+    <image wx:if="{{activity.coverUrl}}" src="{{activity.coverUrl}}" mode="aspectFill"></image>
+    <view wx:else class="cover-fallback">{{firstTag}}</view>
+    <text class="status">{{activity.statusText || '可报名'}}</text>
+  </view>
+  <view class="body">
+    <view class="title">{{activity.title}}</view>
+    <view class="tags">
+      <text wx:for="{{activity.tags}}" wx:key="*this" class="tag">{{item}}</text>
+    </view>
+    <view class="meta">{{timeText}}</view>
+    <view class="meta">{{activity.locationName || '地点待定'}}<text wx:if="{{distanceText}}"> · {{distanceText}}</text></view>
+    <view class="foot">
+      <text>{{activity.currentCount || 0}}/{{activity.maxParticipants || 0}} 人</text>
+      <text>{{feeText}}</text>
+    </view>
+    <button class="detail" catchtap="handleDetail">查看详情</button>
+  </view>
+</view>

@@ -1,0 +1,96 @@
+<view class="page with-fixed-bar">
+  <view class="tabs">
+    <view wx:for="{{steps}}" wx:key="key" class="tab {{step === item.key ? 'active' : ''}}" data-key="{{item.key}}" bindtap="switchStep">{{item.name}}</view>
+  </view>
+
+  <view wx:if="{{step === 'base'}}" class="panel section stack">
+    <label class="field">
+      活动标题
+      <input class="input" value="{{form.title}}" placeholder="例如 周末城市飞盘体验" bindinput="onTitleInput" />
+    </label>
+    <label class="field">
+      标签
+      <input class="input" value="{{tagText}}" placeholder="用逗号分隔，最多 5 个" bindinput="onTagsInput" />
+    </label>
+    <label class="field">
+      封面图片 URL
+      <input class="input" value="{{form.coverUrl}}" placeholder="可先留空" bindinput="onCoverInput" />
+    </label>
+  </view>
+
+  <view wx:elif="{{step === 'time'}}" class="panel section stack">
+    <label class="field">
+      开始日期
+      <picker mode="date" value="{{date}}" bindchange="onDateChange">
+        <view class="picker-box">{{date}}</view>
+      </picker>
+    </label>
+    <view class="grid-2">
+      <label class="field">
+        开始时间
+        <picker mode="time" value="{{startClock}}" bindchange="onStartClockChange">
+          <view class="picker-box">{{startClock}}</view>
+        </picker>
+      </label>
+      <label class="field">
+        结束时间
+        <picker mode="time" value="{{endClock}}" bindchange="onEndClockChange">
+          <view class="picker-box">{{endClock}}</view>
+        </picker>
+      </label>
+    </view>
+    <label class="field">
+      报名截止时间
+      <picker mode="time" value="{{deadlineClock}}" bindchange="onDeadlineClockChange">
+        <view class="picker-box">{{deadlineClock}}</view>
+      </picker>
+    </label>
+    <label class="field">
+      地点名称
+      <input class="input" value="{{form.locationName}}" placeholder="例如 滨江公园东门" bindinput="onLocationNameInput" />
+    </label>
+    <label class="field">
+      详细地址
+      <input class="input" value="{{form.locationDetail}}" placeholder="楼层、门牌或集合点" bindinput="onLocationDetailInput" />
+    </label>
+    <view class="grid-2">
+      <label class="field">
+        纬度
+        <input class="input" type="digit" value="{{form.locationLat}}" bindinput="onLatInput" />
+      </label>
+      <label class="field">
+        经度
+        <input class="input" type="digit" value="{{form.locationLng}}" bindinput="onLngInput" />
+      </label>
+    </view>
+    <button class="btn ghost" bindtap="useLocation">使用当前位置</button>
+  </view>
+
+  <view wx:elif="{{step === 'rule'}}" class="panel section stack">
+    <label class="field">
+      人数上限
+      <input class="input" type="number" value="{{form.maxParticipants}}" bindinput="onMaxInput" />
+    </label>
+    <label class="field">
+      费用
+      <input class="input" type="digit" value="{{form.fee}}" placeholder="0" bindinput="onFeeInput" />
+    </label>
+    <label class="check-row">
+      <checkbox checked="{{form.locationVerify}}" bindtap="toggleLocationVerify" />
+      <text>需要位置签到</text>
+    </label>
+  </view>
+
+  <view wx:else class="panel section stack">
+    <label class="field">
+      活动说明
+      <textarea class="textarea" value="{{form.description}}" placeholder="介绍流程、注意事项、适合人群" bindinput="onDescInput"></textarea>
+    </label>
+    <button class="btn ghost" loading="{{aiLoading}}" disabled="{{aiLoading}}" bindtap="aiPlan">AI 帮我策划</button>
+  </view>
+
+  <view class="fixed-action">
+    <button class="btn secondary" disabled="{{submitting}}" bindtap="saveDraft">保存草稿</button>
+    <button class="btn primary" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitReview">提交审核</button>
+  </view>
+</view>

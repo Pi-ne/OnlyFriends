@@ -1,0 +1,7 @@
+<view class="page">
+  <loading-state wx:if="{{loading}}" text="加载会话"></loading-state>
+  <empty-state wx:elif="{{!conversations.length}}" title="暂无会话" description="活动和小队消息会显示在这里。" mark="信"></empty-state>
+  <view wx:else class="list">
+    <message-item wx:for="{{conversations}}" wx:key="convId" conversation="{{item}}" bind:tap-chat="goChat"></message-item>
+  </view>
+</view>

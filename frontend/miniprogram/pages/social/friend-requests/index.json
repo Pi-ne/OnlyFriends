@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "好友申请",
+  "usingComponents": {
+    "user-avatar": "/components/user-avatar/index",
+    "empty-state": "/components/empty-state/index"
+  }
+}

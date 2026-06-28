@@ -1,0 +1,15 @@
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.hero {
+  padding: 64rpx 8rpx 24rpx;
+}
+
+.brand {
+  color: #1463d8;
+  font-size: 30rpx;
+  font-weight: 800;
+}

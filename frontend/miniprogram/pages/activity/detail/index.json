@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "活动详情",
+  "usingComponents": {
+    "user-avatar": "/components/user-avatar/index",
+    "empty-state": "/components/empty-state/index",
+    "loading-state": "/components/loading-state/index"
+  }
+}

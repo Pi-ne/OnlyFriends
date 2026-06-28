@@ -1,0 +1,21 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.name {
+  color: #111827;
+  font-weight: 800;
+}
+
+.time {
+  color: #98a2b3;
+  font-size: 22rpx;
+}

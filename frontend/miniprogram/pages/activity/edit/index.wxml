@@ -1,0 +1,6 @@
+<view class="page">
+  <view class="panel stack">
+    <view class="title">编辑活动</view>
+    <view class="subtitle">草稿编辑入口已预留。可复用发起活动表单接入 PUT /activities/{id}。</view>
+  </view>
+</view>

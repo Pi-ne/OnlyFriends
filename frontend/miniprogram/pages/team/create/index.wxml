@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="panel stack">
+    <label class="field">小队名称<input class="input" value="{{form.name}}" bindinput="onNameInput" /></label>
+    <label class="field">介绍<textarea class="textarea" value="{{form.description}}" bindinput="onDescInput"></textarea></label>
+    <label class="field">标签<input class="input" value="{{tagText}}" placeholder="用逗号分隔" bindinput="onTagsInput" /></label>
+    <label class="field">人数上限<input class="input" type="number" value="{{form.maxMembers}}" bindinput="onMaxInput" /></label>
+    <button class="btn primary" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">创建小队</button>
+  </view>
+</view>

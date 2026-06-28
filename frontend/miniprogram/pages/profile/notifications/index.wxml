@@ -1,0 +1,13 @@
+<view class="page">
+  <view wx:if="{{!notifications.length && !loading}}" class="panel subtitle">暂无通知</view>
+  <view class="list">
+    <view wx:for="{{notifications}}" wx:key="notificationId" class="panel item" bindtap="read" data-id="{{item.notificationId}}">
+      <view class="between">
+        <view class="name">{{item.title}}</view>
+        <view class="pill">{{item.read ? '已读' : '未读'}}</view>
+      </view>
+      <view class="subtitle">{{item.content}}</view>
+      <view class="time">{{item.createdAt}}</view>
+    </view>
+  </view>
+</view>

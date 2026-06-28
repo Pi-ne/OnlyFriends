@@ -1,0 +1,11 @@
+.section {
+  margin-top: 20rpx;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  color: #344054;
+  font-weight: 700;
+}

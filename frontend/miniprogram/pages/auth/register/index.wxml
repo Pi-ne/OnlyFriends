@@ -1,0 +1,24 @@
+<view class="page auth-page">
+  <view class="hero">
+    <view class="brand">趣聚</view>
+    <view class="title">创建账号</view>
+    <view class="subtitle">注册后请查看邮箱完成激活，再返回登录。</view>
+  </view>
+
+  <view class="panel stack">
+    <label class="field">
+      昵称
+      <input class="input" value="{{nickname}}" placeholder="2-20 个字符" bindinput="onNicknameInput" />
+    </label>
+    <label class="field">
+      邮箱
+      <input class="input" type="text" value="{{email}}" placeholder="请输入邮箱" bindinput="onEmailInput" />
+    </label>
+    <label class="field">
+      密码
+      <input class="input" password value="{{password}}" placeholder="至少 8 位，包含字母和数字" bindinput="onPasswordInput" />
+    </label>
+    <button class="btn primary" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">注册账号</button>
+    <button class="btn secondary" bindtap="goLogin">返回登录</button>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="panel stack">
+    <view class="title">社交关系</view>
+    <button class="btn primary" bindtap="goFriends">好友与关注</button>
+    <button class="btn secondary" bindtap="goRequests">好友申请</button>
+  </view>
+</view>

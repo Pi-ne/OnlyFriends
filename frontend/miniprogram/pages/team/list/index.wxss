@@ -1,0 +1,44 @@
+.search-row {
+  display: flex;
+  gap: 14rpx;
+}
+
+.search {
+  flex: 1;
+  min-height: 76rpx;
+  padding: 0 22rpx;
+  border: 1rpx solid #d8dee8;
+  border-radius: 8rpx;
+  background: #ffffff;
+}
+
+.create,
+.link {
+  min-height: 76rpx;
+  padding: 0 22rpx;
+  border-radius: 8rpx;
+  background: #1463d8;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.link {
+  min-height: 56rpx;
+  background: #eef4ff;
+  color: #1463d8;
+}
+
+.small {
+  font-size: 32rpx;
+}
+
+.head {
+  margin-bottom: 14rpx;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}

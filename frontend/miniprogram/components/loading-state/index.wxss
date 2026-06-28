@@ -1,0 +1,23 @@
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
+  min-height: 180rpx;
+  color: #667085;
+}
+
+.dot {
+  width: 28rpx;
+  height: 28rpx;
+  border: 4rpx solid #c7d7ef;
+  border-top-color: #1463d8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

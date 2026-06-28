@@ -1,0 +1,12 @@
+<view class="page">
+  <view wx:for="{{list}}" wx:key="applyId" class="panel row-item">
+    <user-avatar name="{{item.applicantNickname}}" size="{{72}}"></user-avatar>
+    <view class="main">
+      <view class="name">{{item.applicantNickname}}</view>
+      <view class="subtitle">{{item.message || '请求添加你为好友'}}</view>
+    </view>
+    <button class="mini primary" data-id="{{item.applyId}}" data-action="1" bindtap="review">同意</button>
+    <button class="mini" data-id="{{item.applyId}}" data-action="2" bindtap="review">拒绝</button>
+  </view>
+  <empty-state wx:if="{{!list.length}}" title="暂无好友申请" mark="友"></empty-state>
+</view>
