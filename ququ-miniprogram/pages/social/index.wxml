@@ -1,0 +1,64 @@
+<view class="page">
+  <view class="header">
+    <view>
+      <view class="title">兴趣小队</view>
+      <view class="muted">找到稳定搭子，让活动不只发生一次。</view>
+    </view>
+    <button class="create-btn" bindtap="createTeam">建立队伍</button>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">正在加载小队...</view>
+  <view wx:elif="{{!loggedIn}}" class="state card">登录后查看兴趣小队。</view>
+  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+  <view wx:elif="{{teams.length === 0}}" class="state card">暂无小队。</view>
+
+  <view wx:for="{{teams}}" wx:key="id" class="team card">
+    <view class="team-head">
+      <view class="team-main">
+        <view class="team-name">{{item.name}}</view>
+      </view>
+      <button class="join {{item.joined ? 'joined' : ''}}" data-id="{{item.id}}" data-name="{{item.name}}" data-joined="{{item.joined}}" bindtap="joinTeam">
+        {{item.joined ? "已加入" : "加入"}}
+      </button>
+    </view>
+    <view class="muted topic">{{item.topic}}</view>
+    <view class="team-foot">
+      <view class="team-tags">
+        <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+      </view>
+      <view class="member-count">{{item.members}} 人</view>
+    </view>
+  </view>
+
+  <view wx:if="{{showCreate}}" class="modal-mask" bindtap="closeCreate">
+    <view class="modal card" catchtap="stopBubble">
+      <view class="modal-title">建立队伍</view>
+      <view class="field">
+        <text class="field-label">小队名称</text>
+        <input class="input" data-key="name" value="{{form.name}}" placeholder="请输入小队名称" bindinput="updateForm" />
+      </view>
+      <view class="field">
+        <text class="field-label">小队介绍</text>
+        <textarea class="textarea compact-textarea" data-key="description" value="{{form.description}}" placeholder="介绍小队活动方向" bindinput="updateForm" />
+      </view>
+      <view class="field">
+        <text class="field-label">标签</text>
+        <input class="input" data-key="tags" value="{{form.tags}}" placeholder="用逗号分隔，最多 8 个" bindinput="updateForm" />
+      </view>
+      <view class="field">
+        <text class="field-label">加入方式</text>
+        <picker mode="selector" range="{{joinTypes}}" value="{{form.joinType}}" bindchange="updateJoinType">
+          <view class="picker-box">{{joinTypes[form.joinType]}}</view>
+        </picker>
+      </view>
+      <view class="field">
+        <text class="field-label">人数上限</text>
+        <input class="input" type="number" data-key="maxMembers" value="{{form.maxMembers}}" placeholder="请输入人数上限" bindinput="updateForm" />
+      </view>
+      <view class="modal-actions">
+        <button class="btn secondary" disabled="{{creating}}" bindtap="closeCreate">取消</button>
+        <button class="btn" loading="{{creating}}" disabled="{{creating}}" bindtap="submitCreateTeam">创建</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,93 @@
+.state {
+  margin-bottom: 22rpx;
+  padding: 24rpx;
+  color: #626d7c;
+  font-size: 26rpx;
+  line-height: 1.5;
+  background: #ffffff;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 28rpx;
+}
+
+.avatar {
+  width: 116rpx;
+  height: 116rpx;
+  border-radius: 32rpx;
+  background: #19202b;
+  color: #ffffff;
+  text-align: center;
+  line-height: 116rpx;
+  font-size: 44rpx;
+  font-weight: 800;
+}
+
+.user-main {
+  flex: 1;
+}
+
+.name {
+  margin-bottom: 10rpx;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.tags {
+  margin-top: 16rpx;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+
+.metric {
+  padding: 22rpx;
+  text-align: center;
+}
+
+.num {
+  margin-bottom: 8rpx;
+  font-size: 36rpx;
+  color: #1f7a5a;
+  font-weight: 800;
+}
+
+.menu {
+  margin-top: 22rpx;
+  padding: 0 24rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 92rpx;
+  border-bottom: 1rpx solid #eef1f5;
+  font-weight: 600;
+}
+
+.menu-item::after {
+  content: ">";
+  color: #b2bac6;
+  font-weight: 700;
+}
+
+.menu-item:last-child {
+  border-bottom: 0;
+}
+
+.login {
+  margin-top: 28rpx;
+}
+
+.secondary {
+  background: #ffffff;
+  color: #1f7a5a;
+}

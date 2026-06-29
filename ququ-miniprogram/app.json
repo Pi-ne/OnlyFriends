@@ -1,0 +1,72 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/search/index",
+    "pages/activity/detail/index",
+    "pages/activity/create/index",
+    "pages/activity/map/index",
+    "pages/social/index",
+    "pages/im/index",
+    "pages/im/chat/index",
+    "pages/profile/index",
+    "pages/profile/my-activities/index",
+    "pages/profile/registrations/index",
+    "pages/profile/follows/index",
+    "pages/auth/login/index",
+    "pages/auth/register/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "Onlyfriends",
+    "navigationBarBackgroundColor": "#f7f8fb",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f8fb"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于选择和展示活动地点，方便查看活动位置与导航"
+    }
+  },
+  "requiredPrivateInfos": [
+    "chooseLocation",
+    "getLocation"
+  ],
+  "tabBar": {
+    "color": "#77808f",
+    "selectedColor": "#1f7a5a",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "活动",
+        "iconPath": "assets/tabbar/activity.png",
+        "selectedIconPath": "assets/tabbar/activity-active.png"
+      },
+      {
+        "pagePath": "pages/activity/create/index",
+        "text": "发布",
+        "iconPath": "assets/tabbar/publish.png",
+        "selectedIconPath": "assets/tabbar/publish-active.png"
+      },
+      {
+        "pagePath": "pages/social/index",
+        "text": "社群",
+        "iconPath": "assets/tabbar/social.png",
+        "selectedIconPath": "assets/tabbar/social-active.png"
+      },
+      {
+        "pagePath": "pages/im/index",
+        "text": "消息",
+        "iconPath": "assets/tabbar/message.png",
+        "selectedIconPath": "assets/tabbar/message-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "assets/tabbar/profile.png",
+        "selectedIconPath": "assets/tabbar/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2"
+}

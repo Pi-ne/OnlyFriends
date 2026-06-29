@@ -1,0 +1,5 @@
+.DS_Store
+.idea/
+ququ-miniprogram/project.private.config.json
+miniprogram_npm/
+**/miniprogram_npm/

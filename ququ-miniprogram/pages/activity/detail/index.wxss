@@ -1,0 +1,168 @@
+.detail {
+  padding-bottom: 140rpx;
+}
+
+.state {
+  padding: 26rpx;
+  color: #77808f;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.state.error {
+  color: #b5473f;
+  background: #fff6f4;
+  border-color: #f1c2bc;
+}
+
+.detail-cover {
+  min-height: 340rpx;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  color: #ffffff;
+}
+
+.status-pill {
+  display: inline-flex;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 24rpx;
+}
+
+.detail-title {
+  margin-top: 96rpx;
+  font-size: 46rpx;
+  line-height: 1.18;
+  font-weight: 800;
+}
+
+.detail-sub {
+  margin-top: 16rpx;
+  opacity: 0.9;
+}
+
+.linear-green {
+  background: linear-gradient(135deg, #1f7a5a, #68b684);
+}
+
+.linear-yellow {
+  background: linear-gradient(135deg, #a35f18, #f2c14e);
+}
+
+.linear-blue {
+  background: linear-gradient(135deg, #315f9d, #7eb6d9);
+}
+
+.info-card {
+  margin-top: -34rpx;
+  padding: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #eef1f5;
+}
+
+.info-row:last-child {
+  border-bottom: 0;
+}
+
+.label {
+  width: 96rpx;
+  color: #77808f;
+}
+
+.value {
+  flex: 1;
+  color: #19202b;
+  font-weight: 600;
+}
+
+.map-card {
+  padding: 24rpx;
+}
+
+.map-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-bottom: 18rpx;
+}
+
+.map-address {
+  max-width: 430rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.nav-btn {
+  flex: 0 0 132rpx;
+  width: 132rpx;
+  height: 62rpx;
+  font-size: 24rpx;
+}
+
+.activity-map {
+  width: 100%;
+  height: 320rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.section-title {
+  margin-bottom: 16rpx;
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.section-title.compact {
+  margin-bottom: 8rpx;
+}
+
+.desc {
+  font-size: 27rpx;
+  line-height: 1.75;
+}
+
+.tags {
+  margin-top: 20rpx;
+}
+
+.organizer {
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.small {
+  width: 130rpx;
+  height: 64rpx;
+  font-size: 24rpx;
+}
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 18rpx;
+  padding: 18rpx 28rpx 42rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1rpx solid #e8ecf2;
+}
+
+.share {
+  width: 180rpx;
+}
+
+.main {
+  flex: 1;
+}

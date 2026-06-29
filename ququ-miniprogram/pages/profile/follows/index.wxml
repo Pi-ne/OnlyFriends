@@ -1,0 +1,37 @@
+<view class="page follows-page">
+  <view class="follows-header">
+    <view class="follows-title">关注与好友</view>
+    <view class="follows-subtitle">管理你关注的人和关注你的用户。</view>
+  </view>
+
+  <view class="follow-tabs">
+    <view wx:for="{{tabs}}" wx:key="key" data-key="{{item.key}}" bindtap="switchTab" class="follow-tab {{activeTab === item.key ? 'active' : ''}}">
+      {{item.label}}
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="follow-state card">正在加载关注列表...</view>
+  <view wx:elif="{{error}}" class="follow-state follow-error card">{{error}}</view>
+  <view wx:elif="{{users.length === 0}}" class="follow-state card">{{activeTab === "following" ? "暂无关注用户。" : "暂无粉丝。"}}</view>
+
+  <view class="follow-list">
+    <view wx:for="{{users}}" wx:key="id" class="follow-user card">
+      <view class="follow-profile">
+        <view class="follow-avatar">{{item.avatarText}}</view>
+        <view class="follow-info">
+          <view class="follow-name">{{item.nickname}}</view>
+          <view class="follow-meta">
+            <text>{{item.role}}</text>
+            <text wx:if="{{item.friend}}" class="follow-badge">好友</text>
+            <text wx:elif="{{item.mutualFollow}}" class="follow-badge">互相关注</text>
+          </view>
+        </view>
+      </view>
+      <view class="follow-actions">
+        <button wx:if="{{item.friend}}" class="follow-action primary" data-id="{{item.id}}" bindtap="openChat">消息</button>
+        <button wx:if="{{activeTab === 'following'}}" class="follow-action" data-id="{{item.id}}" bindtap="unfollow">取消</button>
+        <button wx:else class="follow-action" data-id="{{item.id}}" bindtap="followBack">{{item.mutualFollow ? "已互关" : "回关"}}</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,23 @@
+<view class="page auth">
+  <view class="brand">创建账号</view>
+  <view class="subtitle">注册后可报名活动、创建活动和加入小队。</view>
+  <view class="form card">
+    <view class="field">
+      <text class="field-label">邮箱</text>
+      <input class="input" data-key="email" placeholder="name@example.com" bindinput="update" />
+    </view>
+    <view class="field">
+      <text class="field-label">昵称</text>
+      <input class="input" data-key="nickname" placeholder="2-20 个字符" bindinput="update" />
+    </view>
+    <view class="field">
+      <text class="field-label">密码</text>
+      <input class="input" password data-key="password" placeholder="8-20 位，包含字母和数字" bindinput="update" />
+    </view>
+    <view class="field">
+      <text class="field-label">确认密码</text>
+      <input class="input" password data-key="confirmPassword" bindinput="update" />
+    </view>
+    <button class="btn" loading="{{loading}}" disabled="{{loading}}" bindtap="register">{{loading ? "注册中" : "注册并发送激活邮件"}}</button>
+  </view>
+</view>

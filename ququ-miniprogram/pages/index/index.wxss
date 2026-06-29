@@ -1,0 +1,222 @@
+.home {
+  padding-top: 18rpx;
+}
+
+.hero {
+  margin-top: 22rpx;
+  min-height: 240rpx;
+  padding: 34rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #164734, #2b8a67 58%, #f2c14e);
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.eyebrow {
+  font-size: 24rpx;
+  opacity: 0.88;
+}
+
+.title {
+  width: 460rpx;
+  margin-top: 18rpx;
+  font-size: 48rpx;
+  line-height: 1.18;
+  font-weight: 800;
+}
+
+.subtitle {
+  width: 460rpx;
+  margin-top: 18rpx;
+  font-size: 25rpx;
+  line-height: 1.5;
+  opacity: 0.88;
+}
+
+.hero-badge {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 24rpx;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 82rpx;
+  padding: 0 10rpx 0 24rpx;
+  border-radius: 14rpx;
+  background: #ffffff;
+  color: #8b95a3;
+  font-weight: 600;
+}
+
+.search-main {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  flex: 1;
+  height: 100%;
+}
+
+.search-icon {
+  color: #1f7a5a;
+  font-size: 34rpx;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.map-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 64rpx;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 12rpx;
+  background: #ffffff;
+  color: #1f7a5a;
+}
+
+.map-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.tabs {
+  display: flex;
+  margin-top: 28rpx;
+  gap: 12rpx;
+}
+
+.tab {
+  flex: 1;
+  height: 68rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  line-height: 68rpx;
+  color: #626d7c;
+  background: #edf0f5;
+  font-weight: 600;
+}
+
+.tab.active {
+  color: #ffffff;
+  background: #1f7a5a;
+}
+
+.activity-list {
+  margin-top: 24rpx;
+}
+
+.state {
+  margin-bottom: 22rpx;
+  padding: 30rpx;
+  color: #626d7c;
+  font-size: 26rpx;
+  line-height: 1.5;
+  background: #ffffff;
+}
+
+.state.error {
+  color: #a33b2f;
+  background: #fff4f1;
+}
+
+.activity-card {
+  margin-bottom: 22rpx;
+  overflow: hidden;
+}
+
+.cover {
+  height: 190rpx;
+  padding: 24rpx;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.linear-green {
+  background: linear-gradient(135deg, #1f7a5a, #68b684);
+}
+
+.linear-yellow {
+  background: linear-gradient(135deg, #a35f18, #f2c14e);
+}
+
+.linear-blue {
+  background: linear-gradient(135deg, #315f9d, #7eb6d9);
+}
+
+.activity-body {
+  padding: 24rpx;
+}
+
+.activity-title {
+  width: 470rpx;
+  font-size: 32rpx;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.status {
+  flex: 0 0 auto;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: #fff2dc;
+  color: #9a5b00;
+  font-size: 22rpx;
+}
+
+.meta {
+  margin-top: 12rpx;
+  color: #626d7c;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.tags {
+  margin-top: 18rpx;
+}
+
+.map-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22rpx;
+  padding: 26rpx;
+  background: #ffffff;
+}
+
+.suggestion-title {
+  font-size: 31rpx;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.suggestion-sub {
+  margin-top: 8rpx;
+  color: #77808f;
+  font-size: 25rpx;
+}
+
+.suggestion-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  background: #f2f7fb;
+}
+
+.suggestion-icon {
+  width: 48rpx;
+  height: 48rpx;
+}

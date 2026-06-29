@@ -1,0 +1,92 @@
+.title {
+  margin-bottom: 24rpx;
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.state {
+  padding: 26rpx;
+  color: #77808f;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.state.error {
+  color: #b5473f;
+  background: #fff6f4;
+  border-color: #f1c2bc;
+}
+
+.login-btn {
+  width: 180rpx;
+  height: 64rpx;
+  margin-top: 18rpx;
+  border-radius: 12rpx;
+  background: #1f7a5a;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.conversation {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-top: 18rpx;
+  padding: 22rpx;
+}
+
+.avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 24rpx;
+  background: #1f7a5a;
+  color: #ffffff;
+  text-align: center;
+  line-height: 88rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.conv-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.conv-name {
+  max-width: 420rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.time {
+  font-size: 22rpx;
+}
+
+.last {
+  margin-top: 10rpx;
+  color: #77808f;
+  font-size: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  position: absolute;
+  right: 20rpx;
+  bottom: 18rpx;
+  min-width: 34rpx;
+  height: 34rpx;
+  padding: 0 10rpx;
+  border-radius: 999rpx;
+  background: #d94c3d;
+  color: #ffffff;
+  text-align: center;
+  line-height: 34rpx;
+  font-size: 22rpx;
+}
