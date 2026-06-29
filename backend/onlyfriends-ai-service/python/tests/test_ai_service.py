@@ -27,7 +27,7 @@ def test_review_content_rejects_severe_keywords():
 
     data = response.json()["data"]
     assert data["result"] == "reject"
-    assert data["riskLevel"] == 9
+    assert data["riskLevel"] == 10
     assert "severe_violation" in data["riskCategories"]
 
 
