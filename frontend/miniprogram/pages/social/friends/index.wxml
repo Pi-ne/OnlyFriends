@@ -10,7 +10,7 @@
       <user-avatar src="{{item.avatarUrl}}" name="{{item.nickname || item.applicantNickname}}" size="{{72}}"></user-avatar>
       <view class="main">
         <view class="name">{{item.nickname || item.applicantNickname || item.targetNickname}}</view>
-        <view class="subtitle">{{item.remark || item.groupName || item.message || '趣聚用户'}}</view>
+        <view class="subtitle">{{item.remark || item.groupName || item.message || 'OnlyFriends 用户'}}</view>
       </view>
       <button wx:if="{{tab === 'applies'}}" class="mini primary" data-id="{{item.applyId}}" data-action="1" bindtap="review">同意</button>
       <button wx:if="{{tab === 'applies'}}" class="mini" data-id="{{item.applyId}}" data-action="2" bindtap="review">拒绝</button>

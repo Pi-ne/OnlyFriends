@@ -9,7 +9,7 @@
 - 已执行 `sql/init-all.sql`。
 - 已启动 gateway、user、activity、social、im、admin 服务。
 - 所有服务使用相同 `JWT_SECRET`。
-- 如果脚本需要自动激活用户，本地 Docker MySQL 容器名默认为 `ququ-mysql`。
+- 如果脚本需要自动激活用户，本地 Docker MySQL 容器名默认为 `onlyfriends-mysql`。
 
 运行：
 

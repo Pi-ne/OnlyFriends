@@ -1,6 +1,6 @@
 <view class="page auth-page">
   <view class="hero">
-    <view class="brand">趣聚</view>
+    <view class="brand">OnlyFriends</view>
     <view class="title">欢迎回来</view>
     <view class="subtitle">登录后可以报名活动、加入小队和查看消息。</view>
   </view>

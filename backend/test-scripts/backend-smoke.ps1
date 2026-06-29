@@ -1,8 +1,8 @@
 param(
     [string]$BaseUrl = "http://localhost:8080",
-    [string]$MysqlContainer = "ququ-mysql",
+    [string]$MysqlContainer = "onlyfriends-mysql",
     [string]$MysqlUser = "root",
-    [string]$MysqlPassword = "ququ_root_password",
+    [string]$MysqlPassword = "onlyfriends_root_password",
     [string]$Password = "Abc123456",
     [switch]$SkipAdmin,
     [switch]$ValidateOnly
@@ -55,7 +55,7 @@ function Invoke-Json {
 
 function Get-ActivationToken {
     param([string]$Email)
-    $query = "SELECT activate_token FROM ququ_user.user WHERE email='$Email';"
+    $query = "SELECT activate_token FROM onlyfriends_user.user WHERE email='$Email';"
     $token = docker exec -i $MysqlContainer mysql "--user=$MysqlUser" "--password=$MysqlPassword" --default-character-set=utf8mb4 -N -e $query
     if ([string]::IsNullOrWhiteSpace($token)) {
         throw "Activation token not found for $Email. Check database initialization and user-service logs."

@@ -13,7 +13,7 @@ Set-Location $BackendRoot
 docker compose up -d redis
 docker compose up -d --force-recreate mysql
 
-if (-not (Test-Path "ququ-gateway\target\ququ-gateway-1.0.0-SNAPSHOT.jar")) {
+if (-not (Test-Path "onlyfriends-gateway\target\onlyfriends-gateway-1.0.0-SNAPSHOT.jar")) {
     mvn -DskipTests package
 }
 

@@ -1,4 +1,4 @@
--- QuQu local database initialization entry.
+-- OnlyFriends local database initialization entry.
 -- Target: MySQL 8.x. Run this file with UTF-8/utf8mb4 client settings.
 -- This script is intended for a fresh local development database. It drops and
 -- recreates the tables used by the currently implemented backend services.
@@ -6,23 +6,23 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE DATABASE IF NOT EXISTS ququ_user
+CREATE DATABASE IF NOT EXISTS onlyfriends_user
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE IF NOT EXISTS ququ_activity
+CREATE DATABASE IF NOT EXISTS onlyfriends_activity
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE IF NOT EXISTS ququ_social
+CREATE DATABASE IF NOT EXISTS onlyfriends_social
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE IF NOT EXISTS ququ_im
+CREATE DATABASE IF NOT EXISTS onlyfriends_im
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE IF NOT EXISTS ququ_admin
+CREATE DATABASE IF NOT EXISTS onlyfriends_admin
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE ququ_user;
+USE onlyfriends_user;
 
 DROP TABLE IF EXISTS merchant_apply;
 DROP TABLE IF EXISTS merchant_info;
@@ -100,7 +100,7 @@ CREATE TABLE user_ban_record (
   KEY idx_user_ban_admin_created (admin_id, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='user ban record table';
 
-USE ququ_activity;
+USE onlyfriends_activity;
 
 DROP TABLE IF EXISTS activity_review_record;
 DROP TABLE IF EXISTS notification;
@@ -314,7 +314,7 @@ VALUES
   ('公益活动', '公益活动', '适合志愿服务、社区公益活动。', JSON_ARRAY('公益', '志愿'), 3, 50, '遵守组织方安全安排。', 20),
   ('城市探索', '城市探索', '适合城市漫步、展览打卡、文化探索。', JSON_ARRAY('城市探索', '文化'), 3, 20, '注意交通与集合时间。', 10);
 
-USE ququ_social;
+USE onlyfriends_social;
 
 DROP TABLE IF EXISTS team_vote_record;
 DROP TABLE IF EXISTS team_vote_option;
@@ -542,7 +542,7 @@ CREATE TABLE team_admin_operation_log (
   KEY idx_team_admin_log_operation (operation_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='team admin operation log table';
 
-USE ququ_im;
+USE onlyfriends_im;
 
 DROP TABLE IF EXISTS im_conversation_read;
 DROP TABLE IF EXISTS im_group_message;
@@ -628,7 +628,7 @@ CREATE TABLE im_conversation_read (
   KEY idx_conversation_read_conv (conv_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='IM conversation read cursor table';
 
-USE ququ_admin;
+USE onlyfriends_admin;
 
 DROP TABLE IF EXISTS admin_operation_log;
 DROP TABLE IF EXISTS admin_user;

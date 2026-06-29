@@ -12,13 +12,13 @@ Set-Location $BackendRoot
 . .\scripts\set-local-env.ps1
 
 $JarMap = @{
-    gateway  = "ququ-gateway\target\ququ-gateway-1.0.0-SNAPSHOT.jar"
-    user     = "ququ-user-service\target\ququ-user-service-1.0.0-SNAPSHOT.jar"
-    activity = "ququ-activity-service\target\ququ-activity-service-1.0.0-SNAPSHOT.jar"
-    social   = "ququ-social-service\target\ququ-social-service-1.0.0-SNAPSHOT.jar"
-    im       = "ququ-im-service\target\ququ-im-service-1.0.0-SNAPSHOT.jar"
-    admin    = "ququ-admin-service\target\ququ-admin-service-1.0.0-SNAPSHOT.jar"
-    ai       = "ququ-ai-service\target\ququ-ai-service-1.0.0-SNAPSHOT.jar"
+    gateway  = "onlyfriends-gateway\target\onlyfriends-gateway-1.0.0-SNAPSHOT.jar"
+    user     = "onlyfriends-user-service\target\onlyfriends-user-service-1.0.0-SNAPSHOT.jar"
+    activity = "onlyfriends-activity-service\target\onlyfriends-activity-service-1.0.0-SNAPSHOT.jar"
+    social   = "onlyfriends-social-service\target\onlyfriends-social-service-1.0.0-SNAPSHOT.jar"
+    im       = "onlyfriends-im-service\target\onlyfriends-im-service-1.0.0-SNAPSHOT.jar"
+    admin    = "onlyfriends-admin-service\target\onlyfriends-admin-service-1.0.0-SNAPSHOT.jar"
+    ai       = "onlyfriends-ai-service\target\onlyfriends-ai-service-1.0.0-SNAPSHOT.jar"
 }
 
 $JarPath = $JarMap[$Service]

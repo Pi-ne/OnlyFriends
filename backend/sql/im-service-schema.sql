@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ququ_im DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ququ_im;
+CREATE DATABASE IF NOT EXISTS onlyfriends_im DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE onlyfriends_im;
 
 DROP TABLE IF EXISTS `im_conversation_read`;
 DROP TABLE IF EXISTS `im_group_message`;

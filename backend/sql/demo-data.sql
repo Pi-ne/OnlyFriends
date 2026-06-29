@@ -1,9 +1,9 @@
--- QuQu demo seed data.
+-- OnlyFriends demo seed data.
 -- Run after sql/init-all.sql when you want a predictable demo dataset.
 
 SET NAMES utf8mb4;
 
-USE ququ_user;
+USE onlyfriends_user;
 
 INSERT INTO `user`
   (id, email, password_hash, nickname, avatar_url, gender, bio, interest_tags, user_type, status, credit_score)
@@ -15,7 +15,7 @@ ON DUPLICATE KEY UPDATE
   status = VALUES(status),
   credit_score = VALUES(credit_score);
 
-USE ququ_activity;
+USE onlyfriends_activity;
 
 INSERT INTO activity_tag (name, category, usage_count, sort_order)
 VALUES
@@ -39,7 +39,7 @@ ON DUPLICATE KEY UPDATE
   title = VALUES(title),
   status = VALUES(status);
 
-USE ququ_social;
+USE onlyfriends_social;
 
 INSERT INTO team
   (id, owner_id, name, description, tags, join_type, max_members, member_count, status, score)

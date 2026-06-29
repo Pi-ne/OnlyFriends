@@ -1,0 +1,45 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${USER_DB_URL:jdbc:mysql://localhost:3306/onlyfriends_user?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${USER_DB_USERNAME:root}
+    password: ${USER_DB_PASSWORD:onlyfriends_root_password}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: ${REDIS_TIMEOUT:2000ms}
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:true}
+
+jwt:
+  secret: ${JWT_SECRET:replace-with-at-least-32-bytes-dev-secret}
+  access-token-expire: ${JWT_ACCESS_TOKEN_EXPIRE:7200000}
+  refresh-token-expire: ${JWT_REFRESH_TOKEN_EXPIRE:604800000}
+
+app:
+  activation-base-url: ${ACTIVATION_BASE_URL:http://localhost:8081/api/v1/auth/activate}
+  upload-dir: ${USER_UPLOAD_DIR:data/uploads}
+  redis:
+    enabled: ${USER_REDIS_ENABLED:false}
+
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioadmin}
+  secret-key: ${MINIO_SECRET_KEY:minioadmin123}
+  bucket:
+    avatars: ${MINIO_AVATAR_BUCKET:onlyfriends-avatars}

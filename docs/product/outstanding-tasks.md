@@ -1,0 +1,265 @@
+# OnlyFriends 当前缺失内容与后续任务目标
+
+> 核对依据：[系统架构与实现方案 v3.0](../architecture/system-design-v3.md) 与当前仓库后端代码、SQL、配置、测试脚本。
+>
+> 核对范围：本轮按你的要求暂不考虑前端，仅检查网关、用户、活动、社群、IM、AI、后台管理、数据库与部署配置。
+>
+> 核对时间：2026-06-27
+
+## 1. 总体结论
+
+### 2026-06-27 本轮补充结果
+
+本轮已按“暂不处理数据库整体调整、暂不接真实 AI API”的前提完成以下后端补齐：
+
+- 补通知列表与标记已读接口：`GET /api/v1/notifications`、`PUT /api/v1/notifications/{id}/read`，并在网关转发到活动服务。
+- 补等待队列 `pending_confirm` 超时自动递补：活动状态定时任务会扫描过期待确认候补，置为 `expired` 并递补下一位。
+- Admin 服务已改为 OpenFeign Client：用户、活动、社群后台内部调用均由 Feign 接口承接。
+- 补活动克隆：`POST /api/v1/activities/{id}/clone`，克隆结果为草稿。
+- 补活动标签查询与使用次数累加：`GET /api/v1/activities/tags`，创建/更新活动时对已有标签累加使用次数。
+- 补“我报名的活动”：`GET /api/v1/activities/registered`。
+- 补队内活动发布权限校验：创建/克隆/更新带 `teamId` 的活动时，会调用社群服务校验用户是否为小队成员。
+- 补好友备注/分组：`PUT /api/v1/friends/{userId}/setting`，好友列表返回 `remark`、`groupName`。该功能需要 `friend_relation` 的备注/分组字段，本轮同步做了最小 SQL/H2 schema 补充。
+- 统一 IM 群聊消息主路径：继续以 `im_message` 作为统一消息主表，并补 `GET /api/v1/im/groups/{teamId}/messages` 兼容方案接口。
+
+验证结果：
+
+- `mvn -DskipTests compile`：通过，所有 Java 模块可编译。
+- `mvn -pl onlyfriends-activity-service,onlyfriends-social-service,onlyfriends-im-service,onlyfriends-admin-service -am test`：通过。
+
+当前后端已经不是单纯代码骨架，主要服务均有可运行实现：
+
+- `onlyfriends-gateway`：路由、JWT 鉴权、内部接口拦截、可选 Redis 限流。
+- `onlyfriends-user-service`：注册、激活、登录、刷新 Token、个人资料、头像上传、商家申请、后台内部用户/商家审核接口。
+- `onlyfriends-activity-service`：活动创建/草稿/提交、AI 审核接入、活动列表/附近/详情、报名、等待队列、签到二维码、签到、总结、评论、后台活动审核/下架/恢复。
+- `onlyfriends-social-service`：关注、好友申请、小队创建/加入/成员管理/公告/相册/文件/积分/投票、后台小队停用/恢复。
+- `onlyfriends-im-service`：私聊/群聊发送、会话列表、历史消息、撤回、已读、在线状态、WebSocket/STOMP 推送。
+- `onlyfriends-admin-service`：管理员登录、用户管理、商家审核、活动审核、小队管理、操作日志。
+- `onlyfriends-ai-service`：存在 Java Mock 服务与 Python FastAPI Mock 服务，活动服务可本地规则审核或远程调用 AI 服务。
+
+验证结果：
+
+- `mvn -DskipTests compile`：通过，所有 Java 模块可编译。
+- `mvn test`：本轮运行超过 120 秒被中止，未得到完整测试结论。
+
+结论：当前后端可作为阶段性演示版本，但与 v3 方案仍存在若干功能缺口、实现偏差和联调风险。若按方案完整验收，还需要补齐下面的内容。
+
+## 2. 高优先级问题
+
+### 2.1 本地数据库默认配置与 Docker Compose 不一致
+
+问题：
+
+- `docker-compose.yml` 中 MySQL 默认 root 密码是 `onlyfriends_root_password`。
+- 各服务 `application.yml` 默认数据库密码为空，例如 `USER_DB_PASSWORD`、`ACTIVITY_DB_PASSWORD` 默认都是空。
+- 如果直接按默认配置启动服务，服务可能无法连接 Docker MySQL。
+
+影响：
+
+- 新环境一键启动/演示容易失败。
+- 文档虽然说明了初始化脚本，但运行服务仍需要手动设置数据库密码环境变量。
+
+建议任务：
+
+- 统一本地默认密码，或在 [本地开发指南](../getting-started/local-setup.md) 中明确要求设置 `*_DB_PASSWORD=onlyfriends_root_password`。
+- 可增加 `.env.example`，集中维护 MySQL、Redis、JWT、MinIO、AI 等环境变量。
+
+### 2.2 AI 服务仍是 Mock/规则实现，未接入真实大模型
+
+问题：
+
+- Python AI 服务 `onlyfriends-ai-service/python/app/services.py` 明确为 deterministic mock/rule logic。
+- Java AI 服务 `AiMockController` 也是 Mock。
+- 活动服务 `AiClientImpl` 的本地模式只是关键词规则审核与模板化生成。
+- v3 方案要求文心一言/GPT-4o、视觉模型、内容安全 API 等真实 AI 能力，目前未实现。
+
+影响：
+
+- “AI 自主评判”“AI 活动策划”“图片 AI 分类”可以演示接口流程，但不能算真实 AI 能力完成。
+- 对违规内容、复杂中文语义、图片内容的判断能力有限。
+
+建议任务：
+
+- 在 Python `AiService` 后面接真实 LLM Provider，保留当前 HTTP 契约不变。
+- 增加超时、重试、限流、API Key 配置校验和异常降级测试。
+- 将 Mock 模式与真实模式在文档和配置里明确区分。
+
+### 2.3 通知模块状态
+
+本轮已完成：
+
+- 已补 `GET /api/v1/notifications`。
+- 已补 `PUT /api/v1/notifications/{id}/read`。
+- 网关已将 `/api/v1/notifications/**` 转发到活动服务。
+
+剩余增强：
+
+- Redis Pub/Sub 事件仍未接入 IM WebSocket 实时推送，目前通知以数据库列表为主。
+
+### 2.4 等待队列 pending 超时状态
+
+已实现：
+
+- 名额满时进入等待队列。
+- 有人取消报名后，第一个等待用户会变成 `pending_confirm`。
+- 该用户再次报名时可确认候补名额。
+- 本轮已补 pending 超时自动过期与递补，默认 30 分钟，可通过 `WAITLIST_PENDING_TIMEOUT_MINUTES` 配置。
+
+后续可增强：
+
+- 增加等待队列超时相关单元/集成测试。
+
+### 2.5 内部接口与 OpenFeign/Nacos 状态
+
+问题：
+
+- 活动、社群、IM 使用 Feign，但都配置了固定 URL，如 `${USER_SERVICE_BASE_URL:http://localhost:8081}`。
+- Admin 服务本轮已改为 OpenFeign Client。
+- Nacos 配置默认 `enabled: false`，当前更像“多服务 + 固定地址联调”。
+
+影响：
+
+- 与 v3 方案“Spring Cloud OpenFeign + Nacos 服务注册发现”的目标不完全一致。
+- 多环境部署时需要手动维护大量 base-url。
+
+建议任务：
+
+- 逐步去掉固定 URL，改用服务名调用，并提供本地禁用 Nacos 的 fallback 配置。
+- 明确内部接口只允许内网访问，避免服务端口暴露时绕过网关。
+
+## 3. 中优先级缺失与偏差
+
+### 3.1 活动服务功能未完全覆盖 v3 方案
+
+已实现较多核心能力，但仍缺少：
+
+- 草稿自动保存：当前支持创建草稿、修改草稿，但没有自动保存语义或接口节流策略。
+- 活动下架记录：有 `activity_offline_record` 表，但当前下架逻辑写入的是审核记录，未使用专门下架记录表。
+
+建议任务：
+
+- 下架逻辑落库到 `activity_offline_record`。
+
+### 3.2 社群服务还有部分方案细节未落地
+
+已实现关注、好友、小队、公告、相册、文件、积分、投票。
+
+缺失或偏差：
+
+- `team_disable_record` 表存在，但当前后台停用小队写入的是 `team_admin_operation_log`，未使用专门停用记录表。
+- 投票过期后状态没有看到定时关闭逻辑，当前只是投票时判断 deadline。
+
+建议任务：
+
+- 停用小队时写入 `team_disable_record`，或删除该冗余设计并统一文档。
+- 增加投票过期状态更新任务。
+
+### 3.3 IM 服务与方案表结构/API 有偏差
+
+已实现：
+
+- 统一 `im_message` 存私聊/群聊。
+- WebSocket/STOMP 私聊、群聊、撤回。
+- 会话、历史消息、已读、未读、在线状态。
+
+偏差：
+
+- 方案和 SQL 中有 `im_group_message`，当前已统一以 `im_message` 作为主消息表，`im_group_message` 不作为核心读写路径。
+- 本轮已补 `GET /im/groups/{teamId}/messages`，内部仍读取统一会话消息。
+- 群聊标题目前返回类似“小队群聊 {teamId}”，未拉取小队名称。
+- 方案中“上线后订阅所在小队所有 Topic”更多是前端订阅设计，服务端没有自动订阅概念。
+
+建议任务：
+
+- 后续同步方案文档：明确 IM 采用统一 `im_message` 表。
+- 会话列表中补充小队名称/头像等展示字段。
+
+### 3.4 后台管理服务可用，但和方案有实现差异
+
+已实现：
+
+- 管理员登录、修改密码。
+- 用户封禁/解封。
+- 商家申请审核。
+- 活动审核/下架/恢复。
+- 小队停用/恢复。
+- 管理员操作日志。
+
+问题：
+
+- Admin 服务本轮已改为 OpenFeign，保留本地固定 URL 配置用于不启用 Nacos 的开发环境。
+- 管理员 JWT 依靠 `userType=9` 被网关映射为 ADMIN，未显式写入 `role` claim。
+- 缺少更完整的后台审计查询接口，如操作日志列表。
+
+建议任务：
+
+- JWT 增加显式 `role=ADMIN` claim，减少隐式约定。
+- 补 `GET /admin/operation-logs`。
+
+### 3.5 数据库迁移策略还不完整
+
+现状：
+
+- `sql/init-all.sql` 比较完整，适合新环境初始化。
+- 各服务 `resources/db/migration` 下只有部分补表或 baseline，且 `flyway.enabled` 默认 false。
+
+影响：
+
+- 本地初始化靠手工 SQL，Flyway 不能完整重建当前库。
+- 后续多人开发容易出现数据库结构漂移。
+
+建议任务：
+
+- 为每个服务补齐完整 `V1__baseline_*.sql`。
+- 或明确只使用 `sql/init-all.sql`，并暂时移除/禁用零散 migration，避免误解。
+- 将表结构变更纳入版本化迁移。
+
+## 4. 低优先级或可作为后续增强
+
+- 网关限流默认关闭，可根据验收需要开启并补充 Redis 联调说明。
+- 活动列表推荐排序目前比较简单，主要按报名人数/开始时间，不是真正推荐算法。
+- 附近活动使用经纬度框选 + 内存距离计算，数据量大后需要空间索引优化。
+- 邮件服务可在无 SMTP 配置时演示激活链接，但真实发送需要配置和联调。
+- 文件存储支持本地/MinIO，但默认本地存储，生产 OSS/MinIO 权限、桶策略、公开访问还需配置。
+- 安全方面，各业务服务自身也做 JWT 过滤，但内部接口如果服务端口直接暴露，仍可被绕过网关调用，需要内网隔离或内部签名。
+
+## 5. 建议后续任务清单
+
+### P0：影响启动和验收的任务
+
+1. 统一数据库默认密码与 `.env.example`。
+2. 明确 AI 是 Mock 演示还是接真实模型；若要完整验收，接入真实 Provider。
+3. 补完整自动化测试，覆盖本轮新增接口。
+
+### P1：贴合 v3 方案的任务
+
+1. 同步方案文档，明确 IM 使用统一 `im_message` 表。
+2. 补活动下架专用记录落库。
+3. 补小队停用专用记录落库。
+4. 补投票过期状态更新任务。
+5. 补操作日志查询接口。
+
+### P2：工程质量任务
+
+1. 补齐 Flyway baseline。
+2. 补操作日志查询与后台审计接口。
+3. 增加服务间调用失败降级测试。
+4. 完整跑通 `mvn test`，并修复可能的超时或环境依赖问题。
+5. 补充端到端 smoke test，覆盖注册登录、创建活动、报名候补、签到、建队、聊天、后台审核。
+
+## 6. 当前完成度粗略评估
+
+| 模块 | 当前完成度 | 说明 |
+|------|------------|------|
+| 网关服务 | 较高 | 路由、鉴权、内部接口拦截、限流基础已具备 |
+| 用户服务 | 较高 | 注册登录资料商家后台接口较完整 |
+| 活动服务 | 中高 | 核心流程完整，但克隆、标签、通知、候补超时、队内权限缺失 |
+| 社群服务 | 中高 | 小队主流程完整，好友备注/分组已补，部分后台记录表仍未落地 |
+| IM 服务 | 中高 | 聊天核心可用，群聊历史接口/表结构与方案有偏差 |
+| AI 服务 | 中 | 接口完整，但真实 AI 能力未接入 |
+| 后台管理 | 中高 | 管理功能可用，内部调用已改 OpenFeign，审计查询不足 |
+| 数据库/部署 | 中 | init-all 完整度较好，但默认配置和 Flyway 策略需整理 |
+
+## 7. 一句话总结
+
+当前代码已经能支撑一个“后端核心流程演示版”，本轮已补齐通知接口、等待队列超时、Admin OpenFeign、活动克隆/标签/报名查询、好友备注分组、队内活动权限和 IM 群聊历史兼容接口。后续重点是本地配置一致性、真实 AI 接入策略、审计查询、专用操作记录落库和方案文档同步。

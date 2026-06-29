@@ -3,7 +3,7 @@ param(
     [string]$InternalBaseUrl = "http://localhost:8081/internal",
     [string]$Email = ("user" + (Get-Date -Format "yyyyMMddHHmmss") + "@example.com"),
     [string]$Password = "Abc123456",
-    [string]$Nickname = ("趣聚测试" + (Get-Random -Maximum 99999)),
+    [string]$Nickname = ("OnlyFriends测试" + (Get-Random -Maximum 99999)),
     [string]$ActivationToken = ""
 )
 
@@ -87,7 +87,7 @@ $publicProfile = Invoke-Json -Method "Get" -Url "$BaseUrl/users/$userId" -Header
 Write-Host "Public profile nickname=$($publicProfile.data.nickname)"
 
 $apply = Invoke-Json -Method "Post" -Url "$BaseUrl/merchant/apply" -Headers $authHeaders -Body @{
-    merchantName = "趣聚测试商家"
+    merchantName = "OnlyFriends测试商家"
     licenseUrl = "https://example.com/license.jpg"
     focusTags = @("运动", "户外")
 }

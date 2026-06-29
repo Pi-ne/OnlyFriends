@@ -14,10 +14,10 @@ mysql -u root -p < sql/user-service-schema.sql
 
 ```powershell
 mvn -DskipTests package
-& "C:\Program Files\Java\jdk-22\bin\java.exe" -jar ququ-user-service\target\ququ-user-service-1.0.0-SNAPSHOT.jar
+& "C:\Program Files\Java\jdk-22\bin\java.exe" -jar onlyfriends-user-service\target\onlyfriends-user-service-1.0.0-SNAPSHOT.jar
 ```
 
-也可以在 IDE 中直接运行 `com.ququ.user.UserServiceApplication`。
+也可以在 IDE 中直接运行 `com.onlyfriends.user.UserServiceApplication`。
 
 3. 如未配置 SMTP，注册接口会在服务日志输出激活链接。复制链接中的 `token`，传给脚本的 `-ActivationToken` 参数。
 
@@ -38,5 +38,5 @@ mvn -DskipTests package
 可选参数：
 
 ```powershell
-.\test-scripts\user-service\smoke-user-service.ps1 -BaseUrl "http://localhost:8081/api/v1" -Email "dev@example.com" -Password "Abc123456" -Nickname "趣聚测试用户"
+.\test-scripts\user-service\smoke-user-service.ps1 -BaseUrl "http://localhost:8081/api/v1" -Email "dev@example.com" -Password "Abc123456" -Nickname "OnlyFriends测试用户"
 ```

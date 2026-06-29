@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ququ_admin DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ququ_admin;
+CREATE DATABASE IF NOT EXISTS onlyfriends_admin DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE onlyfriends_admin;
 
 DROP TABLE IF EXISTS `admin_operation_log`;
 DROP TABLE IF EXISTS `admin_user`;

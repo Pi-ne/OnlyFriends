@@ -1,6 +1,6 @@
 <view class="page auth-page">
   <view class="hero">
-    <view class="brand">趣聚</view>
+    <view class="brand">OnlyFriends</view>
     <view class="title">创建账号</view>
     <view class="subtitle">注册后请查看邮箱完成激活，再返回登录。</view>
   </view>

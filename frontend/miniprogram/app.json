@@ -29,7 +29,7 @@
     "pages/profile/merchant-apply/index"
   ],
   "window": {
-    "navigationBarTitleText": "趣聚",
+    "navigationBarTitleText": "OnlyFriends",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f7fb",

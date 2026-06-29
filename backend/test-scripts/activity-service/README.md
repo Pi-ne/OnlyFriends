@@ -13,8 +13,8 @@ docker compose up -d mysql redis
 2. 已初始化用户库和活动库：
 
 ```powershell
-Get-Content .\sql\user-service-schema.sql | docker exec -i ququ-mysql mysql -uroot -pququ_root_password
-Get-Content .\sql\activity-service-schema.sql | docker exec -i ququ-mysql mysql -uroot -pququ_root_password
+Get-Content .\sql\user-service-schema.sql | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password
+Get-Content .\sql\activity-service-schema.sql | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password
 ```
 
 3. 已启动用户服务和活动服务，且两者使用相同 `JWT_SECRET`。

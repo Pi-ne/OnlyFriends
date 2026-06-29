@@ -9,7 +9,7 @@
     <view class="panel profile">
       <user-avatar src="{{profile.avatarUrl}}" name="{{profile.nickname}}" size="{{104}}"></user-avatar>
       <view class="profile-main">
-        <view class="title">{{profile.nickname || '趣聚用户'}}</view>
+        <view class="title">{{profile.nickname || 'OnlyFriends 用户'}}</view>
         <view class="subtitle">{{profile.bio || '还没有填写简介'}}</view>
         <view class="pill">信誉分 {{profile.creditScore || 100}}</view>
       </view>

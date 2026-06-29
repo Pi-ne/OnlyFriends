@@ -5,7 +5,7 @@
   <block wx:else>
     <view class="cover">
       <image wx:if="{{activity.coverUrl}}" src="{{activity.coverUrl}}" mode="aspectFill"></image>
-      <view wx:else class="cover-fallback">趣聚活动</view>
+      <view wx:else class="cover-fallback">OnlyFriends 活动</view>
     </view>
 
     <view class="panel detail-head">

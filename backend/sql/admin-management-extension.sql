@@ -1,4 +1,4 @@
-USE ququ_social;
+USE onlyfriends_social;
 
 CREATE TABLE IF NOT EXISTS `team_admin_operation_log` (
   `id`             BIGINT       NOT NULL AUTO_INCREMENT COMMENT 'operation log id',

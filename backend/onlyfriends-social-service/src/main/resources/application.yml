@@ -1,0 +1,40 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: onlyfriends-social-service
+  cloud:
+    nacos:
+      discovery:
+        enabled: ${NACOS_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+      config:
+        enabled: ${NACOS_CONFIG_ENABLED:${NACOS_ENABLED:false}}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+        file-extension: yml
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SOCIAL_DB_URL:jdbc:mysql://localhost:3306/onlyfriends_social?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SOCIAL_DB_USERNAME:root}
+    password: ${SOCIAL_DB_PASSWORD:}
+  flyway:
+    enabled: ${FLYWAY_ENABLED:false}
+    baseline-on-migrate: true
+    baseline-version: 0
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  secret: ${JWT_SECRET:change-me-change-me-change-me-32bytes}
+  access-token-expire: ${JWT_ACCESS_TOKEN_EXPIRE:7200000}
+  refresh-token-expire: ${JWT_REFRESH_TOKEN_EXPIRE:604800000}
+
+user-service:
+  base-url: ${USER_SERVICE_BASE_URL:http://localhost:8081}

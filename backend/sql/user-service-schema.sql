@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ququ_user DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ququ_user;
+CREATE DATABASE IF NOT EXISTS onlyfriends_user DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE onlyfriends_user;
 
 DROP TABLE IF EXISTS `merchant_apply`;
 DROP TABLE IF EXISTS `merchant_info`;

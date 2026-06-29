@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ququ_activity DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ququ_activity;
+CREATE DATABASE IF NOT EXISTS onlyfriends_activity DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE onlyfriends_activity;
 
 DROP TABLE IF EXISTS `activity_review_record`;
 DROP TABLE IF EXISTS `notification`;

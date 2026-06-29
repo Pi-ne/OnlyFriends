@@ -1,11 +1,11 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: ququ-mysql
+    container_name: onlyfriends-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-ququ_root_password}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-ququ_user}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-onlyfriends_root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-onlyfriends_user}
       TZ: Asia/Shanghai
     ports:
       - "${MYSQL_PORT:-3306}:3306"
@@ -14,7 +14,7 @@ services:
       - --collation-server=utf8mb4_unicode_ci
       - --default-time-zone=+08:00
     volumes:
-      - ququ_mysql_data:/var/lib/mysql
+      - onlyfriends_mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
       interval: 10s
@@ -23,13 +23,13 @@ services:
 
   redis:
     image: redis:7
-    container_name: ququ-redis
+    container_name: onlyfriends-redis
     restart: unless-stopped
     ports:
       - "${REDIS_PORT:-6379}:6379"
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - ququ_redis_data:/data
+      - onlyfriends_redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -38,7 +38,7 @@ services:
 
   nacos:
     image: nacos/nacos-server:v2.3.2
-    container_name: ququ-nacos
+    container_name: onlyfriends-nacos
     restart: unless-stopped
     profiles: ["infra"]
     environment:
@@ -49,12 +49,12 @@ services:
       - "${NACOS_PORT:-8848}:8848"
       - "${NACOS_GRPC_PORT:-9848}:9848"
     volumes:
-      - ququ_nacos_data:/home/nacos/data
-      - ququ_nacos_logs:/home/nacos/logs
+      - onlyfriends_nacos_data:/home/nacos/data
+      - onlyfriends_nacos_logs:/home/nacos/logs
 
   minio:
     image: minio/minio:RELEASE.2024-01-16T16-07-38Z
-    container_name: ququ-minio
+    container_name: onlyfriends-minio
     restart: unless-stopped
     profiles: ["infra"]
     environment:
@@ -65,11 +65,11 @@ services:
       - "${MINIO_CONSOLE_PORT:-9001}:9001"
     command: server /data --console-address ":9001"
     volumes:
-      - ququ_minio_data:/data
+      - onlyfriends_minio_data:/data
 
 volumes:
-  ququ_mysql_data:
-  ququ_redis_data:
-  ququ_nacos_data:
-  ququ_nacos_logs:
-  ququ_minio_data:
+  onlyfriends_mysql_data:
+  onlyfriends_redis_data:
+  onlyfriends_nacos_data:
+  onlyfriends_nacos_logs:
+  onlyfriends_minio_data:

@@ -1,0 +1,89 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: onlyfriends-gateway
+  cloud:
+    nacos:
+      discovery:
+        enabled: ${NACOS_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+      config:
+        enabled: ${NACOS_CONFIG_ENABLED:${NACOS_ENABLED:false}}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+        file-extension: yml
+    gateway:
+      httpclient:
+        websocket:
+          max-frame-payload-length: 65536
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            # Development-only CORS. Restrict these origins before production deployment.
+            allowed-origins:
+              - http://localhost:3000
+              - http://localhost:5173
+              - http://localhost:8080
+              - http://127.0.0.1:3000
+              - http://127.0.0.1:5173
+              - http://127.0.0.1:8080
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowed-headers: '*'
+            exposed-headers:
+              - Authorization
+              - X-User-Id
+              - X-User-Type
+              - X-User-Role
+              - X-Nickname
+            allow-credentials: true
+            max-age: 3600
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      routes:
+        - id: user-auth
+          uri: ${USER_SERVICE_URI:http://localhost:8081}
+          predicates:
+            - Path=/api/v1/auth/**
+        - id: user-api
+          uri: ${USER_SERVICE_URI:http://localhost:8081}
+          predicates:
+            - Path=/api/v1/users/**,/api/v1/merchant/**
+        - id: activity-api
+          uri: ${ACTIVITY_SERVICE_URI:http://localhost:8082}
+          predicates:
+            - Path=/api/v1/activities/**,/api/v1/ai/**,/api/v1/notifications/**
+        - id: social-api
+          uri: ${SOCIAL_SERVICE_URI:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/follows/**,/api/v1/friends/**,/api/v1/teams/**
+        - id: im-api
+          uri: ${IM_SERVICE_URI:http://localhost:8084}
+          predicates:
+            - Path=/api/v1/im/**
+        - id: im-websocket
+          uri: ${IM_SERVICE_WS_URI:ws://localhost:8084}
+          predicates:
+            - Path=/ws/im/**
+        - id: admin-api
+          uri: ${ADMIN_SERVICE_URI:http://localhost:8085}
+          predicates:
+            - Path=/api/v1/admin/**
+
+jwt:
+  secret: ${JWT_SECRET:change-me-change-me-change-me-32bytes}
+
+gateway:
+  rate-limit:
+    enabled: false
+    permits-per-second: ${GATEWAY_RATE_LIMIT_PERMITS:20}

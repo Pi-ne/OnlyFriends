@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ququ_social DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ququ_social;
+CREATE DATABASE IF NOT EXISTS onlyfriends_social DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE onlyfriends_social;
 
 DROP TABLE IF EXISTS `team_vote_record`;
 DROP TABLE IF EXISTS `team_vote_option`;
