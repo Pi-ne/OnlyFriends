@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ququ-activity-service" />
+        <module name="ququ-user-service" />
+        <module name="ququ-common" />
+        <module name="ququ-admin-service" />
+        <module name="ququ-ai-service" />
+        <module name="ququ-im-service" />
+        <module name="ququ-gateway" />
+        <module name="ququ-social-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ququ-activity-service" options="-parameters" />
+      <module name="ququ-admin-service" options="-parameters" />
+      <module name="ququ-ai-service" options="-parameters" />
+      <module name="ququ-common" options="-parameters" />
+      <module name="ququ-gateway" options="-parameters" />
+      <module name="ququ-im-service" options="-parameters" />
+      <module name="ququ-social-service" options="-parameters" />
+      <module name="ququ-user-service" options="-parameters" />
+    </option>
+  </component>
+</project>
