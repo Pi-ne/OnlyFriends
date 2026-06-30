@@ -26,14 +26,12 @@ public interface ActivityAdminClient {
     Result<Object> activityDetail(@PathVariable("id") Long activityId);
 
     @PutMapping("/internal/admin/activities/{id}/review")
-    Result<Void> review(@RequestParam("adminId") Long adminId,
-                        @PathVariable("id") Long activityId,
+    Result<Void> review(@PathVariable("id") Long activityId,
                         @RequestBody ReviewRequest request);
 
     @PostMapping("/internal/admin/activities/{id}/offline")
-    Result<Void> offline(@RequestParam("adminId") Long adminId,
-                         @PathVariable("id") Long activityId,
-                         @RequestBody OfflineActivityRequest request);
+    Result<Void> offline(@PathVariable("id") Long activityId,
+                          @RequestBody OfflineActivityRequest request);
 
     @PostMapping("/internal/admin/activities/{id}/restore")
     Result<Void> restore(@PathVariable("id") Long activityId);

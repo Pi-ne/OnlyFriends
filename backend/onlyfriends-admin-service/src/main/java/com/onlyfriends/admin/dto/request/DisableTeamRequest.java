@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class DisableTeamRequest {
+    private Long adminId;
     @NotBlank(message = "停用原因不能为空")
     private String reason;
 }
