@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class BanUserRequest {
+    private Long adminId;
     @NotBlank(message = "封禁原因不能为空")
     private String reason;
     @NotNull(message = "封禁期限不能为空")

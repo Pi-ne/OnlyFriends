@@ -9,6 +9,7 @@ import com.onlyfriends.admin.dto.request.AdminRestoreTeamRequest;
 import com.onlyfriends.admin.dto.request.BanUserRequest;
 import com.onlyfriends.admin.dto.request.ChangePasswordRequest;
 import com.onlyfriends.admin.dto.request.DisableTeamRequest;
+import com.onlyfriends.admin.dto.request.MerchantReviewRequest;
 import com.onlyfriends.admin.dto.request.OfflineActivityRequest;
 import com.onlyfriends.admin.dto.request.ReviewRequest;
 import com.onlyfriends.admin.dto.response.AdminLoginResponse;
@@ -88,7 +89,8 @@ public class AdminService {
     }
 
     public void banUser(Long adminId, Long userId, BanUserRequest request) {
-        data(userAdminClient.banUser(adminId, userId, request), "用户服务调用失败");
+        request.setAdminId(adminId);
+        data(userAdminClient.banUser(userId, request), "用户服务调用失败");
         logOperation(adminId, "BAN_USER", "USER", userId, request.getReason());
     }
 
@@ -106,7 +108,11 @@ public class AdminService {
     }
 
     public void reviewMerchantApply(Long adminId, Long applyId, ReviewRequest request) {
-        data(userAdminClient.reviewMerchantApply(adminId, applyId, request), "用户服务调用失败");
+        MerchantReviewRequest body = new MerchantReviewRequest();
+        body.setAdminId(adminId);
+        body.setAction(request.getAction());
+        body.setReason(request.getComment());
+        data(userAdminClient.reviewMerchantApply(applyId, body), "用户服务调用失败");
         logOperation(adminId, "REVIEW_MERCHANT_APPLY", "MERCHANT_APPLY", applyId, request.getComment());
     }
 
@@ -123,12 +129,14 @@ public class AdminService {
     }
 
     public void reviewActivity(Long adminId, Long activityId, ReviewRequest request) {
-        data(activityAdminClient.review(adminId, activityId, request), "活动服务调用失败");
+        request.setAdminId(adminId);
+        data(activityAdminClient.review(activityId, request), "活动服务调用失败");
         logOperation(adminId, "REVIEW_ACTIVITY", "ACTIVITY", activityId, request.getComment());
     }
 
     public void offlineActivity(Long adminId, Long activityId, OfflineActivityRequest request) {
-        data(activityAdminClient.offline(adminId, activityId, request), "活动服务调用失败");
+        request.setAdminId(adminId);
+        data(activityAdminClient.offline(activityId, request), "活动服务调用失败");
         logOperation(adminId, "OFFLINE_ACTIVITY", "ACTIVITY", activityId, request.getReason());
     }
 
@@ -150,7 +158,8 @@ public class AdminService {
     }
 
     public void disableTeam(Long adminId, Long teamId, DisableTeamRequest request) {
-        data(socialAdminClient.disableTeam(adminId, teamId, request), "社群服务调用失败");
+        request.setAdminId(adminId);
+        data(socialAdminClient.disableTeam(teamId, request), "社群服务调用失败");
         logOperation(adminId, "DISABLE_TEAM", "TEAM", teamId, request.getReason());
     }
 
@@ -162,7 +171,10 @@ public class AdminService {
     private Object data(com.onlyfriends.common.response.Result<?> result, String fallbackMessage) {
         if (result == null || !Integer.valueOf(200).equals(result.getCode())) {
             String message = result == null ? fallbackMessage : result.getMessage();
-            throw new BizException(ResultCode.INTERNAL_ERROR.getCode(), message);
+            Integer code = result == null || result.getCode() == null
+                    ? ResultCode.INTERNAL_ERROR.getCode()
+                    : result.getCode();
+            throw new BizException(code, message);
         }
         return result.getData();
     }

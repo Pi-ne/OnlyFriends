@@ -1,7 +1,7 @@
 package com.onlyfriends.admin.client;
 
 import com.onlyfriends.admin.dto.request.BanUserRequest;
-import com.onlyfriends.admin.dto.request.ReviewRequest;
+import com.onlyfriends.admin.dto.request.MerchantReviewRequest;
 import com.onlyfriends.common.response.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +26,7 @@ public interface UserAdminClient {
     Result<Object> userDetail(@PathVariable("id") Long userId);
 
     @PostMapping("/internal/admin/users/{id}/ban")
-    Result<Void> banUser(@RequestParam("adminId") Long adminId,
-                         @PathVariable("id") Long userId,
+    Result<Void> banUser(@PathVariable("id") Long userId,
                          @RequestBody BanUserRequest request);
 
     @PostMapping("/internal/admin/users/{id}/unban")
@@ -42,7 +41,6 @@ public interface UserAdminClient {
     Result<Object> merchantApplyDetail(@PathVariable("id") Long applyId);
 
     @PutMapping("/internal/admin/merchant-applies/{id}/review")
-    Result<Void> reviewMerchantApply(@RequestParam("adminId") Long adminId,
-                                     @PathVariable("id") Long applyId,
-                                     @RequestBody ReviewRequest request);
+    Result<Void> reviewMerchantApply(@PathVariable("id") Long applyId,
+                                     @RequestBody MerchantReviewRequest request);
 }

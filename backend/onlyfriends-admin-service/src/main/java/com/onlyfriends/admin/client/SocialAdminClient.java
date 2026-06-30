@@ -25,8 +25,7 @@ public interface SocialAdminClient {
     Result<Object> teamMembers(@PathVariable("id") Long teamId);
 
     @PostMapping("/internal/admin/teams/{id}/disable")
-    Result<Void> disableTeam(@RequestParam("adminId") Long adminId,
-                             @PathVariable("id") Long teamId,
+    Result<Void> disableTeam(@PathVariable("id") Long teamId,
                              @RequestBody DisableTeamRequest request);
 
     @PostMapping("/internal/admin/teams/{id}/restore")
