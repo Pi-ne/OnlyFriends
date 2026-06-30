@@ -35,8 +35,10 @@ http://localhost:8080/api/v1/ai
 在项目根目录执行：
 
 ```powershell
-.\scripts\start-all.ps1 -WithAi -Background
+.\scripts\start-all.ps1 -Background
 ```
+
+AI 能力默认由活动服务内置 Mock 代理（`AI_MODE=local`），一般无需单独启动 AI 服务。若需独立 Java AI 服务，可加 `-WithAi`。
 
 如需导入演示数据：
 
@@ -54,7 +56,7 @@ http://localhost:8082/swagger-ui/index.html  活动服务
 http://localhost:8083/swagger-ui/index.html  社交服务
 http://localhost:8084/swagger-ui/index.html  IM 服务
 http://localhost:8085/swagger-ui/index.html  管理服务
-http://localhost:8001/swagger-ui/index.html  AI 服务
+http://localhost:8001/swagger-ui/index.html  AI 服务（仅 `-WithAi` 或独立启动时）
 ```
 
 ## 2. 通用约定

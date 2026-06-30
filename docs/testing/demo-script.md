@@ -6,7 +6,7 @@
 BASE=http://localhost:8080/api/v1
 ```
 
-**推荐准备方式**：在项目根目录执行 `.\scripts\start-all.ps1 -WithAi -Background`（已含 `set-local-env.ps1`）。下文亦给出手动环境变量方式。
+**推荐准备方式**：在项目根目录执行 `.\scripts\start-all.ps1 -Background`（已含 `set-local-env.ps1`）。需独立 AI 服务时加 `-WithAi`。下文亦给出手动环境变量方式。
 
 预期响应格式：
 
@@ -44,7 +44,7 @@ docker compose --profile infra up -d
 Get-Content .\sql\init-all.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
 ```
 
-设置环境变量（或返回项目根目录执行 `..\scripts\start-all.ps1 -WithAi -Background` 自动设置）：
+设置环境变量（或返回项目根目录执行 `..\scripts\start-all.ps1 -Background` 自动设置）：
 
 ```powershell
 . .\scripts\set-local-env.ps1

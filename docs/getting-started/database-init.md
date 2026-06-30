@@ -83,27 +83,23 @@ password: Admin123456
 
 活动库 `onlyfriends_activity`：
 
-- `activity_template`
-- `activity`
-- `activity_review_record`
-- `activity_registration`
-- `activity_waitlist`
+- `activity_template`、`activity_tag`
+- `activity`、`activity_review_record`、`activity_offline_record`
+- `activity_registration`、`activity_waitlist`、`activity_checkin`
+- `activity_summary`、`activity_comment`
 - `notification`
 
 社交库 `onlyfriends_social`：
 
-- `user_follow`
-- `friend_relation`
-- `friend_apply`
-- `team`
-- `team_member`
-- `team_join_apply`
-- `team_admin_operation_log`
+- `user_follow`、`friend_relation`（含 `remark_a/b`、`group_a/b`）、`friend_apply`
+- `team`、`team_member`、`team_join_apply`
+- `team_announcement`、`team_album`、`team_file`、`team_score_log`
+- `team_vote`、`team_vote_option`、`team_vote_record`
+- `team_disable_record`、`team_admin_operation_log`
 
 IM 库 `onlyfriends_im`：
 
-- `im_conversation`
-- `im_message`
+- `im_conversation`、`im_message`、`im_group_message`
 - `im_conversation_read`
 
 管理库 `onlyfriends_admin`：
@@ -117,4 +113,4 @@ IM 库 `onlyfriends_im`：
 - 用户 `email`、`nickname` 与管理员 `username` 等身份字段建有唯一索引。
 - `status`、`created_at`、`activity_id`、`user_id`、`team_id`、`conv_id` 等常用查询字段已建索引。
 - AI Mock 服务无独立数据库；活动 AI 审核结果写入 `onlyfriends_activity.activity_review_record`。
-- 各服务 `resources/db/migration/` 含 Flyway 脚本，本地默认 `FLYWAY_ENABLED=false`，以 `init-all.sql` 为主。
+- 各服务 `resources/db/migration/` 含 Flyway 脚本。通过 `set-local-env.ps1` 或 `start-all.ps1` 启动时默认 `FLYWAY_ENABLED=true`；在 IDE 中直接运行主类且未加载环境变量时，各服务 `application.yml` 默认 `FLYWAY_ENABLED=false`。首次本地开发请先执行 `init-all.sql`。

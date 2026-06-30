@@ -16,7 +16,7 @@ Initialize databases as needed:
 Get-Content .\sql\init-all.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
 ```
 
-See `docs/database-init.md` for the full table list and notes about historical module SQL files.
+See [database-init.md](../getting-started/database-init.md) for the full table list and notes about module SQL files.
 
 Use the same JWT secret for all services:
 

@@ -11,14 +11,16 @@
 
 ## 本地联调
 
-在 `app.js` 中确认 API 地址：
+API 地址在 `config/index.js` 中配置（`app.js` 通过 `globalData.apiBase` 引用）：
 
 ```javascript
-globalData: {
-  apiBase: "http://localhost:8080/api/v1",
-  // ...
+// config/index.js
+dev: {
+  apiBase: "http://localhost:8080/api/v1"
 }
 ```
+
+可选：复制 `config/local.example.js` 为 `config/local.js` 做本机覆盖（已 gitignore）。
 
 启动后端后，在开发者工具中关闭「校验合法域名、web-view、TLS 版本以及 HTTPS 证书」。
 

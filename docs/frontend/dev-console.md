@@ -20,8 +20,10 @@ frontend/server.js
 先启动后端：
 
 ```powershell
-.\scripts\start-all.ps1 -WithAi -Background
+.\scripts\start-all.ps1 -Background
 ```
+
+测试 AI 独立服务时可加 `-WithAi`。
 
 再启动前端静态服务：
 

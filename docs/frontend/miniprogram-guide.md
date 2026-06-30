@@ -17,8 +17,10 @@ frontend/onlyfriends-miniprogram
 在项目根目录执行：
 
 ```powershell
-.\scripts\start-all.ps1 -WithAi -Background
+.\scripts\start-all.ps1 -Background
 ```
+
+AI 策划等功能默认由活动服务内置 Mock 处理；若需独立 AI 服务，可加 `-WithAi`。
 
 后端统一网关地址：
 
@@ -26,13 +28,11 @@ frontend/onlyfriends-miniprogram
 http://localhost:8080
 ```
 
-小程序 API Base URL 在 `frontend/onlyfriends-miniprogram/app.js` 中配置：
+小程序 API Base URL 在 `frontend/onlyfriends-miniprogram/config/index.js` 中配置（`app.js` 通过 `globalData.apiBase` 引用）：
 
 ```javascript
-globalData: {
-  apiBase: 'http://localhost:8080/api/v1',
-  // ...
-}
+// config/index.js → dev.apiBase
+apiBase: "http://localhost:8080/api/v1"
 ```
 
 如果微信开发者工具中请求本地接口失败，请在开发者工具中开启：
@@ -66,30 +66,30 @@ frontend/onlyfriends-miniprogram
 
 ### 4.2 活动核心闭环
 
-1. 进入“发现”。
+1. 进入底部 Tab「活动」。
 2. 查看活动列表。
 3. 使用搜索框或筛选条件查询活动。
 4. 点击活动卡片进入详情页。
-5. 点击“立即报名”。
-6. 返回“我的” -> “我的活动”，查看报名记录。
-7. 回到活动详情，点击“取消报名”验证取消报名。
+5. 点击「立即报名」。
+6. 返回「我的」→「我的活动」，查看报名记录。
+7. 回到活动详情，点击「取消报名」验证取消报名。
 
-### 4.3 发起活动
+### 4.3 发布活动
 
-1. 进入底部 Tab“发起”。
+1. 进入底部 Tab「发布」。
 2. 填写基础信息、时间地点、规则、说明。
-3. 可点击“AI 帮我策划”自动补充标题、标签或说明。
-4. 点击“保存草稿”验证草稿创建。
-5. 点击“提交审核”验证活动提交审核。
+3. 可点击「AI 帮我策划」自动补充标题、标签或说明。
+4. 点击「保存草稿」验证草稿创建。
+5. 点击「提交审核」验证活动提交审核。
 
 说明：后端 `POST /activities` 在 `isDraft=false` 时会直接进入审核流程，前端不会额外调用 `/activities/{id}/submit`。
 
-### 4.4 小队
+### 4.4 社群与小队
 
-1. 进入“小队”。
-2. 查看“我的小队”和推荐小队。
-3. 点击“创建”新建小队。
-4. 进入小队详情后测试加入、退出、成员、动态、相册、文件、投票、积分等入口。
+1. 进入底部 Tab「社群」。
+2. 查看「我的小队」和推荐小队。
+3. 点击「创建」新建小队。
+4. 进入小队详情后测试加入、退出、成员、公告、相册、文件、投票、积分等入口。
 
 ### 4.5 好友与社交
 

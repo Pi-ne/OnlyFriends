@@ -44,7 +44,7 @@ $env:AI_MODE = "local"
 ### 模式二：Java AI Service
 
 ```powershell
-.\scripts\start-all.ps1 -WithAi -Background
+.\scripts\start-all.ps1 -WithAi -Background   # 或在根目录执行同命令
 ```
 
 ### 模式三：Python FastAPI

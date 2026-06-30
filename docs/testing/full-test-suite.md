@@ -1,12 +1,12 @@
 # OnlyFriends 完整测试指南
 
-合并 `ququ-*` 与 `onlyfriends-*` 后，使用本指南验证各模块与整体正确性。
+使用本指南验证各模块与整体正确性。
 
 ## 一、测试分层
 
 | 层级 | 脚本/命令 | 依赖 | 覆盖范围 |
 |------|-----------|------|----------|
-| L1 单元测试 | `mvn clean test` | JDK 21、Maven | Gateway/User/Activity/Social/IM 全部 Java 测试 |
+| L1 单元测试 | `mvn clean test` | JDK 17、Maven | Gateway/User/Activity/Social/IM/Admin 全部 Java 测试 |
 | L2 AI 测试 | `python -m pytest tests/ -v` | Python 3.10+ | AI 策划/审核/图片分类 |
 | L3 单服务冒烟 | `test-scripts/*/smoke-*.ps1` | 对应服务 + MySQL | 单服务功能闭环 |
 | L4 全链路冒烟 | `test-scripts/backend-smoke.ps1` | 全部服务 + 网关 | 注册→活动→社交→IM→Admin |
@@ -132,7 +132,7 @@ python -m pytest tests/ -v
 
 ## 五、小程序 API 对照测试
 
-小程序通过网关 `http://localhost:8080/api/v1` 访问（配置见 `frontend/onlyfriends-miniprogram/app.js` → `globalData.apiBase`）。
+小程序通过网关 `http://localhost:8080/api/v1` 访问（配置见 `frontend/onlyfriends-miniprogram/config/index.js`）。
 
 | 小程序 API | 后端路径 | 冒烟覆盖 |
 |------------|----------|----------|
@@ -145,7 +145,7 @@ python -m pytest tests/ -v
 | `activity.planActivity` | POST `/ai/plan-activity` | activity-smoke |
 | `social.*` / `im.*` | `/teams`, `/im/*` | backend-smoke |
 
-微信开发者工具需开启「不校验合法域名」，并将 `app.js` 中 `apiBase` 设为 `http://localhost:8080/api/v1`（或本机局域网 IP）。
+微信开发者工具需开启「不校验合法域名」，并将 `config/index.js` 中 `dev.apiBase` 设为 `http://localhost:8080/api/v1`（或本机局域网 IP）。
 
 ## 六、验收标准对照
 
@@ -161,7 +161,7 @@ python -m pytest tests/ -v
 
 | 现象 | 原因 | 处理 |
 |------|------|------|
-| `mvn test` 报 `com.ququ` 包错误 | 合并后 target 缓存 | `mvn clean test` |
+| `mvn test` 编译或缓存异常 | 旧 target 缓存 | `mvn clean test` |
 | IM 返回 500 | 8084 端口被占用，IM 未启动 | 重启服务，`set-local-env.ps1` 会自动用 18084 |
 | 激活 token 找不到 | MySQL 容器名不匹配 | 使用 `onlyfriends-mysql` 或传 `-MysqlContainer` |
 | 网关连接重置 | 下游服务未就绪 | 检查 `backend/logs/*.out.log` |

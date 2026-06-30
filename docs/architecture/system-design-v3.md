@@ -1320,10 +1320,11 @@ onlyfriends-platform/
 │
 ├── frontend/
 │   ├── onlyfriends-miniprogram/   # 微信小程序
+│   │   ├── config/index.js        # API Base（dev / release）
 │   │   ├── pages/                 # index、activity、social、im、profile 等
 │   │   ├── api/                   # 业务 API 封装
-│   │   └── app.js                 # globalData.apiBase
-│   ├── index.html / app.js        # Web 开发管理台页面
+│   │   └── app.js                 # 引用 config，暴露 globalData.apiBase
+│   ├── index.html / app.js / styles.css  # Web 开发管理台页面
 │   └── server.js                  # 管理台静态服务（5173）
 │
 ├── docs/                          # 项目文档
@@ -1376,8 +1377,6 @@ OnlyFriends/                           ← Git 根仓库
 ├── docs/                              ← 文档权威入口
 └── scripts/                           ← 根目录启动脚本
 ```
-
-> 历史目录 `backend/ququ-*` 为迁移遗留，不在父 POM 中。
 
 ### A.3 基础设施 Docker Compose 配置
 

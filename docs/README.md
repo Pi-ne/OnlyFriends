@@ -6,10 +6,9 @@
 
 | 类型 | 权威路径 | 说明 |
 |------|----------|------|
-| 后端模块 | `backend/onlyfriends-*` | Maven 父 POM 仅包含 `onlyfriends-*` |
-| 小程序 | `frontend/onlyfriends-miniprogram/` | API 配置在 `app.js` → `globalData.apiBase` |
-| Web 管理台 | `frontend/server.js` | 端口 5173，非 Vue 独立工程 |
-| 遗留 | `backend/ququ-*` | 历史副本，不参与日常构建 |
+| 后端模块 | `backend/onlyfriends-*` | Maven 父 POM 包含 8 个子模块（7 服务 + common） |
+| 小程序 | `frontend/onlyfriends-miniprogram/` | API 配置在 `config/index.js`（`app.js` 引用） |
+| Web 管理台 | `frontend/server.js` | 端口 5173，静态 HTML + Node 静态服务 |
 
 ## 入门指南
 
@@ -60,6 +59,7 @@
 | 文档 | 说明 |
 |------|------|
 | [冒烟测试](testing/smoke-tests.md) | 后端自动化冒烟脚本 |
+| [完整测试指南](testing/full-test-suite.md) | 单元测试、AI 测试与冒烟分层说明 |
 | [演示脚本](testing/demo-script.md) | 验收演示 curl 流程 |
 | [用户故事](product/user-stories.md) | Epic / Story 与优先级 |
 | [验收标准](product/acceptance-criteria.md) | SMART 验收条件 |

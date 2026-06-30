@@ -56,13 +56,11 @@ OnlyFriends/
 │   └── docker-compose.yml
 ├── frontend/
 │   ├── onlyfriends-miniprogram/  # 微信小程序
-│   ├── index.html / app.js  # Web 开发管理台
+│   ├── index.html / app.js / styles.css  # Web 开发管理台
 │   └── server.js            # 管理台静态服务（5173）
 ├── docs/                    # 项目文档（唯一权威入口）
-├── scripts/                 # 根目录启动脚本（委托 backend/scripts）
+└── scripts/                 # 根目录启动脚本（委托 backend/scripts）
 ```
-
-> `backend/ququ-*` 为历史迁移遗留目录，不在 Maven 父 POM 中，日常开发请使用 `onlyfriends-*` 模块。
 
 ## 微服务一览
 

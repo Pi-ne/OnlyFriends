@@ -7,7 +7,7 @@
 | 项 | 值 |
 |----|-----|
 | 模块 | `onlyfriends-im-service` |
-| 端口 | **8084** |
+| 端口 | **8084**（被占用时 `set-local-env.ps1` 自动回退为 **18084**） |
 | 主类 | `com.onlyfriends.im.ImServiceApplication` |
 | 数据库 | `onlyfriends_im` |
 | Swagger | http://localhost:8084/swagger-ui/index.html |
@@ -41,7 +41,7 @@
 | 项 | 值 |
 |----|-----|
 | 网关路径 | `ws://localhost:8080/ws/im/**` |
-| 直连路径 | `ws://localhost:8084/ws/im/**` |
+| 直连路径 | `ws://localhost:8084/ws/im/**`（端口回退时改为 `18084`） |
 
 客户端经网关连接时，网关将 WebSocket 代理到 IM 服务。
 
@@ -49,6 +49,7 @@
 
 | 变量 | 说明 |
 |------|------|
+| `IM_SERVICE_PORT` | 服务监听端口（默认 8084，冲突时 18084） |
 | `IM_DB_URL` | 数据库连接 |
 | `JWT_SECRET` | JWT 密钥 |
 | `SOCIAL_SERVICE_BASE_URL` | 校验群聊成员 |

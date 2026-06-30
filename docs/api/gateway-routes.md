@@ -26,8 +26,8 @@ API Gateway（端口 **8080**）是所有客户端的统一入口。配置位于
 | `USER_SERVICE_URI` | `http://localhost:8081` | 用户服务地址 |
 | `ACTIVITY_SERVICE_URI` | `http://localhost:8082` | 活动服务地址 |
 | `SOCIAL_SERVICE_URI` | `http://localhost:8083` | 社交服务地址 |
-| `IM_SERVICE_URI` | `http://localhost:8084` | IM HTTP 地址 |
-| `IM_SERVICE_WS_URI` | `ws://localhost:8084` | IM WebSocket 地址 |
+| `IM_SERVICE_URI` | `http://localhost:8084` | IM HTTP 地址（8084 被占用时 `set-local-env.ps1` 回退为 `18084`） |
+| `IM_SERVICE_WS_URI` | `ws://localhost:8084` | IM WebSocket 地址（同上） |
 | `ADMIN_SERVICE_URI` | `http://localhost:8085` | 管理服务地址 |
 | `JWT_SECRET` | — | 与各服务保持一致 |
 | `NACOS_ENABLED` | `false` | 是否启用 Nacos 服务发现 |
@@ -47,9 +47,9 @@ API Gateway（端口 **8080**）是所有客户端的统一入口。配置位于
 
 开发环境允许以下来源（生产部署前需收紧）：
 
-- `http://localhost:5173`（Web 开发管理台）
-- `http://localhost:3000`
-- `http://localhost:8080`
+- `http://localhost:5173`、`http://127.0.0.1:5173`（Web 开发管理台）
+- `http://localhost:3000`、`http://127.0.0.1:3000`
+- `http://localhost:8080`、`http://127.0.0.1:8080`
 
 ## 内部接口
 

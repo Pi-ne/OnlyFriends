@@ -62,13 +62,18 @@ cd ..
 .\scripts\start-all.ps1 -Background
 ```
 
-含 AI 服务：
+含 AI 独立服务（可选，日常开发默认由 Activity 内置 Mock 代理，无需 `-WithAi`）：
 
 ```powershell
 .\scripts\start-all.ps1 -WithAi -Background
 ```
 
-`start-all.ps1` 会自动调用 `set-local-env.ps1` 设置 JWT、数据库连接等环境变量，并启动 Redis 与 MySQL 容器（MySQL 使用 `--force-recreate`，会重建容器实例；数据卷默认保留，但若需保留容器内临时状态请注意备份）。
+`start-all.ps1` 会自动调用 `set-local-env.ps1`。该脚本会设置 JWT、数据库连接、服务 URI 等环境变量，并启动 Redis 与 MySQL 容器（MySQL 使用 `--force-recreate`，会重建容器实例；数据卷默认保留）。
+
+**端口冲突自动回退**（由 `set-local-env.ps1` 处理）：
+
+- MySQL `3306` 被占用 → 自动使用 `3307`（需确保 `docker-compose` 映射一致或手动调整）
+- IM `8084` 被占用 → 自动使用 `18084`，网关通过 `IM_SERVICE_URI` / `IM_SERVICE_WS_URI` 同步转发
 
 后台日志与 PID 文件目录：`backend/logs/`。
 
@@ -121,7 +126,7 @@ cd backend
 
 1. 打开微信开发者工具
 2. 导入目录：`frontend/onlyfriends-miniprogram`
-3. 确认 `frontend/onlyfriends-miniprogram/app.js` 中 `globalData.apiBase` 为 `http://localhost:8080/api/v1`
+3. 确认 `frontend/onlyfriends-miniprogram/config/index.js` 中 `dev.apiBase` 为 `http://localhost:8080/api/v1`（也可通过 gitignored 的 `config/local.js` 覆盖）
 4. 开发阶段在开发者工具中关闭域名校验
 
 详见 [小程序使用教程](../frontend/miniprogram-guide.md)。
