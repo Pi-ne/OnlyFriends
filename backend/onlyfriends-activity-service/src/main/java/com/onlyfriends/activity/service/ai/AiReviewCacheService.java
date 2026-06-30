@@ -88,7 +88,7 @@ public class AiReviewCacheService {
 
     private String key(AiReviewRequest request) {
         String content = normalize(request);
-        return "ai:review:" + sha256(content);
+        return "ai:review:" + md5(content);
     }
 
     private String normalize(AiReviewRequest request) {
@@ -106,9 +106,9 @@ public class AiReviewCacheService {
         return value == null ? "" : value.trim();
     }
 
-    private String sha256(String value) {
+    private String md5(String value) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance("MD5");
             byte[] bytes = digest.digest(value.getBytes(StandardCharsets.UTF_8));
             StringBuilder builder = new StringBuilder();
             for (byte b : bytes) {
@@ -116,7 +116,7 @@ public class AiReviewCacheService {
             }
             return builder.toString();
         } catch (NoSuchAlgorithmException ex) {
-            throw new IllegalStateException("SHA-256 algorithm unavailable", ex);
+            throw new IllegalStateException("MD5 algorithm unavailable", ex);
         }
     }
 }
