@@ -14,6 +14,6 @@
 
   <view class="composer">
     <input class="composer-input" value="{{input}}" placeholder="输入消息" confirm-type="send" bindinput="updateInput" bindconfirm="sendMessage" />
-    <button class="send-btn" loading="{{sending}}" disabled="{{sending || !input}}" bindtap="sendMessage">发送</button>
+    <button class="btn small" loading="{{sending}}" disabled="{{sending || !input}}" bindtap="sendMessage">发送</button>
   </view>
 </view>

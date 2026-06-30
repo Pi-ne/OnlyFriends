@@ -4,6 +4,7 @@ import com.onlyfriends.common.response.Result;
 import com.onlyfriends.user.dto.request.LoginRequest;
 import com.onlyfriends.user.dto.request.RefreshTokenRequest;
 import com.onlyfriends.user.dto.request.RegisterRequest;
+import com.onlyfriends.user.dto.request.WxLoginRequest;
 import com.onlyfriends.user.dto.response.LoginResponse;
 import com.onlyfriends.user.service.AuthService;
 import jakarta.validation.Valid;
@@ -38,6 +39,11 @@ public class AuthController {
     @PostMapping("/login")
     public Result<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return Result.success(authService.login(request));
+    }
+
+    @PostMapping("/wx-login")
+    public Result<LoginResponse> wxLogin(@Valid @RequestBody WxLoginRequest request) {
+        return Result.success(authService.wxLogin(request));
     }
 
     @PostMapping("/refresh")

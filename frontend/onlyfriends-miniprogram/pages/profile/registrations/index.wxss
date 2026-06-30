@@ -1,20 +1,5 @@
-.title {
+.page-title {
   margin-bottom: 22rpx;
-  font-size: 42rpx;
-  font-weight: 800;
-}
-
-.state {
-  padding: 26rpx;
-  color: #77808f;
-  font-size: 26rpx;
-  line-height: 1.6;
-}
-
-.state.error {
-  color: #b5473f;
-  background: #fff6f4;
-  border-color: #f1c2bc;
 }
 
 .activity {
@@ -34,22 +19,12 @@
   min-width: 0;
   font-size: 30rpx;
   line-height: 1.35;
-  font-weight: 800;
-}
-
-.status {
-  flex: 0 0 auto;
-  padding: 8rpx 16rpx;
-  border-radius: 999rpx;
-  background: #edf7f2;
-  color: #1f7a5a;
-  font-size: 22rpx;
   font-weight: 700;
 }
 
 .meta {
   margin-top: 12rpx;
-  color: #77808f;
+  color: #8b939e;
   font-size: 24rpx;
   line-height: 1.45;
 }

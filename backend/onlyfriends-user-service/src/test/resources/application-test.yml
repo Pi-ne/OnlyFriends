@@ -31,6 +31,8 @@ jwt:
 
 app:
   upload-dir: target/test-uploads
+  wechat:
+    mock-enabled: true
   redis:
     enabled: false
   storage:

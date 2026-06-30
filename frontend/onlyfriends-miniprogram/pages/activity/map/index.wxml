@@ -12,7 +12,7 @@
   />
 
   <view class="map-chip">活动地图</view>
-  <button class="locate-btn" bindtap="recenter">定位</button>
+  <button class="btn-float locate-btn" bindtap="recenter">定位</button>
 
   <view wx:if="{{loading}}" class="map-state card">正在加载活动地图...</view>
   <view wx:elif="{{error}}" class="map-state card">{{error}}</view>
@@ -28,7 +28,7 @@
     <view class="muted line">
       {{selected.distance ? selected.distance + " · " : ""}}{{selected.fee}} · {{selected.joined}}/{{selected.capacity}} 人
     </view>
-    <view class="summary-actions">
+    <view class="btn-group split summary-actions">
       <button class="btn secondary" bindtap="openNavigation">导航</button>
       <button class="btn" bindtap="goDetail">查看详情</button>
     </view>

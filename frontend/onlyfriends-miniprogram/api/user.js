@@ -4,6 +4,10 @@ function login(data) {
   return request({ url: "/auth/login", method: "POST", data });
 }
 
+function wxLogin(data) {
+  return request({ url: "/auth/wx-login", method: "POST", data });
+}
+
 function register(data) {
   return request({ url: "/auth/register", method: "POST", data });
 }
@@ -14,6 +18,7 @@ function getProfile() {
 
 module.exports = {
   login,
+  wxLogin,
   register,
   getProfile
 };

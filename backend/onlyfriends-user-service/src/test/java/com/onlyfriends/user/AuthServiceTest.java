@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.onlyfriends.common.exception.BizException;
 import com.onlyfriends.user.dto.request.LoginRequest;
 import com.onlyfriends.user.dto.request.RegisterRequest;
+import com.onlyfriends.user.dto.request.WxLoginRequest;
 import com.onlyfriends.user.dto.response.LoginResponse;
 import com.onlyfriends.user.entity.User;
 import com.onlyfriends.user.mapper.UserMapper;
@@ -69,5 +70,23 @@ class AuthServiceTest {
 
         assertThatThrownBy(() -> authService.register(duplicate)).isInstanceOf(BizException.class);
         assertThat(userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getEmail, "duplicate@example.com"))).isEqualTo(1);
+    }
+
+    @Test
+    void wxLoginCreatesActiveUserWithoutActivation() {
+        WxLoginRequest request = new WxLoginRequest();
+        request.setCode("test-wx-code-001");
+
+        LoginResponse loginResponse = authService.wxLogin(request);
+        assertThat(loginResponse.getAccessToken()).isNotBlank();
+        assertThat(loginResponse.getRefreshToken()).isNotBlank();
+
+        User created = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getWxOpenid, "mock_test-wx-code-001"));
+        assertThat(created).isNotNull();
+        assertThat(created.getStatus()).isEqualTo(1);
+        assertThat(created.getActivateToken()).isNull();
+
+        LoginResponse loginAgain = authService.wxLogin(request);
+        assertThat(loginAgain.getUserInfo().getUserId()).isEqualTo(created.getId());
     }
 }

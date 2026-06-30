@@ -6,6 +6,7 @@ import com.onlyfriends.common.response.ResultCode;
 import com.onlyfriends.common.util.JwtUtil;
 import com.onlyfriends.user.dto.request.LoginRequest;
 import com.onlyfriends.user.dto.request.RegisterRequest;
+import com.onlyfriends.user.dto.request.WxLoginRequest;
 import com.onlyfriends.user.dto.response.LoginResponse;
 import com.onlyfriends.user.dto.response.UserInfoResponse;
 import com.onlyfriends.user.entity.User;
@@ -13,14 +14,17 @@ import com.onlyfriends.user.mapper.UserMapper;
 import com.onlyfriends.user.service.AuthService;
 import com.onlyfriends.user.service.MailService;
 import com.onlyfriends.user.service.RefreshTokenStore;
+import com.onlyfriends.user.service.WeChatService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final MailService mailService;
     private final RefreshTokenStore refreshTokenStore;
+    private final WeChatService weChatService;
 
     @Override
     @Transactional
@@ -88,6 +93,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
+    public LoginResponse wxLogin(WxLoginRequest request) {
+        WeChatService.WeChatSession session = weChatService.exchangeCode(request.getCode());
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getWxOpenid, session.openid()));
+        if (user == null) {
+            user = createWeChatUser(session, request);
+        } else {
+            updateWeChatProfile(user, request);
+        }
+        ensureLoginAllowed(user);
+        return buildLoginResponse(user);
+    }
+
+    @Override
     public LoginResponse refreshToken(String refreshToken) {
         Claims claims;
         try {
@@ -133,5 +152,57 @@ public class AuthServiceImpl implements AuthService {
 
     private boolean existsByNickname(String nickname) {
         return userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getNickname, nickname)) > 0;
+    }
+
+    private User createWeChatUser(WeChatService.WeChatSession session, WxLoginRequest request) {
+        User user = new User();
+        user.setWxOpenid(session.openid());
+        user.setWxUnionid(session.unionid());
+        user.setNickname(resolveNickname(request.getNickname()));
+        user.setAvatarUrl(StringUtils.hasText(request.getAvatarUrl()) ? request.getAvatarUrl().trim() : null);
+        user.setGender(0);
+        user.setUserType(0);
+        user.setStatus(STATUS_NORMAL);
+        user.setCreditScore(100);
+        user.setDeleted(0);
+        userMapper.insert(user);
+        return user;
+    }
+
+    private void updateWeChatProfile(User user, WxLoginRequest request) {
+        boolean changed = false;
+        if (StringUtils.hasText(request.getNickname())) {
+            String nickname = request.getNickname().trim();
+            if (!nickname.equals(user.getNickname()) && !existsByNickname(nickname)) {
+                user.setNickname(nickname);
+                changed = true;
+            }
+        }
+        if (StringUtils.hasText(request.getAvatarUrl()) && !request.getAvatarUrl().trim().equals(user.getAvatarUrl())) {
+            user.setAvatarUrl(request.getAvatarUrl().trim());
+            changed = true;
+        }
+        if (changed) {
+            userMapper.updateById(user);
+        }
+    }
+
+    private String resolveNickname(String requestedNickname) {
+        if (StringUtils.hasText(requestedNickname)) {
+            String nickname = requestedNickname.trim();
+            if (nickname.length() > 50) {
+                nickname = nickname.substring(0, 50);
+            }
+            if (!existsByNickname(nickname)) {
+                return nickname;
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            String candidate = "微信用户" + ThreadLocalRandom.current().nextInt(100000, 999999);
+            if (!existsByNickname(candidate)) {
+                return candidate;
+            }
+        }
+        return "微信用户" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
     }
 }

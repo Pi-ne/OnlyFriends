@@ -7,7 +7,7 @@
       </view>
     </view>
     <view class="quick-actions">
-      <button class="btn ai-btn" loading="{{planning}}" disabled="{{planning}}" bindtap="generateAiPlan">AI 策划</button>
+      <button class="btn small pill" loading="{{planning}}" disabled="{{planning}}" bindtap="generateAiPlan">AI 策划</button>
     </view>
   </view>
 
@@ -94,7 +94,7 @@
     </view>
   </view>
 
-  <view class="actions">
+  <view class="btn-group split actions">
     <button class="btn secondary" loading="{{saving}}" disabled="{{saving}}" bindtap="saveDraft">保存草稿</button>
     <button class="btn" loading="{{saving}}" disabled="{{saving}}" bindtap="submitReview">提交审核</button>
   </view>

@@ -1,8 +1,34 @@
 const app = getApp();
 
+const PUBLIC_AUTH_PATHS = [
+  "/auth/wx-login",
+  "/auth/login",
+  "/auth/register",
+  "/auth/refresh",
+  "/auth/activate"
+];
+
+function isPublicAuthRequest(url) {
+  if (!url) {
+    return false;
+  }
+  return PUBLIC_AUTH_PATHS.some((path) => url === path || url.startsWith(path + "?"));
+}
+
 function isAuthExpired(res, body) {
   const message = body && body.message ? String(body.message) : "";
   return res.statusCode === 401 || message === "Invalid or expired token";
+}
+
+function extractErrorMessage(body) {
+  if (!body) {
+    return "请求失败";
+  }
+  const errors = body.data && body.data.errors;
+  if (Array.isArray(errors) && errors.length) {
+    return errors.map((item) => item.message).filter(Boolean).join("；");
+  }
+  return body.message || "请求失败";
 }
 
 function clearAuthAndRedirect() {
@@ -16,7 +42,8 @@ function clearAuthAndRedirect() {
 }
 
 function request(options) {
-  const token = wx.getStorageSync("accessToken");
+  const publicAuth = isPublicAuthRequest(options.url);
+  const token = publicAuth ? "" : wx.getStorageSync("accessToken");
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${app.globalData.apiBase}${options.url}`,
@@ -34,11 +61,13 @@ function request(options) {
           return;
         }
         if (isAuthExpired(res, body)) {
-          clearAuthAndRedirect();
-          reject(new Error("登录已过期，请重新登录"));
+          if (!publicAuth) {
+            clearAuthAndRedirect();
+          }
+          reject(new Error(extractErrorMessage(body) || "登录失败，请重试"));
           return;
         }
-        reject(new Error(body.message || "请求失败"));
+        reject(new Error(extractErrorMessage(body)));
       },
       fail(err) {
         reject(new Error(err.errMsg || "网络请求失败"));

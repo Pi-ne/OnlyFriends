@@ -1,10 +1,10 @@
 <view class="page">
-  <view class="header">
+  <view class="page-header between">
     <view>
-      <view class="title">兴趣小队</view>
-      <view class="muted">找到稳定搭子，让活动不只发生一次。</view>
+      <view class="page-title">兴趣小队</view>
+      <view class="page-subtitle">找到稳定搭子，让活动不只发生一次。</view>
     </view>
-    <button class="create-btn" bindtap="createTeam">建立队伍</button>
+    <button class="btn small pill" bindtap="createTeam">建立队伍</button>
   </view>
 
   <view wx:if="{{loading}}" class="state card">正在加载小队...</view>
@@ -17,7 +17,7 @@
       <view class="team-main">
         <view class="team-name">{{item.name}}</view>
       </view>
-      <button class="join {{item.joined ? 'joined' : ''}}" data-id="{{item.id}}" data-name="{{item.name}}" data-joined="{{item.joined}}" bindtap="joinTeam">
+      <button class="btn small pill {{item.joined ? 'muted' : 'secondary'}}" data-id="{{item.id}}" data-name="{{item.name}}" data-joined="{{item.joined}}" bindtap="joinTeam">
         {{item.joined ? "已加入" : "加入"}}
       </button>
     </view>
@@ -55,7 +55,7 @@
         <text class="field-label">人数上限</text>
         <input class="input" type="number" data-key="maxMembers" value="{{form.maxMembers}}" placeholder="请输入人数上限" bindinput="updateForm" />
       </view>
-      <view class="modal-actions">
+      <view class="btn-group split modal-actions">
         <button class="btn secondary" disabled="{{creating}}" bindtap="closeCreate">取消</button>
         <button class="btn" loading="{{creating}}" disabled="{{creating}}" bindtap="submitCreateTeam">创建</button>
       </view>

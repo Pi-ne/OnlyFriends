@@ -1,45 +1,14 @@
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 -4rpx;
-  padding: 0 24rpx;
+.page-header.between {
+  align-items: flex-start;
+  gap: 16rpx;
 }
 
-.title {
-  margin-bottom: 10rpx;
-  font-size: 42rpx;
-  font-weight: 800;
-}
-
-.create-btn,
-.join {
-  width: 148rpx;
-  height: 62rpx;
-  border-radius: 999rpx;
-  background: #1f7a5a;
-  color: #ffffff;
-  font-size: 24rpx;
-  font-weight: 700;
-  flex: 0 0 148rpx;
-}
-
-.create-btn {
-  transform: translateX(20rpx);
+.page-header .btn {
+  flex-shrink: 0;
 }
 
 .state {
   margin-top: 28rpx;
-  padding: 26rpx;
-  color: #77808f;
-  font-size: 26rpx;
-  line-height: 1.6;
-}
-
-.state.error {
-  color: #b5473f;
-  background: #fff6f4;
-  border-color: #f1c2bc;
 }
 
 .team {
@@ -64,7 +33,7 @@
   min-height: 44rpx;
   font-size: 31rpx;
   line-height: 1.35;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .topic {
@@ -78,24 +47,10 @@
   min-width: 0;
 }
 
-.join {
-  width: 104rpx;
-  height: 56rpx;
-  flex: 0 0 104rpx;
-  background: #edf7f2;
-  color: #1f7a5a;
-  font-size: 24rpx;
-}
-
-.join.joined {
-  color: #77808f;
-  background: #f1f3f6;
-}
-
 .member-count {
   flex: 0 0 96rpx;
-  color: #77808f;
-  font-size: 27rpx;
+  color: #8b939e;
+  font-size: 26rpx;
   text-align: right;
   white-space: nowrap;
 }
@@ -122,7 +77,7 @@
   margin-bottom: 24rpx;
   text-align: center;
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .compact-textarea {
@@ -131,22 +86,15 @@
 
 .picker-box {
   width: 100%;
-  min-height: 76rpx;
-  padding: 0 22rpx;
-  border: 1rpx solid #dde3eb;
-  border-radius: 12rpx;
+  min-height: 80rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #e4e8ee;
+  border-radius: 16rpx;
   background: #ffffff;
-  color: #19202b;
-  line-height: 76rpx;
+  color: #1a1f28;
+  line-height: 80rpx;
 }
 
 .modal-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18rpx;
   margin-top: 12rpx;
-}
-
-.modal-actions .btn {
-  width: 100%;
 }

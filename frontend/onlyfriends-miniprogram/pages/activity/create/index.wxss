@@ -30,11 +30,8 @@
   margin-top: 24rpx;
 }
 
-.ai-btn {
-  width: 260rpx;
-  height: 72rpx;
-  border-radius: 999rpx;
-  font-size: 26rpx;
+.actions {
+  margin-top: 24rpx;
 }
 
 .template-scroll {
@@ -230,15 +227,4 @@
   height: 240rpx;
   border-radius: 12rpx;
   overflow: hidden;
-}
-
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18rpx;
-  margin-top: 24rpx;
-}
-
-.actions .btn {
-  width: 100%;
 }

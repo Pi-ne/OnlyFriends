@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class AdminUserResponse {
     private Long userId;
     private String email;
+    private String wxOpenid;
     private String nickname;
     private String avatarUrl;
     private Integer userType;

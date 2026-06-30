@@ -69,7 +69,9 @@ public class AdminUserInternalController {
         wrapper.like(StringUtils.hasText(email), User::getEmail, email);
         wrapper.like(StringUtils.hasText(nickname), User::getNickname, nickname);
         if (StringUtils.hasText(keyword)) {
-            wrapper.and(w -> w.like(User::getEmail, keyword).or().like(User::getNickname, keyword));
+            wrapper.and(w -> w.like(User::getEmail, keyword)
+                    .or().like(User::getNickname, keyword)
+                    .or().like(User::getWxOpenid, keyword));
         }
         wrapper.orderByDesc(User::getCreatedAt);
         List<User> all = userMapper.selectList(wrapper);
@@ -200,6 +202,7 @@ public class AdminUserInternalController {
         AdminUserResponse response = new AdminUserResponse();
         response.setUserId(user.getId());
         response.setEmail(user.getEmail());
+        response.setWxOpenid(user.getWxOpenid());
         response.setNickname(user.getNickname());
         response.setAvatarUrl(user.getAvatarUrl());
         response.setUserType(user.getUserType());

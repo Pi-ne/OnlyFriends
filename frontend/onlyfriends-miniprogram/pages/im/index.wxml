@@ -1,10 +1,12 @@
 <view class="page">
-  <view class="title">消息</view>
+  <view class="page-title">消息</view>
 
   <view wx:if="{{loading}}" class="state card">正在加载会话...</view>
   <view wx:elif="{{!loggedIn}}" class="state card">
     <view>登录后查看好友私聊。</view>
-    <button class="login-btn" bindtap="goLogin">去登录</button>
+    <view class="state-actions">
+      <button class="btn block" bindtap="goLogin">去登录</button>
+    </view>
   </view>
   <view wx:elif="{{error}}" class="state error card">{{error}}</view>
   <view wx:elif="{{conversations.length === 0}}" class="state card">暂无会话。成为好友后即可开始聊天。</view>

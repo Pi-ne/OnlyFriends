@@ -1,5 +1,5 @@
 {
-  "description": "Onlyfriends WeChat Mini Program prototype",
+  "description": "Onlyfriends WeChat Mini Program",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -25,11 +25,13 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.25.0",
-  "appid": "wxe44112d708f2f987",
+  "appid": "wx48740acb7992b3a4",
   "projectname": "onlyfriends-miniprogram",
   "condition": {},
   "simulatorPluginLibVersion": {},

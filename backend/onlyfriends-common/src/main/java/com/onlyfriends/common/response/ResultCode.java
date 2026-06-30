@@ -17,6 +17,7 @@ public enum ResultCode {
     NICKNAME_ALREADY_EXISTS(1005, "昵称已被使用"),
     WRONG_PASSWORD(1006, "密码错误"),
     TOKEN_INVALID(1007, "Token无效或已过期"),
+    WECHAT_LOGIN_FAILED(1008, "微信登录失败，请重试"),
     MERCHANT_APPLY_PENDING(1101, "商家申请正在审核中"),
     MERCHANT_ALREADY_EXISTS(1102, "当前用户已是商家");
 

@@ -1,6 +1,8 @@
+const config = require("./config/index");
+
 App({
   globalData: {
-    apiBase: "http://localhost:8080/api/v1",
+    apiBase: config.apiBase,
     tencentMapKey: "",
     user: null
   }

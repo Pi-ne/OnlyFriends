@@ -1,5 +1,5 @@
 .detail {
-  padding-bottom: 140rpx;
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
 }
 
 .state {
@@ -18,7 +18,7 @@
 .detail-cover {
   min-height: 340rpx;
   padding: 30rpx;
-  border-radius: 20rpx;
+  border-radius: 24rpx;
   color: #ffffff;
 }
 
@@ -101,11 +101,8 @@
   line-height: 1.4;
 }
 
-.nav-btn {
-  flex: 0 0 132rpx;
-  width: 132rpx;
-  height: 62rpx;
-  font-size: 24rpx;
+.map-head .btn {
+  flex-shrink: 0;
 }
 
 .activity-map {
@@ -113,16 +110,6 @@
   height: 320rpx;
   border-radius: 16rpx;
   overflow: hidden;
-}
-
-.section-title {
-  margin-bottom: 16rpx;
-  font-size: 31rpx;
-  font-weight: 800;
-}
-
-.section-title.compact {
-  margin-bottom: 8rpx;
 }
 
 .desc {
@@ -141,28 +128,7 @@
   justify-content: space-between;
 }
 
-.small {
-  width: 130rpx;
-  height: 64rpx;
-  font-size: 24rpx;
-}
-
-.bottom-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  gap: 18rpx;
-  padding: 18rpx 28rpx 42rpx;
-  background: rgba(255, 255, 255, 0.96);
-  border-top: 1rpx solid #e8ecf2;
-}
-
-.share {
-  width: 180rpx;
-}
-
-.main {
-  flex: 1;
+.organizer .btn {
+  flex-shrink: 0;
+  min-width: 120rpx;
 }

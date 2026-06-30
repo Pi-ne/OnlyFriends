@@ -1,63 +1,9 @@
 .follows-page {
-  padding-top: 34rpx;
+  padding-top: 12rpx;
 }
 
-.follows-header {
-  margin-bottom: 28rpx;
-}
-
-.follows-title {
-  font-size: 46rpx;
-  line-height: 1.2;
-  font-weight: 800;
-  color: #19202b;
-}
-
-.follows-subtitle {
-  margin-top: 10rpx;
-  color: #77808f;
-  font-size: 26rpx;
-  line-height: 1.45;
-}
-
-.follow-tabs {
-  display: flex;
-  gap: 12rpx;
+.tabs-segment {
   margin-bottom: 24rpx;
-  padding: 8rpx;
-  border-radius: 18rpx;
-  background: #eef2f6;
-}
-
-.follow-tab {
-  flex: 1;
-  min-width: 0;
-  height: 68rpx;
-  border-radius: 14rpx;
-  color: #667085;
-  text-align: center;
-  line-height: 68rpx;
-  font-size: 26rpx;
-  font-weight: 800;
-}
-
-.follow-tab.active {
-  background: #1f7a5a;
-  color: #ffffff;
-  box-shadow: 0 8rpx 18rpx rgba(31, 122, 90, 0.18);
-}
-
-.follow-state {
-  padding: 26rpx;
-  color: #77808f;
-  font-size: 26rpx;
-  line-height: 1.6;
-}
-
-.follow-error {
-  color: #b5473f;
-  background: #fff6f4;
-  border-color: #f1c2bc;
 }
 
 .follow-list {
@@ -81,13 +27,13 @@
   flex: 0 0 auto;
   width: 82rpx;
   height: 82rpx;
-  border-radius: 22rpx;
-  background: #16202d;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #1a1f28, #3a4350);
   color: #ffffff;
   text-align: center;
   line-height: 82rpx;
   font-size: 34rpx;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .follow-info {
@@ -101,8 +47,8 @@
   white-space: nowrap;
   font-size: 30rpx;
   line-height: 1.35;
-  font-weight: 800;
-  color: #19202b;
+  font-weight: 700;
+  color: #1a1f28;
 }
 
 .follow-meta {
@@ -110,7 +56,7 @@
   align-items: center;
   gap: 12rpx;
   margin-top: 8rpx;
-  color: #77808f;
+  color: #8b939e;
   font-size: 24rpx;
   line-height: 1.35;
 }
@@ -121,34 +67,19 @@
   height: 38rpx;
   padding: 0 14rpx;
   border-radius: 999rpx;
-  background: #edf7f2;
+  background: rgba(31, 122, 90, 0.1);
   color: #1f7a5a;
   font-size: 21rpx;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .follow-actions {
-  display: flex;
-  gap: 14rpx;
   margin-top: 22rpx;
   padding-top: 20rpx;
-  border-top: 1rpx solid #eef1f5;
+  border-top: 1rpx solid #eef0f3;
 }
 
-.follow-action {
+.follow-actions .btn {
   flex: 1;
   min-width: 0;
-  height: 68rpx;
-  border: 1rpx solid #b9dccd;
-  border-radius: 12rpx;
-  background: #ffffff;
-  color: #1f7a5a;
-  font-size: 25rpx;
-  font-weight: 800;
-}
-
-.follow-action.primary {
-  background: #1f7a5a;
-  color: #ffffff;
-  border-color: #1f7a5a;
 }

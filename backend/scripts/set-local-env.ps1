@@ -60,5 +60,15 @@ $env:ADMIN_SERVICE_URI = "http://localhost:8085"
 $env:NACOS_ENABLED = "false"
 $env:NACOS_CONFIG_ENABLED = "false"
 $env:AI_MODE = "local"
+$env:SPRING_PROFILES_ACTIVE = "dev"
+$env:FLYWAY_ENABLED = "true"
+
+$env:WECHAT_APP_ID = if ($env:WECHAT_APP_ID) { $env:WECHAT_APP_ID } else { "wx48740acb7992b3a4" }
+if (-not $env:WECHAT_APP_SECRET) {
+    $env:WECHAT_MOCK_ENABLED = "true"
+    Write-Host "WECHAT_APP_SECRET is not set. Local wx-login will use mock mode."
+} else {
+    $env:WECHAT_MOCK_ENABLED = "false"
+}
 
 Write-Host "Local backend environment variables have been set for this PowerShell process."

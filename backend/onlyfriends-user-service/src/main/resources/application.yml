@@ -66,6 +66,10 @@ jwt:
 
 app:
   activation-base-url: ${ACTIVATION_BASE_URL:http://localhost:8081/api/v1/auth/activate}
+  wechat:
+    app-id: ${WECHAT_APP_ID:}
+    app-secret: ${WECHAT_APP_SECRET:}
+    mock-enabled: ${WECHAT_MOCK_ENABLED:false}
   upload-dir: ${USER_UPLOAD_DIR:data/uploads}
   redis:
     enabled: ${USER_REDIS_ENABLED:false}

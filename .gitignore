@@ -169,6 +169,7 @@ miniprogram_npm/
 # 微信开发者工具私有配置（含 AppID 等）
 project.private.config.json
 frontend/onlyfriends-miniprogram/project.private.config.json
+frontend/onlyfriends-miniprogram/config/local.js
 
 # 小程序构建产物
 **/dist/

@@ -1,8 +1,8 @@
 <view class="page">
-  <view class="title">我创建的活动</view>
+  <view class="page-title">我创建的活动</view>
 
-  <view class="tabs">
-    <view wx:for="{{tabs}}" wx:key="key" data-key="{{item.key}}" bindtap="switchTab" class="tab {{activeTab === item.key ? 'active' : ''}}">
+  <view class="tabs-segment">
+    <view wx:for="{{tabs}}" wx:key="key" data-key="{{item.key}}" bindtap="switchTab" class="tab-segment {{activeTab === item.key ? 'active' : ''}}">
       {{item.label}}
     </view>
   </view>
@@ -14,7 +14,7 @@
   <view wx:for="{{currentList}}" wx:key="id" class="activity card" data-id="{{item.id}}" bindtap="goDetail">
     <view class="activity-head">
       <view class="activity-title">{{item.title}}</view>
-      <view class="status">{{item.statusText}}</view>
+      <view class="status-badge">{{item.statusText}}</view>
     </view>
     <view class="meta">{{item.time}} · {{item.location}}</view>
     <view class="meta">{{item.feeText}} · {{item.joined}}/{{item.capacity}} 人</view>

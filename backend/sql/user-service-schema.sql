@@ -8,8 +8,10 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id`             BIGINT        NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `email`          VARCHAR(100)  NOT NULL COMMENT '邮箱（登录账号，全平台唯一）',
-  `password_hash`  VARCHAR(255)  NOT NULL COMMENT '密码哈希（BCrypt）',
+  `email`          VARCHAR(100)  DEFAULT NULL COMMENT '邮箱（邮箱注册用户，可为空）',
+  `password_hash`  VARCHAR(255)  DEFAULT NULL COMMENT '密码哈希（BCrypt，微信用户可为空）',
+  `wx_openid`      VARCHAR(64)   DEFAULT NULL COMMENT '微信小程序 openid',
+  `wx_unionid`     VARCHAR(64)   DEFAULT NULL COMMENT '微信 unionid',
   `nickname`       VARCHAR(50)   NOT NULL COMMENT '昵称（全平台唯一）',
   `avatar_url`     VARCHAR(500)  DEFAULT NULL COMMENT '头像URL',
   `gender`         TINYINT       DEFAULT 0 COMMENT '性别：0未知 1男 2女',
@@ -26,6 +28,7 @@ CREATE TABLE `user` (
   `updated_at`     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_email` (`email`),
+  UNIQUE KEY `uk_wx_openid` (`wx_openid`),
   UNIQUE KEY `uk_nickname` (`nickname`),
   INDEX `idx_status` (`status`),
   INDEX `idx_user_type` (`user_type`)

@@ -1,39 +1,45 @@
-const userApi = require("../../../api/user");
+const auth = require("../../../utils/auth");
 
 Page({
   data: {
-    email: "",
-    password: "",
-    loading: false
+    loading: false,
+    redirect: ""
   },
 
-  update(event) {
-    this.setData({ [event.currentTarget.dataset.key]: event.detail.value });
+  onLoad(options) {
+    if (options.redirect) {
+      this.setData({ redirect: decodeURIComponent(options.redirect) });
+    }
+    if (auth.hasSession()) {
+      this.navigateAfterLogin();
+    }
   },
 
-  login() {
-    if (!this.data.email || !this.data.password) {
-      wx.showToast({ title: "请输入邮箱和密码", icon: "none" });
+  wechatLogin() {
+    if (this.data.loading) {
       return;
     }
     this.setData({ loading: true });
-    userApi.login({
-      email: this.data.email,
-      password: this.data.password
-    }).then((res) => {
-      wx.setStorageSync("accessToken", res.accessToken);
-      wx.setStorageSync("refreshToken", res.refreshToken);
-      wx.setStorageSync("userInfo", res.userInfo);
+    auth.loginWithWeChat().then((res) => {
+      auth.saveSession(res);
       wx.showToast({ title: "登录成功", icon: "success" });
-      setTimeout(() => wx.switchTab({ url: "/pages/index/index" }), 500);
+      setTimeout(() => this.navigateAfterLogin(), 400);
     }).catch((err) => {
-      wx.showToast({ title: err.message || "登录失败", icon: "none" });
+      wx.showToast({ title: err.message || "登录失败，请重试", icon: "none" });
     }).finally(() => {
       this.setData({ loading: false });
     });
   },
 
-  goRegister() {
-    wx.navigateTo({ url: "/pages/auth/register/index" });
+  navigateAfterLogin() {
+    const redirect = this.data.redirect;
+    if (redirect) {
+      wx.redirectTo({
+        url: redirect,
+        fail: () => wx.switchTab({ url: "/pages/index/index" })
+      });
+      return;
+    }
+    wx.switchTab({ url: "/pages/index/index" });
   }
 });

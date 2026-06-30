@@ -1,16 +1,9 @@
 <view class="page auth">
   <view class="brand">Onlyfriends</view>
-  <view class="subtitle">用邮箱登录，继续发现附近活动。</view>
+  <view class="subtitle">发现身边有趣的活动</view>
   <view class="form card">
-    <view class="field">
-      <text class="field-label">邮箱</text>
-      <input class="input" data-key="email" value="{{email}}" bindinput="update" />
-    </view>
-    <view class="field">
-      <text class="field-label">密码</text>
-      <input class="input" password data-key="password" value="{{password}}" bindinput="update" />
-    </view>
-    <button class="btn" loading="{{loading}}" disabled="{{loading}}" bindtap="login">{{loading ? "登录中" : "登录"}}</button>
-    <button class="register" bindtap="goRegister">注册新账号</button>
+    <button class="btn wechat block" loading="{{loading}}" disabled="{{loading}}" bindtap="wechatLogin">
+      {{loading ? "登录中" : "微信一键登录"}}
+    </button>
   </view>
 </view>

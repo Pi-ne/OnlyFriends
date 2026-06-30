@@ -31,8 +31,10 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'user id',
-  email VARCHAR(100) NOT NULL COMMENT 'login email',
-  password_hash VARCHAR(255) NOT NULL COMMENT 'BCrypt password hash',
+  email VARCHAR(100) DEFAULT NULL COMMENT 'login email, null for WeChat-only users',
+  password_hash VARCHAR(255) DEFAULT NULL COMMENT 'BCrypt password hash, null for WeChat-only users',
+  wx_openid VARCHAR(64) DEFAULT NULL COMMENT 'WeChat mini program openid',
+  wx_unionid VARCHAR(64) DEFAULT NULL COMMENT 'WeChat unionid',
   nickname VARCHAR(50) NOT NULL COMMENT 'unique nickname',
   avatar_url VARCHAR(500) DEFAULT NULL COMMENT 'avatar URL',
   gender TINYINT NOT NULL DEFAULT 0 COMMENT '0 unknown, 1 male, 2 female',
@@ -49,6 +51,7 @@ CREATE TABLE `user` (
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uk_user_email (email),
+  UNIQUE KEY uk_user_wx_openid (wx_openid),
   UNIQUE KEY uk_user_nickname (nickname),
   KEY idx_user_status (status),
   KEY idx_user_type_status (user_type, status),

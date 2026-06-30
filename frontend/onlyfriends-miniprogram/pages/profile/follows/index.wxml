@@ -1,11 +1,11 @@
 <view class="page follows-page">
-  <view class="follows-header">
-    <view class="follows-title">关注与好友</view>
-    <view class="follows-subtitle">管理你关注的人和关注你的用户。</view>
+  <view class="page-header">
+    <view class="page-title">关注与好友</view>
+    <view class="page-subtitle">管理你关注的人和关注你的用户。</view>
   </view>
 
-  <view class="follow-tabs">
-    <view wx:for="{{tabs}}" wx:key="key" data-key="{{item.key}}" bindtap="switchTab" class="follow-tab {{activeTab === item.key ? 'active' : ''}}">
+  <view class="tabs-segment">
+    <view wx:for="{{tabs}}" wx:key="key" data-key="{{item.key}}" bindtap="switchTab" class="tab-segment {{activeTab === item.key ? 'active' : ''}}">
       {{item.label}}
     </view>
   </view>
@@ -27,10 +27,10 @@
           </view>
         </view>
       </view>
-      <view class="follow-actions">
-        <button wx:if="{{item.friend}}" class="follow-action primary" data-id="{{item.id}}" bindtap="openChat">消息</button>
-        <button wx:if="{{activeTab === 'following'}}" class="follow-action" data-id="{{item.id}}" bindtap="unfollow">取消</button>
-        <button wx:else class="follow-action" data-id="{{item.id}}" bindtap="followBack">{{item.mutualFollow ? "已互关" : "回关"}}</button>
+      <view class="btn-group follow-actions">
+        <button wx:if="{{item.friend}}" class="btn small" data-id="{{item.id}}" bindtap="openChat">消息</button>
+        <button wx:if="{{activeTab === 'following'}}" class="btn small ghost" data-id="{{item.id}}" bindtap="unfollow">取消</button>
+        <button wx:else class="btn small {{item.mutualFollow ? 'muted' : 'secondary'}}" data-id="{{item.id}}" bindtap="followBack">{{item.mutualFollow ? "已互关" : "回关"}}</button>
       </view>
     </view>
   </view>

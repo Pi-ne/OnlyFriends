@@ -1,6 +1,18 @@
 const activityApi = require("../../api/activity");
 const RECOMMEND_LIMIT = 3;
-const COVER_CLASSES = ["linear-green", "linear-yellow", "linear-blue"];
+const COVER_CLASSES = ["cover-soft-green", "cover-soft-warm", "cover-soft-cool"];
+const CHIP_TONES = ["green", "warm", "cool"];
+const STATUS_CLASS_MAP = {
+  报名中: "open",
+  已发布: "open",
+  进行中: "live",
+  审核中: "pending",
+  报名截止: "closed",
+  已结束: "closed",
+  已下架: "closed",
+  审核驳回: "closed",
+  草稿: "closed"
+};
 
 Page({
   data: {
@@ -71,20 +83,26 @@ Page({
     const maxParticipants = item.maxParticipants || 0;
     const fee = Number(item.fee || 0);
     const distanceMeters = item.distanceMeters || 0;
+    const status = item.statusText || "待开放";
+    const tags = item.tags || [];
+    const coverIndex = index % COVER_CLASSES.length;
     return {
       id: item.activityId,
       title: item.title,
-      category: (item.tags && item.tags[0]) || "活动",
-      status: item.statusText || "待开放",
-      cover: COVER_CLASSES[index % COVER_CLASSES.length],
+      category: tags[0] || "活动",
+      status,
+      statusClass: STATUS_CLASS_MAP[status] || "default",
+      cover: COVER_CLASSES[coverIndex],
+      chipTone: CHIP_TONES[coverIndex],
       time: this.formatTime(item.startTime),
       location: item.locationName || item.locationDetail || "地点待定",
-      distance: distanceMeters ? `${(distanceMeters / 1000).toFixed(1)}km` : "距离待定",
+      distance: distanceMeters ? `${(distanceMeters / 1000).toFixed(1)} km` : "距离待定",
       distanceMeters,
-      fee: fee > 0 ? `${fee}元` : "免费",
+      fee: fee > 0 ? `¥${fee}` : "免费",
       joined: item.currentCount || 0,
       capacity: maxParticipants > 0 ? maxParticipants : "不限",
-      tags: item.tags || []
+      tags,
+      displayTags: tags.slice(0, 3)
     };
   },
 

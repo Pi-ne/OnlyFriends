@@ -18,6 +18,6 @@
       <text class="field-label">确认密码</text>
       <input class="input" password data-key="confirmPassword" bindinput="update" />
     </view>
-    <button class="btn" loading="{{loading}}" disabled="{{loading}}" bindtap="register">{{loading ? "注册中" : "注册并发送激活邮件"}}</button>
+    <button class="btn block" loading="{{loading}}" disabled="{{loading}}" bindtap="register">{{loading ? "注册中" : "注册并发送激活邮件"}}</button>
   </view>
 </view>

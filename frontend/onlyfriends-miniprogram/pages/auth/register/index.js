@@ -13,15 +13,38 @@ Page({
     this.setData({ [event.currentTarget.dataset.key]: event.detail.value });
   },
 
+  validateForm() {
+    const email = (this.data.email || "").trim();
+    const nickname = (this.data.nickname || "").trim();
+    const password = this.data.password || "";
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return "请输入正确的邮箱格式";
+    }
+    if (!nickname || nickname.length < 2 || nickname.length > 20) {
+      return "昵称长度需在2-20个字符之间";
+    }
+    if (!password || password.length < 8 || password.length > 20) {
+      return "密码长度需在8-20位之间";
+    }
+    if (!/^(?=.*[A-Za-z])(?=.*\d).+$/.test(password)) {
+      return "密码需同时包含字母和数字";
+    }
+    if (password !== this.data.confirmPassword) {
+      return "两次输入的密码不一致";
+    }
+    return "";
+  },
+
   register() {
-    if (!this.data.email || !this.data.nickname || this.data.password.length < 8 || this.data.password !== this.data.confirmPassword) {
-      wx.showToast({ title: "请检查邮箱、昵称和密码", icon: "none" });
+    const validationError = this.validateForm();
+    if (validationError) {
+      wx.showToast({ title: validationError, icon: "none" });
       return;
     }
     this.setData({ loading: true });
     userApi.register({
-      email: this.data.email,
-      nickname: this.data.nickname,
+      email: this.data.email.trim(),
+      nickname: this.data.nickname.trim(),
       password: this.data.password
     }).then((res) => {
       wx.showModal({

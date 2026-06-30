@@ -12,8 +12,7 @@
     "pages/profile/my-activities/index",
     "pages/profile/registrations/index",
     "pages/profile/follows/index",
-    "pages/auth/login/index",
-    "pages/auth/register/index"
+    "pages/auth/login/index"
   ],
   "window": {
     "navigationBarTitleText": "Onlyfriends",

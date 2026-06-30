@@ -18,6 +18,8 @@ public class User {
     private Long id;
     private String email;
     private String passwordHash;
+    private String wxOpenid;
+    private String wxUnionid;
     private String nickname;
     private String avatarUrl;
     private Integer gender;

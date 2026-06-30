@@ -34,7 +34,7 @@
         <view class="section-title compact">活动地点</view>
         <view class="muted map-address">{{activity.locationDetail || activity.location}}</view>
       </view>
-      <button class="btn ghost nav-btn" bindtap="openNavigation">导航</button>
+      <button class="btn ghost small" bindtap="openNavigation">导航</button>
     </view>
     <map
       class="activity-map"
@@ -72,7 +72,7 @@
 
   <view class="bottom-bar">
     <button class="btn secondary share">分享</button>
-    <button class="btn main" disabled="{{activity.isOwner || registered || !activity.canRegister}}" bindtap="registerNow">
+    <button class="btn" disabled="{{activity.isOwner || registered || !activity.canRegister}}" bindtap="registerNow">
       {{activity.isOwner ? "我发起的活动" : (registered ? "已报名" : (activity.canRegister ? "立即报名" : "暂不可报名"))}}
     </button>
   </view>

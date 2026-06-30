@@ -2,11 +2,11 @@
   <view class="search-panel card">
     <input class="input" value="{{keyword}}" placeholder="输入活动名称、简介或地点" bindinput="onInput" />
     <view class="filter-row">
-      <view wx:for="{{filters}}" wx:key="*this" data-filter="{{item}}" bindtap="pickFilter" class="filter {{activeFilter === item ? 'active' : ''}}">{{item}}</view>
+      <view wx:for="{{filters}}" wx:key="*this" data-filter="{{item}}" bindtap="pickFilter" class="filter-chip {{activeFilter === item ? 'active' : ''}}">{{item}}</view>
     </view>
     <view class="between">
       <view class="muted">{{results.length}} 个结果</view>
-      <button class="clear" bindtap="clearFilters">清空</button>
+      <button class="btn small pill secondary" bindtap="clearFilters">清空</button>
     </view>
   </view>
 
@@ -26,7 +26,7 @@
   <view wx:for="{{results}}" wx:key="id" class="result-card card" data-id="{{item.id}}" bindtap="goDetail">
     <view class="between">
       <view class="result-title">{{item.title}}</view>
-      <view class="status">{{item.status}}</view>
+      <view class="status-badge warn">{{item.status}}</view>
     </view>
     <view class="muted line">{{item.time}} · {{item.location}}</view>
     <view class="muted line">{{item.category}} · {{item.distance}} · {{item.fee}}</view>
