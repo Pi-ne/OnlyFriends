@@ -9,7 +9,7 @@
 - 已执行 `sql/init-all.sql`（推荐统一脚本，勿单独跑分模块 SQL）。
 - 已启动 gateway、user、activity、social、im、admin 服务（`.\scripts\start-all.ps1 -Background`）。
 - 所有服务使用相同 `JWT_SECRET`（`set-local-env.ps1` 已设置）。
-- Docker MySQL 容器名默认为 `onlyfriends-mysql`（也兼容 `ququ-mysql`）。
+- Docker MySQL 容器名默认为 `onlyfriends-mysql`。
 - 若本机 8084 被占用，启动脚本会自动将 IM 服务切换到 `18084`。
 
 ## 一键全量测试
