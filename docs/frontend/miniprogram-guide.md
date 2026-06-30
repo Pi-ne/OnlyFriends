@@ -7,7 +7,7 @@
 微信小程序源码目录：
 
 ```text
-frontend/miniprogram
+frontend/onlyfriends-miniprogram
 ```
 
 请在微信开发者工具中导入该目录，不要导入 `frontend` 根目录。
@@ -26,10 +26,13 @@ frontend/miniprogram
 http://localhost:8080
 ```
 
-小程序 API Base URL 已配置为：
+小程序 API Base URL 在 `frontend/onlyfriends-miniprogram/app.js` 中配置：
 
-```text
-http://localhost:8080/api/v1
+```javascript
+globalData: {
+  apiBase: 'http://localhost:8080/api/v1',
+  // ...
+}
 ```
 
 如果微信开发者工具中请求本地接口失败，请在开发者工具中开启：
@@ -45,7 +48,7 @@ http://localhost:8080/api/v1
 3. 项目目录选择：
 
 ```text
-frontend/miniprogram
+frontend/onlyfriends-miniprogram
 ```
 
 4. AppID 可使用测试号或开发者工具测试 AppID。

@@ -1,0 +1,19 @@
+<view class="chat-page">
+  <view wx:if="{{loading}}" class="chat-state card">正在加载聊天记录...</view>
+  <view wx:elif="{{error}}" class="chat-state chat-error card">{{error}}</view>
+
+  <scroll-view class="message-list" scroll-y scroll-into-view="{{scrollIntoView}}">
+    <view wx:if="{{!loading && !error && messages.length === 0}}" class="chat-state card">暂无聊天记录。</view>
+    <view wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}" class="message-row {{item.mine ? 'mine' : ''}}">
+      <view class="message-bubble {{item.recalled ? 'recalled' : ''}}">
+        <view class="message-content">{{item.content}}</view>
+        <view class="message-time">{{item.time}}</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="composer">
+    <input class="composer-input" value="{{input}}" placeholder="输入消息" confirm-type="send" bindinput="updateInput" bindconfirm="sendMessage" />
+    <button class="send-btn" loading="{{sending}}" disabled="{{sending || !input}}" bindtap="sendMessage">发送</button>
+  </view>
+</view>

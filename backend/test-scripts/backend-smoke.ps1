@@ -1,6 +1,6 @@
 param(
     [string]$BaseUrl = "http://localhost:8080",
-    [string]$MysqlContainer = "onlyfriends-mysql",
+    [string]$MysqlContainer = "",
     [string]$MysqlUser = "root",
     [string]$MysqlPassword = "onlyfriends_root_password",
     [string]$Password = "Abc123456",
@@ -9,6 +9,22 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+function Resolve-MysqlContainer {
+    param([string]$Preferred)
+    if (-not [string]::IsNullOrWhiteSpace($Preferred)) {
+        return $Preferred
+    }
+    foreach ($name in @("onlyfriends-mysql", "ququ-mysql")) {
+        $exists = docker ps -a --format "{{.Names}}" | Where-Object { $_ -eq $name }
+        if ($exists) {
+            return $name
+        }
+    }
+    return "onlyfriends-mysql"
+}
+
+$MysqlContainer = Resolve-MysqlContainer -Preferred $MysqlContainer
 
 function Invoke-Json {
     param(

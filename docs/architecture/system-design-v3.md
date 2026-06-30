@@ -47,13 +47,13 @@
 
 ### 1.1 架构概览
 
-OnlyFriends 采用**前后端分离 + 适度微服务**的整体架构。前端以微信小程序为主要用户入口，后台管理系统采用 Web 端（Vue 3）。后端按业务边界拆分为 **6 个独立微服务**：网关服务、用户服务、活动服务、社群服务、即时通讯服务和 AI 服务；后台管理功能作为独立的 Admin 服务，复用各业务服务的数据层能力。数据层以 MySQL 为主存储，Redis 承担缓存与会话管理，MinIO/OSS 承担文件与图片存储。
+OnlyFriends 采用**前后端分离 + 适度微服务**的整体架构。前端以微信小程序为主要用户入口；开发与测试使用仓库内 **Web 开发管理台**（`frontend/server.js`，静态 HTML + Node.js，端口 5173）。后端按业务边界拆分为 **6 个独立微服务**：网关服务、用户服务、活动服务、社群服务、即时通讯服务和 AI 服务；后台管理功能作为独立的 Admin 服务，复用各业务服务的数据层能力。数据层以 MySQL 为主存储，Redis 承担缓存与会话管理，MinIO/OSS 承担文件与图片存储。
 
 ```mermaid
 graph TB
     subgraph 客户端层
         A[微信小程序\n个人/商家用户]
-        B[Web管理后台\nVue 3 / 管理员]
+        B[Web 开发管理台\n静态页面 / 管理员]
     end
 
     subgraph 网关层
@@ -188,7 +188,7 @@ graph LR
 
 ### 3.1 前端技术栈
 
-微信小程序是本平台的核心用户端，天然具备微信生态集成优势。UI 组件库选用 **Vant Weapp**，地图能力使用**腾讯地图 SDK for 小程序**，满足活动地点选点和地图模式展示的需求。后台管理系统采用 **Vue 3 + Element Plus** 构建，通过 Vite 打包，与后端服务共用同一套 REST API。
+微信小程序是本平台的核心用户端，天然具备微信生态集成优势。UI 组件库可选用 **Vant Weapp**，地图能力使用**腾讯地图 SDK for 小程序**，满足活动地点选点和地图模式展示的需求。开发与联调阶段使用 **`frontend/` 下的 Web 开发管理台**（`server.js` + 静态页面，端口 5173），与后端共用同一套 REST API；生产环境可另行规划独立 Vue/React 管理后台。
 
 ### 3.2 后端技术栈
 
@@ -1318,33 +1318,17 @@ onlyfriends-platform/
 │   ├── requirements.txt
 │   └── main.py
 │
-├── onlyfriends-miniprogram/               # 微信小程序
-│   ├── pages/
-│   │   ├── index/                  # 首页（推荐/最新/附近 Tab）
-│   │   ├── activity/               # 活动相关页面
-│   │   │   ├── list/               # 活动列表
-│   │   │   ├── detail/             # 活动详情
-│   │   │   ├── create/             # 活动创建
-│   │   │   └── map/                # 地图模式
-│   │   ├── social/                 # 社群页面
-│   │   │   ├── team/               # 小队
-│   │   │   └── friends/            # 好友
-│   │   ├── im/                     # 即时通讯
-│   │   └── profile/                # 个人中心
-│   ├── subpackages/
-│   │   └── merchant/               # 商家端（分包）
-│   └── app.js
+├── frontend/
+│   ├── onlyfriends-miniprogram/   # 微信小程序
+│   │   ├── pages/                 # index、activity、social、im、profile 等
+│   │   ├── api/                   # 业务 API 封装
+│   │   └── app.js                 # globalData.apiBase
+│   ├── index.html / app.js        # Web 开发管理台页面
+│   └── server.js                  # 管理台静态服务（5173）
 │
-├── onlyfriends-admin-web/                 # 后台管理 Web（Vue 3）
-│   ├── src/
-│   │   ├── views/
-│   │   │   ├── users/              # 用户管理
-│   │   │   ├── activities/         # 活动管理与审核
-│   │   │   └── teams/              # 小队管理
-│   │   └── router/
-│   └── package.json
-│
-└── docker-compose.yml              # 一键启动所有服务
+├── docs/                          # 项目文档
+├── scripts/                       # 根目录启动脚本
+└── backend/docker-compose.yml     # MySQL / Redis / 可选 Nacos、MinIO
 ```
 
 ---
@@ -1373,22 +1357,27 @@ onlyfriends-platform/
 团队统一使用以下 Git 仓库结构（Monorepo 风格，便于统一管理）：
 
 ```
-onlyfriends-platform/                  ← 根仓库（Git 根目录）
-├── onlyfriends-gateway/               ← 网关服务（Java）
-├── onlyfriends-user-service/          ← 用户服务（Java）
-├── onlyfriends-activity-service/      ← 活动服务（Java）
-├── onlyfriends-social-service/        ← 社群服务（Java）
-├── onlyfriends-im-service/            ← IM 服务（Java）
-├── onlyfriends-admin-service/         ← 后台管理服务（Java）
-├── onlyfriends-common/                ← 公共模块（Java，被各服务依赖）
-├── onlyfriends-ai-service/            ← AI 服务（Python）
-├── onlyfriends-miniprogram/           ← 微信小程序（JS）
-├── onlyfriends-admin-web/             ← 后台管理 Web（Vue 3）
-├── docker-compose.yml          ← 基础设施一键启动
-├── docker-compose.services.yml ← 应用服务启动（可选）
-└── init-sql/                   ← 数据库初始化脚本
-    └── 01_init.sql
+OnlyFriends/                           ← Git 根仓库
+├── backend/                           ← Maven 多模块（onlyfriends-platform）
+│   ├── onlyfriends-gateway/           ← 网关（8080）
+│   ├── onlyfriends-user-service/      ← 用户（8081）
+│   ├── onlyfriends-activity-service/  ← 活动（8082）
+│   ├── onlyfriends-social-service/    ← 社群（8083）
+│   ├── onlyfriends-im-service/        ← IM（8084）
+│   ├── onlyfriends-admin-service/     ← 后台管理 API（8085）
+│   ├── onlyfriends-common/            ← 公共模块
+│   ├── onlyfriends-ai-service/        ← AI（8001，含 python/）
+│   ├── sql/init-all.sql               ← 数据库统一初始化
+│   ├── scripts/                       ← set-local-env、start-all
+│   └── docker-compose.yml             ← 基础设施
+├── frontend/
+│   ├── onlyfriends-miniprogram/       ← 微信小程序
+│   └── server.js                      ← Web 开发管理台（5173）
+├── docs/                              ← 文档权威入口
+└── scripts/                           ← 根目录启动脚本
 ```
+
+> 历史目录 `backend/ququ-*` 为迁移遗留，不在父 POM 中。
 
 ### A.3 基础设施 Docker Compose 配置
 
@@ -4095,53 +4084,30 @@ stompClient.publish({
 
 ---
 
-### F.2 后台管理 Web（Vue 3）页面与接口映射
+### F.2 Web 开发管理台页面与接口映射
 
-| 页面 | 路由 | 主要接口 |
-|------|------|----------|
-| 登录页 | `/login` | `POST /admin/auth/login` |
-| 用户管理 | `/users` | `GET /admin/users`、`POST /admin/users/{id}/ban` |
-| 商家审核 | `/merchant-applies` | `GET /admin/merchant-applies`、`PUT /admin/merchant-applies/{id}` |
-| 活动管理 | `/activities` | `GET /admin/activities`（支持状态筛选） |
-| 活动审核 | `/activities/review` | `GET /admin/activities?status=1`（审核中）、`PUT /admin/activities/{id}/review` |
-| 小队管理 | `/teams` | `GET /admin/teams`、`POST /admin/teams/{id}/disable` |
+当前实现位于 `frontend/`（`index.html` + `app.js` + `server.js`），非独立 Vue 工程。下表为功能与 API 对应关系，供联调参考：
 
-**Vue 3 请求封装（src/utils/request.js）：**
+| 功能模块 | 主要接口 |
+|----------|----------|
+| 管理员登录 | `POST /admin/auth/login` |
+| 用户管理 | `GET /admin/users`、`POST /admin/users/{id}/ban` |
+| 商家审核 | `GET /admin/merchant-applies`、`PUT /admin/merchant-applies/{id}` |
+| 活动管理/审核 | `GET /admin/activities`、`PUT /admin/activities/{id}/review` |
+| 小队管理 | `GET /admin/teams`、`POST /admin/teams/{id}/disable` |
+
+**请求封装（`frontend/app.js`）示例：**
+
 ```javascript
-import axios from 'axios';
-import { useUserStore } from '@/stores/user';
+const API_BASE = 'http://localhost:8080/api/v1';
 
-const instance = axios.create({
-  baseURL: 'http://localhost:8080/api/v1',
-  timeout: 10000
-});
-
-// 请求拦截器：自动添加 Token
-instance.interceptors.request.use(config => {
-  const userStore = useUserStore();
-  if (userStore.token) {
-    config.headers.Authorization = `Bearer ${userStore.token}`;
-  }
-  return config;
-});
-
-// 响应拦截器：统一处理错误
-instance.interceptors.response.use(
-  res => {
-    if (res.data.code !== 200) {
-      ElMessage.error(res.data.message);
-      return Promise.reject(res.data);
-    }
-    return res.data.data;
-  },
-  err => {
-    if (err.response?.status === 401) {
-      useUserStore().logout();
-      router.push('/login');
-    }
-    return Promise.reject(err);
-  }
-);
-
-export default instance;
+async function apiRequest(path, options = {}) {
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('userToken');
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  return res.json();
+}
 ```
+
+> 若未来拆分为独立 Vue/React 管理后台，可沿用上表接口契约；详见 [Web 开发管理台说明](../frontend/dev-console.md)。

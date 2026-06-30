@@ -380,6 +380,7 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityRegistrationStatusResponse register(Long activityId, Long userId) {
         Activity activity = getActivityOrThrow(activityId);
         validateRegisterable(activity);
+        ensureNotCreator(activity, userId);
         ensureRegistrantValid(userId);
 
         if (activeRegistration(activityId, userId) != null) {
@@ -1100,6 +1101,12 @@ public class ActivityServiceImpl implements ActivityService {
     private void ensureCreator(Activity activity, Long creatorId) {
         if (!activity.getCreatorId().equals(creatorId)) {
             throw new BizException(ResultCode.FORBIDDEN);
+        }
+    }
+
+    private void ensureNotCreator(Activity activity, Long userId) {
+        if (activity.getCreatorId().equals(userId)) {
+            throw new BizException(ResultCode.BAD_REQUEST.getCode(), "发起人不能报名自己的活动");
         }
     }
 

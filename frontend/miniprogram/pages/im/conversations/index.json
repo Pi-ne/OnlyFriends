@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "消息",
-  "usingComponents": {
-    "message-item": "/components/message-item/index",
-    "empty-state": "/components/empty-state/index",
-    "loading-state": "/components/loading-state/index"
-  }
-}

@@ -4,10 +4,16 @@ param(
     [string]$Email = ("user" + (Get-Date -Format "yyyyMMddHHmmss") + "@example.com"),
     [string]$Password = "Abc123456",
     [string]$Nickname = ("OnlyFriends测试" + (Get-Random -Maximum 99999)),
-    [string]$ActivationToken = ""
+    [string]$ActivationToken = "",
+    [switch]$ValidateOnly
 )
 
 $ErrorActionPreference = "Stop"
+
+if ($ValidateOnly) {
+    Write-Host "smoke-user-service.ps1 syntax/options validation passed."
+    exit 0
+}
 
 function Invoke-Json {
     param(

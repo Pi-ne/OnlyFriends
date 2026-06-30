@@ -1,0 +1,80 @@
+<view class="detail page">
+  <view wx:if="{{loading}}" class="state card">正在加载活动...</view>
+  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+
+  <block wx:elif="{{activity}}">
+  <view class="detail-cover {{activity.cover}}">
+    <view class="status-pill">{{activity.statusText}}</view>
+    <view class="detail-title">{{activity.title}}</view>
+    <view class="detail-sub">{{activity.category}} · {{activity.fee}}</view>
+  </view>
+
+  <view class="card info-card">
+    <view class="info-row">
+      <view class="label">时间</view>
+      <view class="value">{{activity.time}}</view>
+    </view>
+    <view class="info-row">
+      <view class="label">地点</view>
+      <view class="value">{{activity.location}}</view>
+    </view>
+    <view class="info-row">
+      <view class="label">截止</view>
+      <view class="value">{{activity.deadline}}</view>
+    </view>
+    <view class="info-row">
+      <view class="label">人数</view>
+      <view class="value">{{activity.joined}}/{{activity.capacity}} 人</view>
+    </view>
+  </view>
+
+  <view wx:if="{{activity.hasLocation}}" class="section card map-card">
+    <view class="map-head">
+      <view>
+        <view class="section-title compact">活动地点</view>
+        <view class="muted map-address">{{activity.locationDetail || activity.location}}</view>
+      </view>
+      <button class="btn ghost nav-btn" bindtap="openNavigation">导航</button>
+    </view>
+    <map
+      class="activity-map"
+      latitude="{{activity.latitude}}"
+      longitude="{{activity.longitude}}"
+      markers="{{activity.markers}}"
+      scale="15"
+      enable-scroll="{{true}}"
+      enable-zoom="{{true}}"
+    />
+  </view>
+
+  <view class="section">
+    <view class="section-title">活动介绍</view>
+    <view class="desc">{{activity.desc}}</view>
+    <view class="tags">
+      <text wx:for="{{activity.tags}}" wx:key="*this" class="tag">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="section card organizer">
+    <view>
+      <view class="section-title compact">{{activity.organizer}}</view>
+      <view class="muted">活动发起人</view>
+    </view>
+    <button class="btn ghost small" loading="{{followLoading}}" disabled="{{activity.isOwner || followLoading}}" bindtap="followOrganizer">
+      {{activity.isOwner ? "本人" : (followedOrganizer ? "已关注" : "关注")}}
+    </button>
+  </view>
+
+  <view class="section">
+    <view class="section-title">安全须知</view>
+    <view class="desc muted">请按活动说明准时到达，注意个人安全和随身物品。</view>
+  </view>
+
+  <view class="bottom-bar">
+    <button class="btn secondary share">分享</button>
+    <button class="btn main" disabled="{{activity.isOwner || registered || !activity.canRegister}}" bindtap="registerNow">
+      {{activity.isOwner ? "我发起的活动" : (registered ? "已报名" : (activity.canRegister ? "立即报名" : "暂不可报名"))}}
+    </button>
+  </view>
+  </block>
+</view>

@@ -48,21 +48,17 @@
 
 ### 2.1 本地数据库默认配置与 Docker Compose 不一致
 
-问题：
+**状态（2026-06-29）**：通过 `scripts/start-all.ps1` 或手动执行 `backend/scripts/set-local-env.ps1` 启动时，已自动设置 `*_DB_PASSWORD=onlyfriends_root_password`，与 `docker-compose.yml` 一致。
 
-- `docker-compose.yml` 中 MySQL 默认 root 密码是 `onlyfriends_root_password`。
-- 各服务 `application.yml` 默认数据库密码为空，例如 `USER_DB_PASSWORD`、`ACTIVITY_DB_PASSWORD` 默认都是空。
-- 如果直接按默认配置启动服务，服务可能无法连接 Docker MySQL。
+**仍存在的风险**：
 
-影响：
-
-- 新环境一键启动/演示容易失败。
-- 文档虽然说明了初始化脚本，但运行服务仍需要手动设置数据库密码环境变量。
+- 在 IDE 中直接运行 `*Application` 且未先加载 `set-local-env.ps1` 时，各服务 `application.yml` 默认密码仍为空，可能连不上 Docker MySQL。
+- 单独 `mvn spring-boot:run` 时同样需先设置环境变量。
 
 建议任务：
 
-- 统一本地默认密码，或在 [本地开发指南](../getting-started/local-setup.md) 中明确要求设置 `*_DB_PASSWORD=onlyfriends_root_password`。
-- 可增加 `.env.example`，集中维护 MySQL、Redis、JWT、MinIO、AI 等环境变量。
+- IDE 运行配置中引用 `set-local-env.ps1` 或复制其中变量。
+- 可增加 `backend/.env.example`，集中维护 MySQL、Redis、JWT、MinIO、AI 等环境变量。
 
 ### 2.2 AI 服务仍是 Mock/规则实现，未接入真实大模型
 

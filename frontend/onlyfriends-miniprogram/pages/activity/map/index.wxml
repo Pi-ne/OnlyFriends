@@ -1,0 +1,36 @@
+<view class="map-page">
+  <map
+    class="activity-map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    show-location="{{true}}"
+    enable-scroll="{{true}}"
+    enable-zoom="{{true}}"
+    bindmarkertap="selectMarker"
+  />
+
+  <view class="map-chip">活动地图</view>
+  <button class="locate-btn" bindtap="recenter">定位</button>
+
+  <view wx:if="{{loading}}" class="map-state card">正在加载活动地图...</view>
+  <view wx:elif="{{error}}" class="map-state card">{{error}}</view>
+
+  <view wx:if="{{selected}}" class="summary card">
+    <view class="summary-head">
+      <view>
+        <view class="summary-title">{{selected.title}}</view>
+        <view class="muted line">{{selected.time}} · {{selected.location}}</view>
+      </view>
+      <view class="tag warn">{{selected.status}}</view>
+    </view>
+    <view class="muted line">
+      {{selected.distance ? selected.distance + " · " : ""}}{{selected.fee}} · {{selected.joined}}/{{selected.capacity}} 人
+    </view>
+    <view class="summary-actions">
+      <button class="btn secondary" bindtap="openNavigation">导航</button>
+      <button class="btn" bindtap="goDetail">查看详情</button>
+    </view>
+  </view>
+</view>

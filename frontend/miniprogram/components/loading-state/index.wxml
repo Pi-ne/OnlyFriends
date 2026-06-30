@@ -1,4 +1,0 @@
-<view class="loading">
-  <view class="dot"></view>
-  <text>{{text}}</text>
-</view>

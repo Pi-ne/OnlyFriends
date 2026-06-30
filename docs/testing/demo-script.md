@@ -1,12 +1,14 @@
-# Demo Script
+# Demo Script / 演示脚本
 
-This script is for course acceptance or project demonstration. It uses the gateway as the unified API entry:
+面向课程验收或项目演示的 curl 流程。统一 API 入口：
 
 ```text
-BASE=http://localhost:8080
+BASE=http://localhost:8080/api/v1
 ```
 
-Expected response format:
+**推荐准备方式**：在项目根目录执行 `.\scripts\start-all.ps1 -WithAi -Background`（已含 `set-local-env.ps1`）。下文亦给出手动环境变量方式。
+
+预期响应格式：
 
 ```json
 {
@@ -19,23 +21,36 @@ Expected response format:
 
 Replace placeholders such as `<activationTokenA>`, `<activityId>`, `<userBId>`, `<applyId>`, `<convId>`, and `<msgId>` with values returned by earlier steps.
 
-## 1. Environment Preparation
+## 1. Environment Preparation / 环境准备
 
-Start infrastructure:
+在 `backend/` 目录启动基础设施：
 
 ```powershell
-docker compose --profile infra up -d mysql redis nacos minio
+cd backend
+docker compose up -d mysql redis
 ```
 
-For the current implemented backend, MySQL and Redis are required. Nacos and MinIO can be started for a full platform-like demo, but service discovery and object storage upload are not required by the current curl flow.
+如需完整平台演示（Nacos、MinIO 可选）：
 
-Initialize all databases:
+```powershell
+docker compose --profile infra up -d
+```
+
+当前已实现后端**至少需要** MySQL 与 Redis。Nacos、MinIO 可启动以模拟完整平台，但本 curl 流程不依赖服务发现与对象存储上传。
+
+初始化全部数据库：
 
 ```powershell
 Get-Content .\sql\init-all.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
 ```
 
-Set shared development environment variables:
+设置环境变量（或返回项目根目录执行 `..\scripts\start-all.ps1 -WithAi -Background` 自动设置）：
+
+```powershell
+. .\scripts\set-local-env.ps1
+```
+
+手动设置时示例：
 
 ```powershell
 $env:JWT_SECRET="replace-with-at-least-32-bytes-dev-secret"
@@ -52,7 +67,7 @@ $env:ADMIN_DB_PASSWORD="onlyfriends_root_password"
 $env:AI_MODE="local"
 ```
 
-Build shared modules once, then start backend services in separate terminals:
+在 `backend/` 目录编译并分终端启动（或使用根目录 `..\scripts\start-all.ps1`）：
 
 ```powershell
 mvn install -DskipTests

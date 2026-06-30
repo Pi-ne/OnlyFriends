@@ -1,0 +1,59 @@
+<view class="page home">
+  <view class="search-box card">
+    <view class="search-main" bindtap="goSearch">
+      <text class="search-icon">⌕</text>
+      <text>搜索活动、地点或兴趣</text>
+    </view>
+    <button class="map-icon-btn" bindtap="goMap" aria-label="地图模式">
+      <image class="map-icon" src="/assets/icons/map-arrow.png" mode="aspectFit" />
+    </button>
+  </view>
+
+  <view class="hero">
+    <view>
+      <view class="eyebrow">Onlyfriends</view>
+      <view class="title">今天想参加什么活动？</view>
+      <view class="subtitle">附近新鲜活动、兴趣小队和报名提醒都在这里。</view>
+    </view>
+    <view class="hero-badge">北京</view>
+  </view>
+
+  <view class="tabs">
+    <view wx:for="{{tabs}}" wx:key="key" data-key="{{item.key}}" bindtap="switchTab" class="tab {{activeTab === item.key ? 'active' : ''}}">
+      {{item.label}}
+    </view>
+  </view>
+
+  <view class="activity-list">
+    <view wx:if="{{loading}}" class="state card">正在加载真实活动...</view>
+    <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+    <view wx:elif="{{currentList.length === 0}}" class="state card">后端暂无活动，发布一个活动后会显示在这里。</view>
+
+    <view wx:for="{{currentList}}" wx:key="id" class="activity-card card" data-id="{{item.id}}" bindtap="goDetail">
+      <view class="cover {{item.cover}}">
+        <text>{{item.category}}</text>
+      </view>
+      <view class="activity-body">
+        <view class="between">
+          <view class="activity-title">{{item.title}}</view>
+          <view class="status">{{item.status}}</view>
+        </view>
+        <view class="meta">{{item.time}} · {{item.location}}</view>
+        <view class="meta">{{item.distance}} · {{item.fee}} · {{item.joined}}/{{item.capacity}} 人</view>
+        <view class="tags">
+          <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{showMapSuggestion}}" class="map-suggestion card" bindtap="goMap">
+      <view>
+        <view class="suggestion-title">没有感兴趣的活动？</view>
+        <view class="suggestion-sub">去地图里看看吧</view>
+      </view>
+      <view class="suggestion-action">
+        <image class="suggestion-icon" src="/assets/icons/map-arrow.png" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+</view>

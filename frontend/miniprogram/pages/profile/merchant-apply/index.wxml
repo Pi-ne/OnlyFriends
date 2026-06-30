@@ -1,6 +1,0 @@
-<view class="page">
-  <view class="panel stack">
-    <view class="title">商家申请</view>
-    <view class="subtitle">当前前端已预留入口。后端商家申请接口位于 /merchant，可在下一阶段接入完整表单。</view>
-  </view>
-</view>

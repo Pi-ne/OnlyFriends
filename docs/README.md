@@ -1,6 +1,15 @@
 # OnlyFriends 文档索引
 
-本目录为项目文档的**唯一权威入口**。历史散落在 `backend/docs/`、`frontend/` 根目录的文档已迁移至此。
+本目录为项目文档的**唯一权威入口**。
+
+## 代码与文档对应关系
+
+| 类型 | 权威路径 | 说明 |
+|------|----------|------|
+| 后端模块 | `backend/onlyfriends-*` | Maven 父 POM 仅包含 `onlyfriends-*` |
+| 小程序 | `frontend/onlyfriends-miniprogram/` | API 配置在 `app.js` → `globalData.apiBase` |
+| Web 管理台 | `frontend/server.js` | 端口 5173，非 Vue 独立工程 |
+| 遗留 | `backend/ququ-*` | 历史副本，不参与日常构建 |
 
 ## 入门指南
 
@@ -60,7 +69,9 @@
 
 | 脚本 | 说明 |
 |------|------|
-| `scripts/start-all.ps1` | 启动全部后端服务 |
-| `scripts/start-frontend.ps1` | 启动 Web 开发管理台 |
-| `scripts/stop-all.ps1` | 停止后台服务 |
-| `backend/scripts/set-local-env.ps1` | 设置本地环境变量 |
+| `scripts/start-all.ps1` | 启动全部后端服务（委托 `backend/scripts/start-all.ps1`） |
+| `scripts/start-frontend.ps1` | 启动 Web 开发管理台（日志在根目录 `logs/`） |
+| `scripts/stop-all.ps1` | 停止后台后端与前端进程 |
+| `backend/scripts/set-local-env.ps1` | 设置本地 JWT、数据库、服务 URI 等环境变量 |
+| `backend/scripts/start-service.ps1` | 启动单个服务：`user` / `activity` / `social` / `im` / `admin` / `gateway` / `ai` |
+| `backend/test-scripts/backend-smoke.ps1` | 全链路冒烟测试 |

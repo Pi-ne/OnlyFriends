@@ -1,0 +1,135 @@
+page {
+  min-height: 100%;
+  background: #f7f8fb;
+  color: #19202b;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 28rpx;
+}
+
+view,
+text,
+button,
+input,
+textarea,
+picker {
+  box-sizing: border-box;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  line-height: normal;
+}
+
+button::after {
+  border: 0;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 28rpx;
+}
+
+.section {
+  margin-top: 28rpx;
+}
+
+.card {
+  background: #ffffff;
+  border: 1rpx solid #e8ecf2;
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 28rpx rgba(18, 38, 63, 0.06);
+}
+
+.muted {
+  color: #77808f;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 44rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: #edf7f2;
+  color: #1f7a5a;
+  font-size: 22rpx;
+  margin-right: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.tag.gray {
+  background: #f0f2f5;
+  color: #626d7c;
+}
+
+.tag.warn {
+  background: #fff2dc;
+  color: #9a5b00;
+}
+
+.btn {
+  height: 80rpx;
+  border-radius: 12rpx;
+  background: #1f7a5a;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 0 28rpx;
+  font-weight: 700;
+}
+
+.btn.secondary {
+  background: #edf7f2;
+  color: #1f7a5a;
+}
+
+.btn.ghost {
+  background: #ffffff;
+  color: #1f7a5a;
+  border: 1rpx solid #b9dccd;
+}
+
+.input {
+  width: 100%;
+  min-height: 76rpx;
+  padding: 0 22rpx;
+  border: 1rpx solid #dde3eb;
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 168rpx;
+  padding: 20rpx 22rpx;
+  border: 1rpx solid #dde3eb;
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.field {
+  margin-bottom: 24rpx;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 12rpx;
+  color: #3a4350;
+  font-size: 25rpx;
+  font-weight: 600;
+}

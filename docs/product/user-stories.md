@@ -195,7 +195,7 @@
 | Epic 标题 | 平台治理与后台管理 |
 | 关联服务 | Admin Service（通过 OpenFeign 调用 User / Activity / Social Service） |
 | 业务价值 | 为平台管理员提供统一的运营治理工具，保障平台内容安全与用户秩序 |
-| 客户端 | Vue 3 + Element Plus Web 管理后台 |
+| 客户端 | Web 开发管理台（`frontend/server.js`，端口 5173） |
 
 | Story ID | 优先级 | 目标版本 | 10 天处理策略 | 用户故事 |
 |----------|--------|----------|----------------|----------|

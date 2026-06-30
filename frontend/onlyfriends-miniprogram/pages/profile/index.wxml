@@ -1,0 +1,39 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="state card">正在加载真实资料...</view>
+
+  <view class="profile-card card">
+    <view class="avatar">{{user.avatarText}}</view>
+    <view class="user-main">
+      <view class="name">{{user.nickname}}</view>
+      <view class="muted">{{user.role}} · {{user.city}}</view>
+      <view class="tags">
+        <text wx:for="{{user.tags}}" wx:key="*this" class="tag">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="grid">
+    <view class="metric card">
+      <view class="num">{{statsLoading ? "..." : stats.registeredCount}}</view>
+      <view class="muted">已报名</view>
+    </view>
+    <view class="metric card">
+      <view class="num">{{statsLoading ? "..." : stats.createdCount}}</view>
+      <view class="muted">发起活动</view>
+    </view>
+    <view class="metric card">
+      <view class="num">{{loggedIn ? user.creditScore : "--"}}</view>
+      <view class="muted">信誉分</view>
+    </view>
+  </view>
+
+  <view class="menu card">
+    <view class="menu-item" bindtap="goRegistrations">我的报名</view>
+    <view class="menu-item" bindtap="goMyActivities">我创建的活动</view>
+    <view class="menu-item" bindtap="goFriends">关注与好友</view>
+    <view class="menu-item" bindtap="applyMerchant">商家身份申请</view>
+  </view>
+
+  <button wx:if="{{!loggedIn}}" class="btn login" bindtap="goLogin">账号登录 / 切换</button>
+  <button wx:else class="btn login secondary" bindtap="logout">退出登录</button>
+</view>

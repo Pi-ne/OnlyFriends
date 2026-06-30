@@ -1,7 +1,28 @@
 $env:JWT_SECRET = "replace-with-at-least-32-bytes-random-secret"
 
+function Test-PortAvailable {
+    param([int]$Port)
+    $listeners = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
+    return -not $listeners
+}
+
 $mysqlPort = if ($env:MYSQL_PORT) { $env:MYSQL_PORT } else { "3306" }
+if (-not (Test-PortAvailable ([int]$mysqlPort))) {
+    if ($mysqlPort -eq "3306") {
+        $mysqlPort = "3307"
+        Write-Host "Port 3306 is in use, falling back to MYSQL_PORT=3307"
+    }
+}
 $env:MYSQL_PORT = $mysqlPort
+
+$imPort = if ($env:IM_SERVICE_PORT) { $env:IM_SERVICE_PORT } else { "8084" }
+if (-not (Test-PortAvailable ([int]$imPort))) {
+    if ($imPort -eq "8084") {
+        $imPort = "18084"
+        Write-Host "Port 8084 is in use, falling back to IM_SERVICE_PORT=18084"
+    }
+}
+$env:IM_SERVICE_PORT = $imPort
 
 $env:USER_DB_USERNAME = "root"
 $env:USER_DB_PASSWORD = "onlyfriends_root_password"
@@ -26,14 +47,14 @@ $env:ADMIN_DB_URL = "jdbc:mysql://localhost:$mysqlPort/onlyfriends_admin?useUnic
 $env:USER_SERVICE_BASE_URL = "http://localhost:8081"
 $env:ACTIVITY_SERVICE_BASE_URL = "http://localhost:8082"
 $env:SOCIAL_SERVICE_BASE_URL = "http://localhost:8083"
-$env:IM_SERVICE_BASE_URL = "http://localhost:8084"
+$env:IM_SERVICE_BASE_URL = "http://localhost:$imPort"
 $env:ADMIN_SERVICE_BASE_URL = "http://localhost:8085"
 
 $env:USER_SERVICE_URI = "http://localhost:8081"
 $env:ACTIVITY_SERVICE_URI = "http://localhost:8082"
 $env:SOCIAL_SERVICE_URI = "http://localhost:8083"
-$env:IM_SERVICE_URI = "http://localhost:8084"
-$env:IM_SERVICE_WS_URI = "ws://localhost:8084"
+$env:IM_SERVICE_URI = "http://localhost:$imPort"
+$env:IM_SERVICE_WS_URI = "ws://localhost:$imPort"
 $env:ADMIN_SERVICE_URI = "http://localhost:8085"
 
 $env:NACOS_ENABLED = "false"

@@ -1,7 +1,7 @@
 # OnlyFriends 小程序前端规划与需求说明
 
-> 文档定位：本文件用于指导后续真正的小程序前端开发，不是静态 HTML 原型说明。  
-> 目标产物：一个可在微信开发者工具中运行、可与后端网关 `http://localhost:8080/api/v1` 联调的微信小程序前端。
+> 文档定位：描述小程序前端目标、页面结构与接口映射。  
+> **当前实现**：`frontend/onlyfriends-miniprogram/` 为当前小程序工程，可与网关 `http://localhost:8080/api/v1` 联调。
 
 ---
 
@@ -120,7 +120,7 @@ frontend/
       images/
 ```
 
-后续真实开发时，不建议继续扩展当前 `index.html` 静态文件。应新建 `frontend/miniprogram` 作为真正小程序源码目录。
+后续真实开发时，不建议继续扩展当前 `index.html` 静态文件。应新建 `frontend/onlyfriends-miniprogram` 作为真正小程序源码目录。
 
 ---
 
@@ -1025,7 +1025,7 @@ AI Service: http://localhost:8001
 
 目标：
 
-- 创建 `frontend/miniprogram` 工程。
+- 创建 `frontend/onlyfriends-miniprogram` 工程。
 - 配置 `app.json`、TabBar、全局样式。
 - 完成登录拦截和请求封装。
 - 首页、发起、小队、消息、我的 5 个 Tab 可以切换。
@@ -1103,19 +1103,19 @@ AI Service: http://localhost:8001
 下一步开发时，建议优先创建这些文件：
 
 ```text
-frontend/miniprogram/app.js
-frontend/miniprogram/app.json
-frontend/miniprogram/app.wxss
-frontend/miniprogram/utils/request.js
-frontend/miniprogram/utils/auth.js
-frontend/miniprogram/utils/route.js
-frontend/miniprogram/services/auth.js
-frontend/miniprogram/services/activity.js
-frontend/miniprogram/pages/auth/login/
-frontend/miniprogram/pages/home/index/
-frontend/miniprogram/pages/activity/detail/
-frontend/miniprogram/pages/activity/create/
-frontend/miniprogram/pages/profile/index/
+frontend/onlyfriends-miniprogram/app.js
+frontend/onlyfriends-miniprogram/app.json
+frontend/onlyfriends-miniprogram/app.wxss
+frontend/onlyfriends-miniprogram/utils/request.js
+frontend/onlyfriends-miniprogram/utils/auth.js
+frontend/onlyfriends-miniprogram/utils/route.js
+frontend/onlyfriends-miniprogram/services/auth.js
+frontend/onlyfriends-miniprogram/services/activity.js
+frontend/onlyfriends-miniprogram/pages/auth/login/
+frontend/onlyfriends-miniprogram/pages/home/index/
+frontend/onlyfriends-miniprogram/pages/activity/detail/
+frontend/onlyfriends-miniprogram/pages/activity/create/
+frontend/onlyfriends-miniprogram/pages/profile/index/
 ```
 
 第一批页面不要一次性追求全部功能，应先跑通：

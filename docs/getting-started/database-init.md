@@ -1,6 +1,6 @@
-# Database Initialization
+# 数据库初始化
 
-This project keeps one database per backend service in local development:
+本地开发采用**每服务独立数据库**：
 
 - `onlyfriends_user`
 - `onlyfriends_activity`
@@ -8,72 +8,80 @@ This project keeps one database per backend service in local development:
 - `onlyfriends_im`
 - `onlyfriends_admin`
 
-The unified initialization entry is:
+统一初始化入口：
 
 ```text
-sql/init-all.sql
+backend/sql/init-all.sql
 ```
 
-Historical module SQL files are still kept under `sql/` for reference and for module-by-module initialization. For a new local environment, prefer `sql/init-all.sql` because it contains all currently implemented tables and baseline data in one ordered script.
+`sql/` 下仍保留各模块独立脚本，供分步初始化参考。新环境请优先执行 `init-all.sql`，其中包含当前已实现表结构与基线数据。
 
-## Prerequisites
+## 前置条件
 
-Start MySQL first:
+先启动 MySQL：
 
 ```powershell
+cd backend
 docker compose up -d mysql
 ```
 
-The default local root password from `docker-compose.yml` is:
+`docker-compose.yml` 中默认 root 密码：
 
 ```text
 onlyfriends_root_password
 ```
 
-If you set `MYSQL_ROOT_PASSWORD`, use that value instead.
+若通过环境变量设置了 `MYSQL_ROOT_PASSWORD`，请改用对应值。
 
-## Run The Unified Script
+## 执行统一脚本
 
-PowerShell with the Docker MySQL container:
+PowerShell（Docker MySQL 容器）：
 
 ```powershell
+cd backend
 Get-Content .\sql\init-all.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
 ```
 
-Local MySQL client:
+本地 MySQL 客户端：
 
 ```powershell
 mysql -h 127.0.0.1 -P 3306 -uroot -p --default-character-set=utf8mb4 < .\sql\init-all.sql
 ```
 
-The script is intended for a fresh local development database. It drops and recreates the current service tables, so do not run it against data you need to keep.
+该脚本面向**全新本地库**：会删除并重建当前服务表，请勿对需要保留的数据执行。
 
-## Initialized Baseline Data
+可选演示数据：
 
-The script inserts:
+```powershell
+Get-Content .\sql\demo-data.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
+```
 
-- Activity templates in `onlyfriends_activity.activity_template`.
-- Default admin account in `onlyfriends_admin.admin_user`.
+## 基线数据
 
-Default admin login:
+脚本会插入：
+
+- `onlyfriends_activity.activity_template` 中的活动模板
+- `onlyfriends_admin.admin_user` 中的默认管理员
+
+默认管理员登录：
 
 ```text
 username: admin
 password: Admin123456
 ```
 
-The database stores only the BCrypt password hash, not the plaintext password.
+数据库仅存储 BCrypt 密码哈希，不保存明文。
 
-## Included Tables
+## 表清单
 
-User service database `onlyfriends_user`:
+用户库 `onlyfriends_user`：
 
 - `user`
 - `merchant_info`
 - `merchant_apply`
 - `user_ban_record`
 
-Activity service database `onlyfriends_activity`:
+活动库 `onlyfriends_activity`：
 
 - `activity_template`
 - `activity`
@@ -82,7 +90,7 @@ Activity service database `onlyfriends_activity`:
 - `activity_waitlist`
 - `notification`
 
-Social service database `onlyfriends_social`:
+社交库 `onlyfriends_social`：
 
 - `user_follow`
 - `friend_relation`
@@ -92,20 +100,21 @@ Social service database `onlyfriends_social`:
 - `team_join_apply`
 - `team_admin_operation_log`
 
-IM service database `onlyfriends_im`:
+IM 库 `onlyfriends_im`：
 
 - `im_conversation`
 - `im_message`
 - `im_conversation_read`
 
-Admin service database `onlyfriends_admin`:
+管理库 `onlyfriends_admin`：
 
 - `admin_user`
 - `admin_operation_log`
 
-## Notes
+## 说明
 
-- All databases and tables use `utf8mb4` with `utf8mb4_unicode_ci`.
-- Unique indexes are configured for account identity fields such as user `email`, user `nickname`, and admin `username`.
-- Common query fields such as `status`, `created_at`, `activity_id`, `user_id`, `team_id`, and `conv_id` are indexed.
-- The AI mock service does not own a separate database table in the current codebase. Activity AI review results are persisted in `onlyfriends_activity.activity_review_record`.
+- 所有库表使用 `utf8mb4` / `utf8mb4_unicode_ci`。
+- 用户 `email`、`nickname` 与管理员 `username` 等身份字段建有唯一索引。
+- `status`、`created_at`、`activity_id`、`user_id`、`team_id`、`conv_id` 等常用查询字段已建索引。
+- AI Mock 服务无独立数据库；活动 AI 审核结果写入 `onlyfriends_activity.activity_review_record`。
+- 各服务 `resources/db/migration/` 含 Flyway 脚本，本地默认 `FLYWAY_ENABLED=false`，以 `init-all.sql` 为主。

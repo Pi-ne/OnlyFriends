@@ -68,7 +68,9 @@ cd ..
 .\scripts\start-all.ps1 -WithAi -Background
 ```
 
-后台日志目录：`backend/logs/`。
+`start-all.ps1` 会自动调用 `set-local-env.ps1` 设置 JWT、数据库连接等环境变量，并启动 Redis 与 MySQL 容器（MySQL 使用 `--force-recreate`，会重建容器实例；数据卷默认保留，但若需保留容器内临时状态请注意备份）。
+
+后台日志与 PID 文件目录：`backend/logs/`。
 
 ### 前台分窗口启动（便于看日志）
 
@@ -113,11 +115,13 @@ cd backend
 
 访问：http://127.0.0.1:5173
 
+后台模式日志与 PID 文件目录：仓库根目录 `logs/`（与后端 `backend/logs/` 分开）。
+
 ## 6. 启动微信小程序
 
 1. 打开微信开发者工具
-2. 导入目录：`frontend/miniprogram`
-3. 确认 `utils/config.js` 中 API 地址为 `http://localhost:8080/api/v1`
+2. 导入目录：`frontend/onlyfriends-miniprogram`
+3. 确认 `frontend/onlyfriends-miniprogram/app.js` 中 `globalData.apiBase` 为 `http://localhost:8080/api/v1`
 4. 开发阶段在开发者工具中关闭域名校验
 
 详见 [小程序使用教程](../frontend/miniprogram-guide.md)。

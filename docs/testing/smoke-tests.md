@@ -32,8 +32,19 @@ cd backend
 
 ```powershell
 cd backend
-mvn test
+mvn clean test
 ```
+
+## 完整测试套件
+
+一键运行单元测试、AI 测试与全链路冒烟：
+
+```powershell
+cd backend
+.\test-scripts\run-all-tests.ps1
+```
+
+详见 [完整测试指南](full-test-suite.md)。
 
 ## 前置条件
 

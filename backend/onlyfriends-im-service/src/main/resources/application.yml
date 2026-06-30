@@ -1,5 +1,5 @@
 server:
-  port: 8084
+  port: ${IM_SERVICE_PORT:8084}
 
 spring:
   application:

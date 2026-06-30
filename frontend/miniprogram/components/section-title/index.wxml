@@ -1,7 +1,0 @@
-<view class="head">
-  <view>
-    <view wx:if="{{kicker}}" class="kicker">{{kicker}}</view>
-    <view class="title">{{title}}</view>
-  </view>
-  <slot></slot>
-</view>

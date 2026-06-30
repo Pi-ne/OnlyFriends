@@ -1,7 +1,0 @@
-.qrcode {
-  padding: 24rpx;
-  border-radius: 8rpx;
-  background: #f8fafc;
-  color: #111827;
-  word-break: break-all;
-}

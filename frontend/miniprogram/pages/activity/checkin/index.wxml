@@ -1,9 +1,0 @@
-<view class="page">
-  <view class="panel stack">
-    <view class="title">活动签到</view>
-    <view class="subtitle">发起人可生成签到码，参与者可扫码后提交签到。</view>
-    <button class="btn secondary" bindtap="loadQrcode">生成签到码</button>
-    <view wx:if="{{qrcode}}" class="qrcode">{{qrcode.qrcodeContent || qrcode.content || qrcode}}</view>
-    <button class="btn primary" bindtap="scan">扫码签到</button>
-  </view>
-</view>

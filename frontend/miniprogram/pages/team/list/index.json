@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "小队",
-  "usingComponents": {
-    "team-card": "/components/team-card/index",
-    "empty-state": "/components/empty-state/index",
-    "loading-state": "/components/loading-state/index"
-  }
-}

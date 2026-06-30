@@ -6,7 +6,7 @@ It keeps the same response envelope and endpoint paths as the Java mock service,
 ## Quick Start
 
 ```powershell
-cd onlyfriends-ai-service/python
+cd backend/onlyfriends-ai-service/python
 
 # Create and activate virtual environment
 python -m venv venv

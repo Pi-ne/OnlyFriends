@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "我的活动",
-  "usingComponents": {
-    "activity-card": "/components/activity-card/index",
-    "empty-state": "/components/empty-state/index",
-    "loading-state": "/components/loading-state/index"
-  }
-}

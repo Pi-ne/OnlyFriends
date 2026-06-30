@@ -24,6 +24,17 @@ cd ..
 | onlyfriends-ai-service | 8001 | [AI](../docs/services/ai-service.md) |
 | onlyfriends-common | — | [Common](../docs/services/common.md) |
 
+> `backend/ququ-*` 为历史遗留目录，不在 Maven 父 POM 中，请勿用于构建与启动。
+
+## 脚本
+
+| 脚本 | 说明 |
+|------|------|
+| `scripts/start-all.ps1` | 启动全部服务（含 `set-local-env`、Docker、可选编译） |
+| `scripts/start-service.ps1` | 启动单个服务 |
+| `scripts/set-local-env.ps1` | 本地环境变量 |
+| `test-scripts/backend-smoke.ps1` | 全链路冒烟 |
+
 ## 文档
 
 - [本地开发指南](../docs/getting-started/local-setup.md)

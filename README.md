@@ -14,20 +14,20 @@
 ## 快速启动
 
 ```powershell
-# 1. 启动基础设施
+# 1. 启动基础设施并初始化数据库（首次）
 cd backend
 docker compose up -d mysql redis
-
-# 2. 初始化数据库（首次）
 Get-Content .\sql\init-all.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
 cd ..
 
-# 3. 后台启动全部后端服务
+# 2. 后台启动全部后端
 .\scripts\start-all.ps1 -Background
 
-# 4. 启动 Web 开发管理台（可选）
+# 3. 启动 Web 开发管理台（可选）
 .\scripts\start-frontend.ps1
 ```
+
+> `start-all.ps1` 会自动设置环境变量并启动 Docker 中的 Redis/MySQL；数据库初始化仍需在首次手动执行 `init-all.sql`。
 
 | 入口 | 地址 |
 |------|------|
@@ -41,23 +41,28 @@ cd ..
 
 ```text
 OnlyFriends/
-├── backend/                 # Maven 多模块后端
+├── backend/                 # Maven 多模块后端（onlyfriends-*）
 │   ├── onlyfriends-gateway/
 │   ├── onlyfriends-user-service/
 │   ├── onlyfriends-activity-service/
 │   ├── onlyfriends-social-service/
 │   ├── onlyfriends-im-service/
 │   ├── onlyfriends-admin-service/
-│   ├── onlyfriends-ai-service/
+│   ├── onlyfriends-ai-service/   # Java 代理 + python/ FastAPI
 │   ├── onlyfriends-common/
-│   ├── sql/                 # 数据库脚本
-│   └── scripts/             # 后端启动脚本
+│   ├── sql/                 # 数据库脚本（init-all.sql）
+│   ├── scripts/             # set-local-env、start-all、start-service
+│   ├── test-scripts/        # 冒烟测试
+│   └── docker-compose.yml
 ├── frontend/
-│   ├── miniprogram/         # 微信小程序
-│   └── server.js            # Web 开发管理台
-├── docs/                    # 项目文档（统一入口）
-└── scripts/                 # 根目录启动脚本
+│   ├── onlyfriends-miniprogram/  # 微信小程序
+│   ├── index.html / app.js  # Web 开发管理台
+│   └── server.js            # 管理台静态服务（5173）
+├── docs/                    # 项目文档（唯一权威入口）
+├── scripts/                 # 根目录启动脚本（委托 backend/scripts）
 ```
+
+> `backend/ququ-*` 为历史迁移遗留目录，不在 Maven 父 POM 中，日常开发请使用 `onlyfriends-*` 模块。
 
 ## 微服务一览
 

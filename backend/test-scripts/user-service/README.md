@@ -1,23 +1,25 @@
-# User Service Test Scripts
+# User Service 测试脚本
 
 本目录用于用户服务接口冒烟测试，独立于 Java 单元测试。
 
 ## 前置条件
 
-1. 已初始化 MySQL：
+1. 已初始化数据库（推荐统一脚本）：
 
 ```powershell
-mysql -u root -p < sql/user-service-schema.sql
+cd backend
+Get-Content .\sql\init-all.sql -Encoding UTF8 | docker exec -i onlyfriends-mysql mysql -uroot -ponlyfriends_root_password --default-character-set=utf8mb4
 ```
 
-2. 已使用 Java 17+ 启动用户服务：
+2. 已启动用户服务（端口 8081）：
 
 ```powershell
-mvn -DskipTests package
-& "C:\Program Files\Java\jdk-22\bin\java.exe" -jar onlyfriends-user-service\target\onlyfriends-user-service-1.0.0-SNAPSHOT.jar
+cd backend
+. .\scripts\set-local-env.ps1
+.\scripts\start-service.ps1 user
 ```
 
-也可以在 IDE 中直接运行 `com.onlyfriends.user.UserServiceApplication`。
+或在 IDE 中运行 `com.onlyfriends.user.UserServiceApplication`（需先加载环境变量）。
 
 3. 如未配置 SMTP，注册接口会在服务日志输出激活链接。复制链接中的 `token`，传给脚本的 `-ActivationToken` 参数。
 
@@ -26,6 +28,7 @@ mvn -DskipTests package
 先注册并观察服务日志：
 
 ```powershell
+cd backend
 .\test-scripts\user-service\smoke-user-service.ps1
 ```
 
