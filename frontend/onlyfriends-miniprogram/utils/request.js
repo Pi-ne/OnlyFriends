@@ -70,7 +70,12 @@ function request(options) {
         reject(new Error(extractErrorMessage(body)));
       },
       fail(err) {
-        reject(new Error(err.errMsg || "网络请求失败"));
+        const message = err && err.errMsg ? String(err.errMsg) : "网络请求失败";
+        if (message.indexOf("timeout") >= 0) {
+          reject(new Error("网络超时，请确认后端已启动"));
+          return;
+        }
+        reject(new Error(message));
       }
     });
   });

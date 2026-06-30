@@ -30,7 +30,7 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.25.0",
+  "libVersion": "3.16.1",
   "appid": "wx48740acb7992b3a4",
   "projectname": "onlyfriends-miniprogram",
   "condition": {},

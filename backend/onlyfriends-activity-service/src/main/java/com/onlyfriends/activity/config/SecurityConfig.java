@@ -37,6 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(SwaggerPaths.PUBLIC_PATHS).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/activities").permitAll()
                         .requestMatchers(new RegexRequestMatcher("^/api/v1/activities/\\d+$", "GET")).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/activities/templates").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/activities/tags").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {

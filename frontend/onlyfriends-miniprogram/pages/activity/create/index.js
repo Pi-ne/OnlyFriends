@@ -6,6 +6,16 @@ const DEFAULT_WECHAT_MAP_CENTER = {
   longitude: 116.40717
 };
 
+const CATEGORIES = [
+  "运动健身",
+  "户外徒步",
+  "桌游聚会",
+  "学习交流",
+  "公益活动",
+  "城市探索",
+  "其他"
+];
+
 function createEmptyForm() {
   return {
     title: "",
@@ -22,70 +32,79 @@ function createEmptyForm() {
   };
 }
 
+function createUiHints(form) {
+  const hasLocation = form.locationLat !== null;
+  const categoryIndex = resolveCategoryIndex(form.category);
+  return {
+    dateText: form.date || "选择日期",
+    clockText: form.clock || "选择时间",
+    locationName: form.location || (hasLocation ? "已选择地图位置" : "从地图选择活动地点"),
+    locationDetail: form.locationDetail || (hasLocation ? "请在下方填写具体地点名称" : "选择后会保存真实地图位置"),
+    locationCta: hasLocation ? "重选" : "选择",
+    categoryText: form.category || "请选择活动类型",
+    datePlaceholder: !form.date,
+    clockPlaceholder: !form.clock,
+    categoryPlaceholder: !form.category,
+    locationSelected: hasLocation,
+    pickerCategoryIndex: categoryIndex < 0 ? 0 : categoryIndex
+  };
+}
+
+function resolveCategoryIndex(category) {
+  const index = CATEGORIES.indexOf(category);
+  return index >= 0 ? index : -1;
+}
+
 Page({
   data: {
-    templates: [],
-    templateLoading: false,
-    templateError: "",
+    categories: CATEGORIES,
     saving: false,
     planning: false,
     form: createEmptyForm(),
+    ui: createUiHints(createEmptyForm()),
     locationMarkers: []
   },
 
   onShow() {
-    this.loadTemplates();
     wx.pageScrollTo({
       scrollTop: 0,
       duration: 0
     });
   },
 
-  loadTemplates() {
-    if (!wx.getStorageSync("accessToken")) {
-      this.setData({ templates: [], templateError: "" });
-      return;
-    }
-    this.setData({ templateLoading: true, templateError: "" });
-    activityApi.listTemplates().then((list) => {
-      const templates = (list || []).map((item) => ({
-        id: item.templateId,
-        title: item.name || "活动模板",
-        type: item.category || "",
-        desc: item.description || "",
-        tags: item.defaultTags || [],
-        capacity: item.defaultMaxParticipants || ""
-      }));
-      this.setData({ templates });
-    }).catch((err) => {
-      this.setData({
-        templates: [],
-        templateError: err.message || "模板加载失败"
-      });
-    }).finally(() => {
-      this.setData({ templateLoading: false });
+  syncFormState(formPatch) {
+    const form = Object.assign({}, this.data.form, formPatch);
+    this.setData({
+      form,
+      ui: createUiHints(form)
     });
   },
 
   updateField(event) {
     const key = event.currentTarget.dataset.key;
-    this.setData({ [`form.${key}`]: event.detail.value });
+    this.syncFormState({ [key]: event.detail.value });
+  },
+
+  updateCategory(event) {
+    const index = Number(event.detail.value);
+    const category = this.data.categories[index] || "";
+    this.syncFormState({ category });
   },
 
   updateDate(event) {
-    this.setData({ "form.date": event.detail.value });
+    this.syncFormState({ date: event.detail.value });
     this.refreshTime();
   },
 
   updateClock(event) {
-    this.setData({ "form.clock": event.detail.value });
+    this.syncFormState({ clock: event.detail.value });
     this.refreshTime();
   },
 
   refreshTime() {
-    const date = this.data.form.date;
-    const clock = this.data.form.clock;
-    this.setData({ "form.time": date && clock ? `${date} ${clock}` : "" });
+    const form = this.data.form;
+    const time = form.date && form.clock ? `${form.date} ${form.clock}` : "";
+    this.syncFormState({ time });
   },
 
   chooseActivityLocation() {
@@ -130,11 +149,13 @@ Page({
       });
       return;
     }
+    this.syncFormState({
+      location: chosen.name,
+      locationDetail: chosen.detail,
+      locationLat: chosen.latitude,
+      locationLng: chosen.longitude
+    });
     this.setData({
-      "form.location": chosen.name,
-      "form.locationDetail": chosen.detail,
-      "form.locationLat": chosen.latitude,
-      "form.locationLng": chosen.longitude,
       locationMarkers: this.createLocationMarkers(chosen)
     });
     if (!chosen.resolvedByText) {
@@ -167,13 +188,13 @@ Page({
   },
 
   clearChosenLocation() {
-    this.setData({
-      "form.location": "",
-      "form.locationDetail": "",
-      "form.locationLat": null,
-      "form.locationLng": null,
-      locationMarkers: []
+    this.syncFormState({
+      location: "",
+      locationDetail: "",
+      locationLat: null,
+      locationLng: null
     });
+    this.setData({ locationMarkers: [] });
   },
 
   isSuspiciousDefaultLocation(location) {
@@ -226,22 +247,12 @@ Page({
         if (!name && !detail) {
           return;
         }
-        this.setData({
-          "form.location": name || detail,
-          "form.locationDetail": detail || name
+        this.syncFormState({
+          location: name || detail,
+          locationDetail: detail || name
         });
       }
     });
-  },
-
-  useTemplate(event) {
-    const item = this.data.templates[event.currentTarget.dataset.index];
-    this.setData({
-      "form.category": item.type,
-      "form.desc": item.desc,
-      "form.capacity": item.capacity || this.data.form.capacity
-    });
-    wx.showToast({ title: "已套用模板", icon: "success" });
   },
 
   generateAiPlan() {
@@ -264,16 +275,19 @@ Page({
       preferences: [this.data.form.category].filter(Boolean)
     }).then((plan) => {
       const tags = plan.tags || [];
-      this.setData({
-        "form.title": plan.title || this.data.form.title,
-        "form.category": tags[0] || this.data.form.category,
-        "form.location": plan.locationSuggestion || this.data.form.location,
-        "form.locationDetail": plan.locationSuggestion ? "" : this.data.form.locationDetail,
-        "form.locationLat": plan.locationSuggestion ? null : this.data.form.locationLat,
-        "form.locationLng": plan.locationSuggestion ? null : this.data.form.locationLng,
-        "form.desc": plan.description || this.data.form.desc,
-        "form.capacity": plan.suggestedMaxParticipants || this.data.form.capacity
+      this.syncFormState({
+        title: plan.title || this.data.form.title,
+        category: tags[0] || this.data.form.category,
+        location: plan.locationSuggestion || this.data.form.location,
+        locationDetail: plan.locationSuggestion ? "" : this.data.form.locationDetail,
+        locationLat: plan.locationSuggestion ? null : this.data.form.locationLat,
+        locationLng: plan.locationSuggestion ? null : this.data.form.locationLng,
+        desc: plan.description || this.data.form.desc,
+        capacity: plan.suggestedMaxParticipants || this.data.form.capacity
       });
+      if (plan.locationSuggestion) {
+        this.setData({ locationMarkers: [] });
+      }
       wx.showToast({ title: "已生成草稿", icon: "success" });
     }).catch((err) => {
       wx.showToast({ title: err.message || "AI 策划失败", icon: "none" });
@@ -291,8 +305,10 @@ Page({
   },
 
   resetForm() {
+    const form = createEmptyForm();
     this.setData({
-      form: createEmptyForm(),
+      form,
+      ui: createUiHints(form),
       locationMarkers: [],
       planning: false
     });

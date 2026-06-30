@@ -44,6 +44,12 @@ Page({
     const locationName = this.cleanLocationText(item.locationName);
     const locationDetail = this.cleanLocationText(item.locationDetail);
     const location = locationName || locationDetail || "地点待定";
+    const joined = item.currentCount || 0;
+    const hasCapacityLimit = maxParticipants > 0;
+    const capacityPercent = hasCapacityLimit
+      ? Math.min(100, Math.round((joined / maxParticipants) * 100))
+      : 0;
+    const organizer = item.creatorNickname || "发起人";
     return {
       id: item.activityId,
       creatorId: item.creatorId,
@@ -65,10 +71,13 @@ Page({
         longitude,
         title: location
       }] : [],
-      joined: item.currentCount || 0,
-      capacity: maxParticipants > 0 ? maxParticipants : "不限",
+      joined,
+      capacity: hasCapacityLimit ? maxParticipants : "不限",
+      capacityPercent,
+      hasCapacityLimit,
       fee: fee > 0 ? `${fee}元` : "免费",
-      organizer: item.creatorNickname || "发起人",
+      organizer,
+      organizerInitial: organizer.charAt(0),
       desc: item.description || "暂无活动介绍",
       tags,
       isOwner: this.isOwner(item.creatorId),

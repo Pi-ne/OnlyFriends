@@ -101,8 +101,7 @@ public class ActivityController {
     }
 
     @GetMapping("/templates")
-    public Result<List<ActivityTemplateResponse>> templates(@AuthenticationPrincipal CurrentUser currentUser) {
-        requireUser(currentUser);
+    public Result<List<ActivityTemplateResponse>> templates() {
         return Result.success(activityService.templates());
     }
 

@@ -41,11 +41,22 @@ Page({
 
   loadActivities(key) {
     this.setData({ activeTab: key, loading: true, error: "" });
-    activityApi.listActivities({
+    const fetchList = (extra = {}) => activityApi.listActivities({
       tab: key,
       page: 1,
-      size: 20
-    }).then((page) => {
+      size: 20,
+      ...extra
+    });
+
+    const request = key === "nearby"
+      ? this.getCurrentLocation().then((location) => fetchList({
+        lat: location.latitude,
+        lng: location.longitude,
+        radius: 5000
+      }))
+      : fetchList();
+
+    request.then((page) => {
       const list = (page.list || []).map((item, index) => this.normalizeActivity(item, index));
       this.refreshList(key, list);
     }).catch((err) => {
@@ -57,6 +68,16 @@ Page({
       });
     }).finally(() => {
       this.setData({ loading: false });
+    });
+  },
+
+  getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+      wx.getLocation({
+        type: "gcj02",
+        success: resolve,
+        fail: () => reject(new Error("需要定位权限才能查看附近活动"))
+      });
     });
   },
 

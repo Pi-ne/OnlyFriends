@@ -1,18 +1,36 @@
 .create {
+  padding-top: 8rpx;
   padding-bottom: 48rpx;
 }
 
+.create .page-header {
+  margin-bottom: 24rpx;
+}
+
 .quick {
-  padding: 26rpx;
-  background: #ffffff;
+  padding: 28rpx;
+  background: linear-gradient(135deg, #f7fcfa 0%, #ffffff 100%);
+  border-color: #d9ebe3;
 }
 
 .quick-head {
   display: block;
 }
 
-.quick-title,
-.section-title {
+.quick-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 40rpx;
+  padding: 0 16rpx;
+  margin-bottom: 14rpx;
+  border-radius: 999rpx;
+  background: rgba(31, 122, 90, 0.1);
+  color: #1f7a5a;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.quick-title {
   margin-bottom: 10rpx;
   font-size: 31rpx;
   font-weight: 800;
@@ -34,71 +52,12 @@
   margin-top: 24rpx;
 }
 
-.template-scroll {
-  width: 100%;
-  white-space: nowrap;
-}
-
-.template-state {
-  padding: 22rpx;
-  color: #77808f;
-  font-size: 25rpx;
-  line-height: 1.5;
-}
-
-.template-state.error {
-  color: #b5473f;
-  background: #fff6f4;
-  border-color: #f1c2bc;
-}
-
-.template-row {
-  display: flex;
-  gap: 18rpx;
-  padding-bottom: 4rpx;
-}
-
-.template {
-  display: flex;
-  flex-direction: column;
-  width: 286rpx;
-  min-height: 238rpx;
-  padding: 22rpx;
-  vertical-align: top;
-  white-space: normal;
-}
-
-.template-title {
-  margin-bottom: 10rpx;
-  font-size: 28rpx;
-  line-height: 1.28;
-  font-weight: 800;
-}
-
-.template-desc {
-  min-height: 104rpx;
-  font-size: 23rpx;
-  line-height: 1.45;
-}
-
-.template-chip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 152rpx;
-  height: 46rpx;
-  margin-top: auto;
-  border-radius: 999rpx;
-  background: #f0f2f5;
-  color: #626d7c;
-  font-size: 22rpx;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-}
-
 .form {
   padding: 24rpx;
+}
+
+.field-last {
+  margin-bottom: 0;
 }
 
 .datetime-row {
@@ -124,13 +83,6 @@
 
 .picker-value.placeholder {
   color: #9aa2ad;
-}
-
-.time-preview {
-  margin-top: 12rpx;
-  color: #77808f;
-  font-size: 23rpx;
-  line-height: 1.45;
 }
 
 .location-picker {

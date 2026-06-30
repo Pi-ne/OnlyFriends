@@ -8,10 +8,6 @@ function listRegisteredActivities(params) {
   return request({ url: "/activities/registered", data: params });
 }
 
-function listTemplates() {
-  return request({ url: "/activities/templates" });
-}
-
 function getActivity(id) {
   return request({ url: `/activities/${id}` });
 }
@@ -39,7 +35,6 @@ function planActivity(data) {
 module.exports = {
   listActivities,
   listRegisteredActivities,
-  listTemplates,
   getActivity,
   createActivity,
   registerActivity,
