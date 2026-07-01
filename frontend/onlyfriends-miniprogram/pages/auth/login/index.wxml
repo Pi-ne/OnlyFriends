@@ -1,8 +1,17 @@
 <view class="page auth">
-  <view class="brand">Onlyfriends</view>
-  <view class="subtitle">发现身边有趣的活动</view>
-  <view class="form card">
-    <button class="btn wechat block" loading="{{loading}}" disabled="{{loading}}" bindtap="wechatLogin">
+  <view class="auth-main">
+    <view class="auth-hero">
+      <view class="hero-glow hero-glow-a"></view>
+      <view class="hero-glow hero-glow-b"></view>
+      <view class="eyebrow">Onlyfriends</view>
+      <view class="auth-title">发现身边有趣的活动</view>
+    </view>
+    <button
+      class="btn wechat block"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+      bindtap="wechatLogin"
+    >
       {{loading ? "登录中" : "微信一键登录"}}
     </button>
   </view>

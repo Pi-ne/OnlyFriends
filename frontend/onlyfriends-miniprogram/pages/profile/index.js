@@ -153,10 +153,9 @@ Page({
   },
 
   applyMerchant() {
-    wx.showModal({
-      title: "商家申请",
-      content: "这里将接入商家名称、活动领域和营业凭证上传表单。",
-      showCancel: false
-    });
+    if (!this.ensureLoggedIn()) {
+      return;
+    }
+    wx.navigateTo({ url: "/pages/profile/merchant-apply/index" });
   }
 });

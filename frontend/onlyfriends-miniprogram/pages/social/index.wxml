@@ -1,38 +1,67 @@
-<view class="page">
-  <view class="page-header between">
-    <view>
-      <view class="page-title">兴趣小队</view>
-      <view class="page-subtitle">找到稳定搭子，让活动不只发生一次。</view>
-    </view>
-    <button class="btn small pill" bindtap="createTeam">建立队伍</button>
+<view class="page social-page">
+  <view class="page-header">
+    <view class="page-title">兴趣小队</view>
+    <view class="page-subtitle">找到稳定搭子，让活动不只发生一次。</view>
   </view>
 
-  <view wx:if="{{loading}}" class="state card">正在加载小队...</view>
-  <view wx:elif="{{!loggedIn}}" class="state card">登录后查看兴趣小队。</view>
-  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
-  <view wx:elif="{{teams.length === 0}}" class="state card">暂无小队。</view>
-
-  <view wx:for="{{teams}}" wx:key="id" class="team card">
-    <view class="team-head">
-      <view class="team-main">
-        <view class="team-name">{{item.name}}</view>
-      </view>
-      <button class="btn small pill {{item.joined ? 'muted' : 'secondary'}}" data-id="{{item.id}}" data-name="{{item.name}}" data-joined="{{item.joined}}" bindtap="joinTeam">
-        {{item.joined ? "已加入" : "加入"}}
-      </button>
+  <view class="create-cta" bindtap="createTeam" hover-class="create-cta-hover">
+    <view class="create-cta-glow create-cta-glow-a"></view>
+    <view class="create-cta-glow create-cta-glow-b"></view>
+    <view class="create-cta-body">
+      <view class="create-cta-label">发起小队</view>
+      <view class="create-cta-title">建立队伍</view>
+      <view class="create-cta-desc">聚集同好，让约活动变得更简单</view>
     </view>
-    <view class="muted topic">{{item.topic}}</view>
-    <view class="team-foot">
-      <view class="team-tags">
-        <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+    <view class="create-cta-action">
+      <text class="create-cta-plus">+</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">
+    <view class="state-dot"></view>
+    <text>正在加载小队...</text>
+  </view>
+  <view wx:elif="{{!loggedIn}}" class="state card">
+    <view class="state-title">登录后查看兴趣小队</view>
+    <view class="state-desc">登录即可浏览和加入小队</view>
+  </view>
+  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+  <view wx:elif="{{teams.length === 0}}" class="state card empty-state">
+    <view class="empty-icon">◎</view>
+    <view class="state-title">暂无小队</view>
+    <view class="state-desc">点击上方卡片，创建第一个兴趣小队</view>
+  </view>
+
+  <view wx:if="{{!loading && teams.length > 0}}" class="list-section">
+    <view class="section-title compact">发现小队</view>
+    <view wx:for="{{teams}}" wx:key="id" class="team card">
+      <view class="team-head">
+        <view class="team-main">
+          <view class="team-name">{{item.name}}</view>
+        </view>
+        <button class="btn small pill {{item.joined ? 'muted' : 'secondary'}}" data-id="{{item.id}}" data-name="{{item.name}}" data-joined="{{item.joined}}" bindtap="joinTeam">
+          {{item.joined ? "已加入" : "加入"}}
+        </button>
       </view>
-      <view class="member-count">{{item.members}} 人</view>
+      <view class="muted topic">{{item.topic}}</view>
+      <view class="team-foot">
+        <view class="team-tags">
+          <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+        <view class="member-count">
+          <text class="member-num">{{item.members}}</text>
+          <text class="member-label">人</text>
+        </view>
+      </view>
     </view>
   </view>
 
   <view wx:if="{{showCreate}}" class="modal-mask" bindtap="closeCreate">
     <view class="modal card" catchtap="stopBubble">
-      <view class="modal-title">建立队伍</view>
+      <view class="modal-header">
+        <view class="modal-title">建立队伍</view>
+        <view class="modal-subtitle">填写小队信息，开始聚集同好</view>
+      </view>
       <view class="field">
         <text class="field-label">小队名称</text>
         <input class="input" data-key="name" value="{{form.name}}" placeholder="请输入小队名称" bindinput="updateForm" />

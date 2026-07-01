@@ -13,6 +13,7 @@
     "pages/profile/my-activities/index",
     "pages/profile/registrations/index",
     "pages/profile/follows/index",
+    "pages/profile/merchant-apply/index",
     "pages/auth/login/index"
   ],
   "window": {

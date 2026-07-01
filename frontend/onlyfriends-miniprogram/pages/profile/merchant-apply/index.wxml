@@ -1,0 +1,225 @@
+<view class="page merchant-apply">
+  <view class="hero-banner">
+    <view class="hero-glow hero-glow-a"></view>
+    <view class="hero-glow hero-glow-b"></view>
+    <view class="hero-inner">
+      <view class="hero-badge">商家认证</view>
+      <view class="hero-title">成为趣聚商家</view>
+      <view class="hero-desc">通过审核后可发起商业类活动，向用户展示专业商家资料</view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card loading-card">
+    <view class="loading-dot"></view>
+    <text>正在加载申请信息...</text>
+  </view>
+  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+
+  <block wx:elif="{{viewMode === 'merchant'}}">
+    <view class="status-panel card approved">
+      <view class="status-icon-wrap approved">
+        <text class="status-icon">✓</text>
+      </view>
+      <view class="status-content">
+        <view class="status-title">你已是商家用户</view>
+        <view class="status-desc">可以发起商业类活动，个人中心将显示商家身份</view>
+      </view>
+    </view>
+
+    <view class="detail-card card">
+      <view class="detail-title">商家资料</view>
+      <view class="detail-item">
+        <text class="detail-label">商家名称</text>
+        <text class="detail-value">{{merchantInfo.merchantName || '—'}}</text>
+      </view>
+      <view wx:if="{{merchantInfo.merchantNick}}" class="detail-item">
+        <text class="detail-label">展示昵称</text>
+        <text class="detail-value">{{merchantInfo.merchantNick}}</text>
+      </view>
+      <view class="detail-item column">
+        <text class="detail-label">关注领域</text>
+        <view class="tag-cloud">
+          <text wx:for="{{merchantInfo.focusTags}}" wx:key="*this" class="tag">{{item}}</text>
+          <text wx:if="{{!merchantInfo.focusTags || !merchantInfo.focusTags.length}}" class="empty-hint">暂未设置</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{viewMode === 'pending'}}">
+    <view class="status-panel card pending">
+      <view class="status-icon-wrap pending">
+        <text class="status-icon">⏳</text>
+      </view>
+      <view class="status-content">
+        <view class="status-title">申请审核中</view>
+        <view class="status-desc">平台将在 1-3 个工作日内完成审核，请耐心等待</view>
+      </view>
+    </view>
+
+    <view class="detail-card card">
+      <view class="detail-title">已提交资料</view>
+      <view class="detail-item">
+        <text class="detail-label">商家名称</text>
+        <text class="detail-value">{{applyStatus.merchantName}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">提交时间</text>
+        <text class="detail-value">{{applyStatus.createdAtText}}</text>
+      </view>
+      <view class="detail-item column">
+        <text class="detail-label">关注领域</text>
+        <view class="tag-cloud">
+          <text wx:for="{{applyStatus.focusTags}}" wx:key="*this" class="tag">{{item}}</text>
+          <text wx:if="{{!applyStatus.focusTags.length}}" class="empty-hint">未填写</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{viewMode === 'approved'}}">
+    <view class="status-panel card approved">
+      <view class="status-icon-wrap approved">
+        <text class="status-icon">✓</text>
+      </view>
+      <view class="status-content">
+        <view class="status-title">申请已通过</view>
+        <view class="status-desc">你的商家身份已生效，可以返回个人中心查看</view>
+      </view>
+    </view>
+
+    <view class="detail-card card">
+      <view class="detail-title">审核结果</view>
+      <view class="detail-item">
+        <text class="detail-label">商家名称</text>
+        <text class="detail-value">{{applyStatus.merchantName}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">审核时间</text>
+        <text class="detail-value">{{applyStatus.reviewedAtText || '—'}}</text>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{viewMode === 'rejected'}}">
+    <view class="status-panel card rejected">
+      <view class="status-icon-wrap rejected">
+        <text class="status-icon">!</text>
+      </view>
+      <view class="status-content">
+        <view class="status-title">申请未通过</view>
+        <view class="status-desc">{{applyStatus.rejectReason || '资料不符合要求，请修改后重新提交'}}</view>
+      </view>
+    </view>
+    <button class="btn block retry-main-btn" bindtap="retryApply">修改资料，重新申请</button>
+  </block>
+
+  <block wx:if="{{viewMode === 'form'}}">
+    <view class="form-section card">
+      <view class="section-head">
+        <view class="section-num">01</view>
+        <view class="section-meta">
+          <view class="section-title">基本信息</view>
+          <view class="section-sub">填写对外展示的商家名称</view>
+        </view>
+      </view>
+      <view class="field">
+        <text class="field-label">商家名称</text>
+        <input
+          class="input field-input"
+          value="{{form.merchantName}}"
+          maxlength="100"
+          placeholder="如：趣聚户外俱乐部"
+          placeholder-class="input-placeholder"
+          bindinput="updateMerchantName"
+        />
+      </view>
+    </view>
+
+    <view class="form-section card">
+      <view class="section-head">
+        <view class="section-num">02</view>
+        <view class="section-meta">
+          <view class="section-title">关注活动领域</view>
+          <view class="section-sub">手动输入或点选推荐，最多 10 个</view>
+        </view>
+      </view>
+
+      <view wx:if="{{focusTags.length}}" class="selected-tags">
+        <view wx:for="{{focusTags}}" wx:key="*this" class="selected-tag">
+          <text class="selected-tag-text">{{item}}</text>
+          <view class="selected-tag-remove" data-tag="{{item}}" bindtap="removeTag">×</view>
+        </view>
+      </view>
+      <view wx:else class="tag-empty">还没有添加领域标签</view>
+
+      <view class="tag-composer">
+        <input
+          class="tag-composer-input"
+          value="{{tagInput}}"
+          maxlength="20"
+          placeholder="输入自定义领域"
+          placeholder-class="input-placeholder"
+          confirm-type="done"
+          bindinput="onTagInput"
+          bindconfirm="addCustomTag"
+        />
+        <view class="tag-composer-btn" bindtap="addCustomTag">添加</view>
+      </view>
+
+      <view class="preset-block">
+        <view class="preset-label">常用推荐</view>
+        <view class="preset-grid">
+          <view
+            wx:for="{{presetTagOptions}}"
+            wx:key="name"
+            class="preset-chip {{item.selected ? 'active' : ''}}"
+            data-tag="{{item.name}}"
+            bindtap="toggleTag"
+          >{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-section card">
+      <view class="section-head">
+        <view class="section-num">03</view>
+        <view class="section-meta">
+          <view class="section-title">营业凭证</view>
+          <view class="section-sub">上传营业执照或相关资质照片</view>
+        </view>
+      </view>
+
+      <view class="license-box {{form.licensePreview ? 'has-image' : ''}}" bindtap="chooseLicense">
+        <image
+          wx:if="{{form.licensePreview}}"
+          class="license-preview"
+          src="{{form.licensePreview}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="license-empty">
+          <view class="license-icon">📄</view>
+          <view class="license-title">{{uploading ? '上传中...' : '点击上传凭证'}}</view>
+          <view class="license-sub">支持 jpg / png，请确保文字清晰可辨</view>
+        </view>
+        <view wx:if="{{form.licensePreview}}" class="license-mask">
+          <text class="license-mask-text">点击更换</text>
+        </view>
+      </view>
+      <view wx:if="{{form.licenseUrl}}" class="upload-success">
+        <text class="upload-success-icon">✓</text>
+        <text>凭证已上传，可以提交申请</text>
+      </view>
+    </view>
+
+    <view class="submit-spacer"></view>
+    <view class="bottom-bar">
+      <button
+        class="btn block submit-btn"
+        loading="{{submitting}}"
+        disabled="{{submitting || uploading}}"
+        bindtap="submitApply"
+      >提交商家申请</button>
+    </view>
+  </block>
+</view>

@@ -19,9 +19,11 @@ USE onlyfriends_activity;
 
 INSERT INTO activity_tag (name, category, usage_count, sort_order)
 VALUES
-  ('hiking', 'outdoor', 10, 100),
-  ('boardgame', 'indoor', 8, 90),
-  ('social', 'common', 20, 80)
+  ('运动', '运动健身', 10, 100),
+  ('跑步', '运动健身', 8, 90),
+  ('户外', '户外徒步', 12, 80),
+  ('桌游', '桌游聚会', 6, 70),
+  ('聚会', '桌游聚会', 15, 60)
 ON DUPLICATE KEY UPDATE
   usage_count = VALUES(usage_count),
   sort_order = VALUES(sort_order);
@@ -31,12 +33,25 @@ INSERT INTO activity
    location_name, location_lat, location_lng, location_detail, max_participants, current_count,
    fee, status, review_type, is_team_only, location_verify, location_radius, deleted)
 VALUES
-  (20001, 10001, 'Demo Weekend Hiking', 'A prepared demo activity.', JSON_ARRAY('hiking', 'social'),
-   'https://example.com/demo-hiking.jpg', '2026-07-20 09:00:00', '2026-07-20 12:00:00',
-   '2026-07-19 18:00:00', 'Demo Park', 31.2304000, 121.4737000, 'East gate',
-   20, 0, 0.00, 2, 0, 0, 0, 500, 0)
+  (20001, 10001, '周末奥森公园晨跑',
+   '周六早晨在奥林匹克森林公园慢跑 5 公里，适合初跑者。跑完一起在园区咖啡厅吃早餐。',
+   JSON_ARRAY('运动', '跑步', '户外'),
+   'https://images.unsplash.com/photo-1476480862126-209bfaa8dcc8?w=800',
+   '2026-07-05 07:00:00', '2026-07-05 09:00:00', '2026-07-04 20:00:00',
+   '奥林匹克森林公园南园', 40.0028000, 116.3903000, '南门集合，地铁8号线森林公园南门站',
+   15, 0, 0.00, 2, 0, 0, 1, 300, 0),
+  (20002, 10001, '周五晚狼人杀桌游局',
+   '下班后一起玩狼人杀，新手友好，有主持人带局。场地已预定，自带零食饮料更佳。',
+   JSON_ARRAY('桌游', '聚会', '室内'),
+   'https://images.unsplash.com/photo-1611195974226-ef6e9a2a8c8a?w=800',
+   '2026-07-04 19:30:00', '2026-07-04 22:30:00', '2026-07-04 17:00:00',
+   '中关村创业大街咖啡吧', 39.9836000, 116.3164000, '海淀区中关村大街11号一层',
+   12, 0, 0.00, 2, 0, 0, 0, 200, 0)
 ON DUPLICATE KEY UPDATE
   title = VALUES(title),
+  description = VALUES(description),
+  tags = VALUES(tags),
+  location_name = VALUES(location_name),
   status = VALUES(status);
 
 USE onlyfriends_social;

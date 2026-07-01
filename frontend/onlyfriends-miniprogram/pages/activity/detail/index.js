@@ -17,6 +17,13 @@ Page({
     this.loadActivity(Number(options.id));
   },
 
+  onShow() {
+    const activity = this.data.activity;
+    if (activity) {
+      this.loadRegistrationStatus(activity);
+    }
+  },
+
   loadActivity(id) {
     if (!id) {
       this.setData({ error: "活动不存在" });
@@ -25,8 +32,9 @@ Page({
     this.setData({ loading: true, error: "" });
     activityApi.getActivity(id).then((item) => {
       const activity = this.normalizeActivity(item);
-      this.setData({ activity, followedOrganizer: false });
+      this.setData({ activity, followedOrganizer: false, registered: false });
       this.loadFollowStatus(activity);
+      this.loadRegistrationStatus(activity);
     }).catch((err) => {
       this.setData({ activity: null, error: err.message || "活动加载失败" });
     }).finally(() => {
@@ -131,8 +139,8 @@ Page({
       confirmText: "确认报名",
       success: (res) => {
         if (!res.confirm) return;
-        activityApi.registerActivity(activity.id).then(() => {
-          this.setData({ registered: true });
+        activityApi.registerActivity(activity.id).then((status) => {
+          this.setData({ registered: this.isRegistered(status) });
           wx.showToast({ title: "报名成功", icon: "success" });
         }).catch((err) => {
           wx.showToast({ title: err.message || "报名失败", icon: "none" });
@@ -184,6 +192,21 @@ Page({
       name: activity.location,
       address: activity.locationDetail || activity.location,
       scale: 17
+    });
+  },
+
+  isRegistered(status) {
+    return Boolean(status && (status.registrationStatus === 1 || status.registrationStatusText === "registered"));
+  },
+
+  loadRegistrationStatus(activity) {
+    if (!activity || activity.isOwner || !wx.getStorageSync("accessToken")) {
+      return;
+    }
+    activityApi.getMyRegistrationStatus(activity.id).then((status) => {
+      this.setData({ registered: this.isRegistered(status) });
+    }).catch(() => {
+      this.setData({ registered: false });
     });
   },
 

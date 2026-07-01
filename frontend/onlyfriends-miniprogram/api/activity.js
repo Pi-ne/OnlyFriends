@@ -20,6 +20,10 @@ function registerActivity(id, data) {
   return request({ url: `/activities/${id}/register`, method: "POST", data });
 }
 
+function getMyRegistrationStatus(id) {
+  return request({ url: `/activities/${id}/registration/me` });
+}
+
 function listNotifications(params) {
   return request({ url: "/notifications", data: params });
 }
@@ -38,6 +42,7 @@ module.exports = {
   getActivity,
   createActivity,
   registerActivity,
+  getMyRegistrationStatus,
   listNotifications,
   markNotificationRead,
   planActivity
