@@ -23,6 +23,7 @@
         <button data-view="users" type="button">用户管理</button>
         <button data-view="activities" type="button">活动管理</button>
         <button data-view="teams" type="button">兴趣组/小队</button>
+        <button data-view="social" type="button">好友与聊天</button>
         <button data-view="seed" type="button">测试造数</button>
         <button data-view="api" type="button">接口调试</button>
       </nav>
@@ -162,12 +163,12 @@
       </section>
 
       <section class="view" id="view-teams" data-title="兴趣组/小队">
-        <div class="panel two-column">
-          <div>
+        <div class="panel teams-layout">
+          <div class="teams-admin-col">
             <div class="panel-head compact">
               <div>
-                <h2>小队列表</h2>
-                <p>查询、停用、恢复兴趣组/小队。</p>
+                <h2>管理端 · 小队列表</h2>
+                <p>管理员查询、停用、恢复小队。</p>
               </div>
               <button id="loadTeamsBtn" class="secondary" type="button">查询小队</button>
             </div>
@@ -195,21 +196,236 @@
             </div>
           </div>
 
-          <form id="createTeamForm" class="form-card">
-            <h2>建立新的兴趣组</h2>
-            <label>创建者用户 Token<input id="teamCreatorToken" placeholder="先在测试造数里登录一个普通用户"></label>
-            <label>名称<input name="name" value="开发测试兴趣组"></label>
-            <label>介绍<textarea name="description" rows="3">用于开发测试的小队。</textarea></label>
-            <label>标签<input name="tags" value="开发,测试"></label>
-            <label>人数上限<input name="maxMembers" type="number" value="30"></label>
-            <label>加入方式
-              <select name="joinType">
-                <option value="0">直接加入</option>
-                <option value="1">需要审核</option>
+          <div class="teams-user-col">
+            <div class="sub-panel">
+              <div class="panel-head compact">
+                <div>
+                  <h2>测试登录</h2>
+                  <p class="hint">本页独立登录，与「好友与聊天」互不影响。登录后自动设为当前操作身份。</p>
+                </div>
+              </div>
+              <div class="dual-login compact">
+                <form id="teamLoginAForm" class="form-card compact-card">
+                  <h2>用户 A</h2>
+                  <label>邮箱<input name="email" id="teamEmailA" value="demo.a@example.com"></label>
+                  <label>密码<input name="password" type="password" value="Abc123456"></label>
+                  <button class="primary" type="submit">登录 A</button>
+                  <p class="hint" id="teamUserAInfo">未登录</p>
+                </form>
+                <form id="teamLoginBForm" class="form-card compact-card">
+                  <h2>用户 B</h2>
+                  <label>邮箱<input name="email" id="teamEmailB" value="demo.b@example.com"></label>
+                  <label>密码<input name="password" type="password" value="Abc123456"></label>
+                  <button class="primary" type="submit">登录 B</button>
+                  <p class="hint" id="teamUserBInfo">未登录</p>
+                </form>
+              </div>
+              <label class="inline-select">
+                当前操作身份
+                <select id="teamTestActiveUser">
+                  <option value="A">用户 A</option>
+                  <option value="B">用户 B</option>
+                </select>
+              </label>
+              <p class="hint" id="teamTestUserInfo">请先登录要操作的用户</p>
+            </div>
+
+            <form id="createTeamForm" class="form-card">
+              <h2>创建兴趣组</h2>
+              <p class="hint">以<strong>当前操作身份</strong>创建小队，创建后自动成为队长并建立群聊。</p>
+              <label>名称<input name="name" value="开发测试兴趣组"></label>
+              <label>介绍<textarea name="description" rows="2">用于开发测试的小队。</textarea></label>
+              <label>标签<input name="tags" value="开发,测试"></label>
+              <label>人数上限<input name="maxMembers" type="number" value="30"></label>
+              <label>加入方式
+                <select name="joinType">
+                  <option value="0">直接加入</option>
+                  <option value="1">需要审核</option>
+                </select>
+              </label>
+              <button class="primary" type="submit">创建兴趣组</button>
+            </form>
+
+            <div class="sub-panel">
+              <div class="panel-head compact">
+                <div>
+                  <h2>选择小队</h2>
+                  <p class="hint">点击一个小队选中，再点「加入所选小队」。</p>
+                </div>
+                <button id="loadTeamBrowseBtn" class="secondary" type="button">刷新列表</button>
+              </div>
+              <div class="toolbar">
+                <input id="teamBrowseKeyword" placeholder="搜索小队名称 / 标签">
+              </div>
+              <p class="hint" id="teamSelectedInfo">未选择小队</p>
+              <div id="teamBrowseList" class="team-pick-list">
+                <p class="hint empty-hint">登录后点击「刷新列表」</p>
+              </div>
+              <button id="joinSelectedTeamBtn" class="primary" type="button">当前用户加入所选小队</button>
+            </div>
+
+            <div class="sub-panel">
+              <div class="panel-head compact">
+                <div>
+                  <h2>已加入的群聊</h2>
+                  <p class="hint">点击群聊进入下方聊天窗口。</p>
+                </div>
+                <button id="refreshJoinedTeamsBtn" class="secondary" type="button">刷新</button>
+              </div>
+              <div id="joinedTeamChatList" class="team-pick-list">
+                <p class="hint empty-hint">加入小队后会显示在这里</p>
+              </div>
+            </div>
+
+            <div class="sub-panel chat-main team-group-chat-panel">
+              <div class="panel-head compact">
+                <div>
+                  <h2 id="teamGroupChatTitle">群聊</h2>
+                  <p id="teamGroupChatMeta" class="chat-meta">从「已加入的群聊」中选择一个小队</p>
+                </div>
+                <button id="loadTeamGroupMessagesBtn" class="secondary" type="button">刷新消息</button>
+              </div>
+              <div id="teamChatMessages" class="chat-messages team-chat-messages">
+                <p class="hint empty-hint">选择已加入的群聊后开始聊天</p>
+              </div>
+              <form id="sendTeamGroupMessageForm" class="chat-compose">
+                <label class="block-label">群消息
+                  <textarea id="teamChatInput" rows="2" placeholder="向当前小队群聊发送消息"></textarea>
+                </label>
+                <button class="primary" type="submit">发送</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-social" data-title="好友与聊天">
+        <div class="panel social-layout">
+          <div class="panel-head compact">
+            <div>
+              <h2>双用户联调</h2>
+              <p>先分别登录两个测试用户，再测试加好友与私聊（私聊需先成为好友）。</p>
+            </div>
+            <label class="inline-select">
+              当前操作身份
+              <select id="socialActiveUser">
+                <option value="A">用户 A</option>
+                <option value="B">用户 B</option>
               </select>
             </label>
-            <button class="primary" type="submit">创建兴趣组</button>
-          </form>
+          </div>
+
+          <div class="dual-login">
+            <form id="socialLoginAForm" class="form-card compact-card">
+              <h2>用户 A 登录</h2>
+              <label>邮箱<input name="email" id="socialEmailA" value="demo.a@example.com"></label>
+              <label>密码<input name="password" type="password" value="Abc123456"></label>
+              <button class="primary" type="submit">登录 A</button>
+              <p class="hint" id="socialUserAInfo">未登录</p>
+            </form>
+            <form id="socialLoginBForm" class="form-card compact-card">
+              <h2>用户 B 登录</h2>
+              <label>邮箱<input name="email" id="socialEmailB" value="demo.b@example.com"></label>
+              <label>密码<input name="password" type="password" value="Abc123456"></label>
+              <button class="primary" type="submit">登录 B</button>
+              <p class="hint" id="socialUserBInfo">未登录</p>
+            </form>
+          </div>
+
+          <div class="social-grid">
+            <div class="social-friends">
+              <form id="friendApplyForm" class="form-card compact-card">
+                <h2>发起好友申请</h2>
+                <label>目标用户 ID<input name="targetUserId" id="friendTargetUserId" placeholder="对方 userId"></label>
+                <label>附言<input name="message" value="开发管理台测试加好友"></label>
+                <button class="primary" type="submit">发送申请</button>
+              </form>
+
+              <div class="sub-panel">
+                <div class="panel-head compact">
+                  <h2>好友申请</h2>
+                  <div class="inline-actions">
+                    <select id="friendApplyType">
+                      <option value="received">收到的</option>
+                      <option value="sent">发出的</option>
+                    </select>
+                    <button id="loadFriendAppliesBtn" class="secondary" type="button">刷新</button>
+                  </div>
+                </div>
+                <div class="table-wrap compact-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>申请人</th>
+                        <th>目标</th>
+                        <th>附言</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="friendAppliesBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-panel">
+                <div class="panel-head compact">
+                  <h2>好友列表</h2>
+                  <button id="loadFriendsBtn" class="secondary" type="button">刷新</button>
+                </div>
+                <div class="table-wrap compact-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>昵称</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="friendsBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="social-chat">
+              <div class="sub-panel chat-shell">
+                <div class="panel-head compact">
+                  <h2>会话</h2>
+                  <button id="loadConversationsBtn" class="secondary" type="button">刷新会话</button>
+                </div>
+                <div id="conversationList" class="conversation-list">
+                  <p class="hint empty-hint">登录后点击「刷新会话」</p>
+                </div>
+              </div>
+
+              <div class="sub-panel chat-shell chat-main">
+                <div class="panel-head compact">
+                  <div>
+                    <h2 id="chatTitle">私聊</h2>
+                    <p id="chatMeta" class="chat-meta">选择会话或从好友列表发起聊天</p>
+                  </div>
+                  <button id="loadMessagesBtn" class="secondary" type="button">刷新消息</button>
+                </div>
+                <div id="chatMessages" class="chat-messages">
+                  <p class="hint empty-hint">暂无消息</p>
+                </div>
+                <form id="sendMessageForm" class="chat-compose">
+                  <input id="chatReceiverId" type="hidden">
+                  <input id="chatConvId" type="hidden">
+                  <label class="block-label">消息内容
+                    <textarea id="chatInput" rows="2" placeholder="输入消息后发送（需已是好友）"></textarea>
+                  </label>
+                  <div class="inline-actions">
+                    <button class="primary" type="submit">发送私聊</button>
+                    <button id="markReadBtn" class="secondary" type="button">标记已读</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
