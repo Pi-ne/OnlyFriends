@@ -19,7 +19,7 @@
 
   <view wx:if="{{selected}}" class="summary card">
     <view class="summary-head">
-      <view>
+      <view class="summary-main">
         <view class="summary-title">{{selected.title}}</view>
         <view class="muted line">{{selected.time}} · {{selected.location}}</view>
       </view>

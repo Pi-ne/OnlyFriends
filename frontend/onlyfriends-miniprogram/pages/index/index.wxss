@@ -36,10 +36,22 @@
   font-weight: 400;
 }
 
+.map-entry-btn {
+  flex: 0 0 68rpx;
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.map-entry-btn:active {
+  opacity: 0.82;
+}
+
 .home .map-icon {
-  width: 36rpx;
-  height: 36rpx;
-  filter: brightness(0) invert(1);
+  width: 60rpx;
+  height: 60rpx;
 }
 
 /* ── Hero ── */
@@ -325,15 +337,20 @@
 
 .card-footer {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 16rpx;
   margin-top: 20rpx;
   padding-top: 20rpx;
   border-top: 1rpx solid #f3f5f8;
 }
 
 .chips {
+  flex: 1;
+  min-width: 0;
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 12rpx;
 }
 
@@ -360,8 +377,10 @@
 }
 
 .seats {
+  flex: 0 0 auto;
   display: flex;
   align-items: baseline;
+  padding-top: 2rpx;
   color: #8b939e;
   font-size: 24rpx;
 }
@@ -375,13 +394,6 @@
 .seats-label {
   margin-left: 4rpx;
   font-size: 22rpx;
-}
-
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10rpx;
-  margin-top: 18rpx;
 }
 
 .tag-minimal {

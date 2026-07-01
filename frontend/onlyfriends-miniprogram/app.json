@@ -5,6 +5,7 @@
     "pages/activity/detail/index",
     "pages/activity/create/index",
     "pages/activity/map/index",
+    "pages/location/picker/index",
     "pages/social/index",
     "pages/im/index",
     "pages/im/chat/index",

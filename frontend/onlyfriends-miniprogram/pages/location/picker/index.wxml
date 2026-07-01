@@ -1,0 +1,60 @@
+<view class="picker-page">
+  <map
+    class="picker-map"
+    latitude="{{centerLatitude}}"
+    longitude="{{centerLongitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    show-location="{{true}}"
+    enable-scroll="{{true}}"
+    enable-zoom="{{true}}"
+    bindtap="tapMap"
+  />
+
+  <view class="search-panel">
+    <view class="search-row">
+      <input
+        class="search-input"
+        value="{{keyword}}"
+        placeholder="搜索地点，如哈尔滨站、海南岛"
+        confirm-type="search"
+        bindinput="updateKeyword"
+        bindconfirm="confirmSearch"
+      />
+      <button wx:if="{{keyword}}" class="clear-btn" bindtap="clearKeyword">清空</button>
+    </view>
+    <view class="state-line {{error ? 'error' : ''}}">
+      {{searching ? "正在搜索..." : (error || hint)}}
+    </view>
+  </view>
+
+  <scroll-view wx:if="{{suggestions.length}}" class="suggestion-panel card" scroll-y="{{true}}">
+    <view
+      wx:for="{{suggestions}}"
+      wx:key="id"
+      class="suggestion-item"
+      data-index="{{index}}"
+      bindtap="selectSuggestion"
+    >
+      <view class="suggestion-title">{{item.name}}</view>
+      <view class="suggestion-detail">{{item.detail}}</view>
+      <view class="suggestion-coord">{{item.latitudeText}}, {{item.longitudeText}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-panel card">
+    <view wx:if="{{selected}}" class="selected-block">
+      <view class="selected-name">{{selected.name}}</view>
+      <view class="selected-detail">{{selected.detail}}</view>
+      <view class="selected-coord">纬度 {{selected.latitudeText}} · 经度 {{selected.longitudeText}}</view>
+    </view>
+    <view wx:else class="empty-block">
+      <view class="empty-title">请选择活动地点</view>
+      <view class="empty-detail">优先搜索地点并点选结果，也可以点击地图上的具体位置。</view>
+    </view>
+    <view class="actions">
+      <button class="btn secondary" bindtap="useNativeChooser">系统地图</button>
+      <button class="btn" bindtap="confirmSelection">确认地点</button>
+    </view>
+  </view>
+</view>

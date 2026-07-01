@@ -61,12 +61,25 @@
   gap: 18rpx;
 }
 
+.summary-main {
+  flex: 1;
+  min-width: 0;
+}
+
 .summary-title {
-  max-width: 430rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 32rpx;
   font-weight: 700;
   line-height: 1.35;
   color: #1a1f28;
+}
+
+.summary-head .tag {
+  flex: 0 0 auto;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .line {

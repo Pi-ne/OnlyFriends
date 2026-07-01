@@ -4,7 +4,7 @@
       <text class="search-icon">⌕</text>
       <text class="search-placeholder">搜索活动、地点或兴趣</text>
     </view>
-    <button class="btn-icon" bindtap="goMap" aria-label="地图模式">
+    <button class="map-entry-btn" bindtap="goMap" aria-label="地图模式">
       <image class="map-icon" src="/assets/icons/map-arrow.png" mode="aspectFit" />
     </button>
   </view>
@@ -67,16 +67,14 @@
         </view>
         <view class="card-footer">
           <view class="chips">
-            <text class="chip chip-{{activity.chipTone}}">{{activity.distance}}</text>
+            <text wx:if="{{activity.distance}}" class="chip chip-{{activity.chipTone}}">{{activity.distance}}</text>
             <text class="chip chip-{{activity.chipTone}}">{{activity.fee}}</text>
+            <text wx:for="{{activity.displayTags}}" wx:key="*this" class="tag-minimal tag-{{activity.chipTone}}">{{item}}</text>
           </view>
           <view class="seats">
             <text class="seats-num">{{activity.joined}}</text>
             <text class="seats-label">/ {{activity.capacity}} 人</text>
           </view>
-        </view>
-        <view wx:if="{{activity.displayTags.length}}" class="card-tags">
-          <text wx:for="{{activity.displayTags}}" wx:key="*this" class="tag-minimal tag-{{activity.chipTone}}">{{item}}</text>
         </view>
       </view>
     </view>
