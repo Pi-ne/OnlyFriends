@@ -452,7 +452,11 @@ pre {
 
   .two-column,
   .cards,
-  .status-grid {
+  .status-grid,
+  .social-grid,
+  .dual-login,
+  .teams-side,
+  .teams-layout {
     grid-template-columns: 1fr;
   }
 
@@ -464,4 +468,267 @@ pre {
     align-items: stretch;
     flex-direction: column;
   }
+}
+
+.social-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.dual-login {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+  gap: 16px;
+}
+
+.social-friends,
+.social-chat {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.compact-card {
+  padding: 14px;
+  box-shadow: none;
+}
+
+.sub-panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  padding: 14px;
+}
+
+.inline-select {
+  min-width: 160px;
+}
+
+.inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-shell {
+  display: grid;
+  gap: 10px;
+}
+
+.chat-main {
+  min-height: 420px;
+}
+
+.chat-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.conversation-list {
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.conv-item {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.conv-item:hover,
+.conv-item.active {
+  border-color: var(--primary);
+  background: #f5f9ff;
+}
+
+.conv-item strong {
+  font-size: 14px;
+}
+
+.conv-item span,
+.conv-item small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.conv-item small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-messages {
+  display: grid;
+  gap: 8px;
+  min-height: 240px;
+  max-height: 320px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.chat-bubble.mine {
+  margin-left: auto;
+  background: #dbeafe;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.theirs {
+  margin-right: auto;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble time {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.chat-bubble.recalled {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.chat-compose {
+  display: grid;
+  gap: 10px;
+}
+
+.teams-side {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.teams-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 440px);
+  gap: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.teams-admin-col,
+.teams-user-col {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.team-pick-list {
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.team-pick-item {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.team-pick-item:hover,
+.team-pick-item.active {
+  border-color: var(--primary);
+  background: #f5f9ff;
+}
+
+.team-pick-item strong {
+  font-size: 14px;
+}
+
+.team-pick-item span,
+.team-pick-item small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.team-pick-item.joined.active {
+  border-color: var(--success);
+  background: #f0fdf7;
+}
+
+.team-group-chat-panel {
+  min-height: 320px;
+}
+
+.dual-login.compact {
+  gap: 10px;
+}
+
+.team-chat-messages {
+  min-height: 180px;
+  max-height: 260px;
+}
+
+.chat-sender {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.token-details {
+  margin-top: 4px;
+}
+
+.token-details summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.token-details[open] {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.empty-hint {
+  margin: 0;
+  text-align: center;
+  padding: 24px 12px;
 }
