@@ -1,4 +1,5 @@
 const imApi = require("../../api/im");
+const imRealtime = require("../../utils/im-realtime");
 
 Page({
   data: {
@@ -9,10 +10,35 @@ Page({
   },
 
   onShow() {
+    imRealtime.ensureConnected();
     this.loadConversations();
+    if (!this._offRealtime) {
+      this._offRealtime = imRealtime.onEvent(() => this.scheduleRefresh());
+    }
   },
 
-  loadConversations() {
+  onHide() {
+    if (this._refreshTimer) {
+      clearTimeout(this._refreshTimer);
+      this._refreshTimer = null;
+    }
+    if (this._offRealtime) {
+      this._offRealtime();
+      this._offRealtime = null;
+    }
+  },
+
+  scheduleRefresh() {
+    if (this._refreshTimer) {
+      return;
+    }
+    this._refreshTimer = setTimeout(() => {
+      this._refreshTimer = null;
+      this.loadConversations(true);
+    }, 400);
+  },
+
+  loadConversations(silent) {
     const token = wx.getStorageSync("accessToken");
     if (!token) {
       this.setData({
@@ -24,16 +50,25 @@ Page({
       return;
     }
 
-    this.setData({ loading: true, error: "", loggedIn: true });
+    if (!silent) {
+      this.setData({ loading: true, error: "", loggedIn: true });
+    } else {
+      this.setData({ loggedIn: true });
+    }
+
     imApi.listConversations().then((list) => {
       this.setData({ conversations: (list || []).map((item) => this.normalizeConversation(item)) });
     }).catch((err) => {
-      this.setData({
-        conversations: [],
-        error: err.message || "会话加载失败"
-      });
+      if (!silent) {
+        this.setData({
+          conversations: [],
+          error: err.message || "会话加载失败"
+        });
+      }
     }).finally(() => {
-      this.setData({ loading: false });
+      if (!silent) {
+        this.setData({ loading: false });
+      }
     });
   },
 
@@ -44,6 +79,7 @@ Page({
       id: item.convId,
       convType: item.convType,
       peerUserId: item.peerUserId,
+      teamId: item.teamId,
       title,
       avatarText: title.slice(0, 1),
       last: item.lastMsgPreview || "暂无消息",
@@ -72,7 +108,9 @@ Page({
       return;
     }
     if (conversation.isGroup) {
-      wx.showToast({ title: "群聊页面稍后接入", icon: "none" });
+      wx.navigateTo({
+        url: `/pages/im/chat/index?type=group&convId=${conversation.id}&teamId=${conversation.teamId || ""}&title=${encodeURIComponent(conversation.title)}`
+      });
       return;
     }
     wx.navigateTo({

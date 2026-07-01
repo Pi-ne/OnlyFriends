@@ -21,10 +21,24 @@ try {
 const selected = CONFIG[ENV] || CONFIG.dev;
 const apiBase = localOverride.apiBase || selected.apiBase;
 
+function deriveWsBase(value) {
+  const origin = String(value || "").replace(/\/api\/v1\/?$/, "");
+  if (origin.startsWith("https://")) {
+    return `${origin.replace(/^https:/, "wss:")}/ws/im`;
+  }
+  if (origin.startsWith("http://")) {
+    return `${origin.replace(/^http:/, "ws:")}/ws/im`;
+  }
+  return "";
+}
+
+const wsBase = localOverride.wsBase || deriveWsBase(apiBase);
+
 if (!apiBase) {
   throw new Error("请在 config/index.js 的 release.apiBase 或 config/local.js 中配置 API 地址");
 }
 
 module.exports = {
-  apiBase
+  apiBase,
+  wsBase
 };

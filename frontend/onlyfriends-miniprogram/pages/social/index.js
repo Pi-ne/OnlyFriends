@@ -131,12 +131,20 @@ Page({
     return value.split(/[,，\s]+/).map((item) => item.trim()).filter(Boolean).slice(0, 8);
   },
 
+  openTeamChat(event) {
+    const id = Number(event.currentTarget.dataset.id);
+    const name = event.currentTarget.dataset.name || "小队群聊";
+    wx.navigateTo({
+      url: `/pages/im/chat/index?type=group&teamId=${id}&title=${encodeURIComponent(name)}`
+    });
+  },
+
   joinTeam(event) {
     const id = Number(event.currentTarget.dataset.id);
     const name = event.currentTarget.dataset.name;
     const team = this.data.teams.find((item) => item.id === id);
     if (team && team.joined) {
-      wx.showToast({ title: "你已加入该小队", icon: "none" });
+      this.openTeamChat(event);
       return;
     }
     socialApi.joinTeam(id, { message: "" }).then((res) => {

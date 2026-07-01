@@ -12,6 +12,14 @@ function joinTeam(id, data) {
   return request({ url: `/teams/${id}/join`, method: "POST", data });
 }
 
+function listTeamMembers(teamId) {
+  return request({ url: `/teams/${teamId}/members` });
+}
+
+function dissolveTeam(teamId) {
+  return request({ url: `/teams/${teamId}`, method: "DELETE" });
+}
+
 function followUser(userId) {
   return request({ url: `/follows/${userId}`, method: "POST" });
 }
@@ -32,6 +40,8 @@ module.exports = {
   listTeams,
   createTeam,
   joinTeam,
+  listTeamMembers,
+  dissolveTeam,
   followUser,
   unfollowUser,
   listFollowing,

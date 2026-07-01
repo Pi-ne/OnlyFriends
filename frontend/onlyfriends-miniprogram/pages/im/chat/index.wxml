@@ -1,4 +1,12 @@
-<view class="chat-page">
+<view class="chat-page {{isGroup ? 'group-chat' : ''}}">
+  <view wx:if="{{isGroup}}" class="group-toolbar card" bindtap="openMembers">
+    <view class="group-toolbar-main">
+      <view class="group-toolbar-title">群成员</view>
+      <view class="group-toolbar-desc">{{memberCount ? memberCount + ' 人在群内' : '点击查看成员与队长'}}</view>
+    </view>
+    <view class="group-toolbar-action">查看</view>
+  </view>
+
   <view wx:if="{{loading}}" class="chat-state card">正在加载聊天记录...</view>
   <view wx:elif="{{error}}" class="chat-state chat-error card">{{error}}</view>
 
@@ -6,6 +14,7 @@
     <view wx:if="{{!loading && !error && messages.length === 0}}" class="chat-state card">暂无聊天记录。</view>
     <view wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}" class="message-row {{item.mine ? 'mine' : ''}}">
       <view class="message-bubble {{item.recalled ? 'recalled' : ''}}">
+        <view wx:if="{{item.showSender}}" class="message-sender">{{item.senderNickname}}</view>
         <view class="message-content">{{item.content}}</view>
         <view class="message-time">{{item.time}}</view>
       </view>
@@ -15,5 +24,36 @@
   <view class="composer">
     <input class="composer-input" value="{{input}}" placeholder="输入消息" confirm-type="send" bindinput="updateInput" bindconfirm="sendMessage" />
     <button class="btn small" loading="{{sending}}" disabled="{{sending || !input}}" bindtap="sendMessage">发送</button>
+  </view>
+
+  <view wx:if="{{showMembers}}" class="members-mask" bindtap="closeMembers">
+    <view class="members-panel card" catchtap="stopBubble">
+      <view class="members-header">
+        <view>
+          <view class="members-title">群成员</view>
+          <view class="members-subtitle">共 {{memberCount || members.length}} 人</view>
+        </view>
+        <view class="members-close" bindtap="closeMembers">关闭</view>
+      </view>
+
+      <view wx:if="{{membersLoading}}" class="members-state">正在加载成员...</view>
+      <view wx:elif="{{membersError}}" class="members-state error">{{membersError}}</view>
+      <view wx:elif="{{members.length === 0}}" class="members-state">暂无成员信息。</view>
+
+      <scroll-view wx:else class="members-list" scroll-y>
+        <view wx:for="{{members}}" wx:key="id" class="member-row">
+          <view class="member-avatar">{{item.avatarText}}</view>
+          <view class="member-main">
+            <view class="member-name">{{item.nickname}}</view>
+            <view wx:if="{{item.joinedAt}}" class="member-meta">加入于 {{item.joinedAt}}</view>
+          </view>
+          <view class="member-role {{item.isOwner ? 'owner' : (item.isAdmin ? 'admin' : '')}}">{{item.roleText}}</view>
+        </view>
+      </scroll-view>
+
+      <view wx:if="{{isCaptain}}" class="members-footer">
+        <button class="btn danger block" loading="{{dissolving}}" disabled="{{dissolving}}" bindtap="confirmDissolveTeam">解散群聊</button>
+      </view>
+    </view>
   </view>
 </view>

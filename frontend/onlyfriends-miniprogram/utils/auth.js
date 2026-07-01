@@ -1,12 +1,15 @@
 const userApi = require("../api/user");
+const imRealtime = require("./im-realtime");
 
 function saveSession(res) {
   wx.setStorageSync("accessToken", res.accessToken);
   wx.setStorageSync("refreshToken", res.refreshToken);
   wx.setStorageSync("userInfo", res.userInfo);
+  imRealtime.ensureConnected();
 }
 
 function clearSession() {
+  imRealtime.disconnect();
   wx.removeStorageSync("accessToken");
   wx.removeStorageSync("refreshToken");
   wx.removeStorageSync("userInfo");

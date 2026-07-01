@@ -39,9 +39,8 @@
         <view class="team-main">
           <view class="team-name">{{item.name}}</view>
         </view>
-        <button class="btn small pill {{item.joined ? 'muted' : 'secondary'}}" data-id="{{item.id}}" data-name="{{item.name}}" data-joined="{{item.joined}}" bindtap="joinTeam">
-          {{item.joined ? "已加入" : "加入"}}
-        </button>
+        <button wx:if="{{item.joined}}" class="btn small pill" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="openTeamChat">群聊</button>
+        <button wx:else class="btn small pill secondary" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="joinTeam">加入</button>
       </view>
       <view class="muted topic">{{item.topic}}</view>
       <view class="team-foot">

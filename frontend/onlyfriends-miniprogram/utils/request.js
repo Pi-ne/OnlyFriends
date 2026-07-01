@@ -1,4 +1,5 @@
-const app = getApp();
+const config = require("../config/index");
+const imRealtime = require("./im-realtime");
 
 const PUBLIC_AUTH_PATHS = [
   "/auth/wx-login",
@@ -32,6 +33,7 @@ function extractErrorMessage(body) {
 }
 
 function clearAuthAndRedirect() {
+  imRealtime.disconnect();
   wx.removeStorageSync("accessToken");
   wx.removeStorageSync("refreshToken");
   wx.removeStorageSync("userInfo");
@@ -46,7 +48,7 @@ function request(options) {
   const token = publicAuth ? "" : wx.getStorageSync("accessToken");
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${app.globalData.apiBase}${options.url}`,
+      url: `${config.apiBase}${options.url}`,
       method: options.method || "GET",
       data: options.data || {},
       timeout: options.timeout || 15000,
