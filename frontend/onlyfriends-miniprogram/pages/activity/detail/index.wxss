@@ -258,8 +258,13 @@
 
 /* ── Content Sections ── */
 .content-card,
-.notice-card {
+.notice-card,
+.checkin-card {
   padding: 28rpx;
+}
+
+.checkin-btn {
+  margin-top: 20rpx;
 }
 
 .notice-card {

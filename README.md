@@ -87,4 +87,4 @@ OnlyFriends/
 | API | [中文 API 指南](docs/api/overview-zh.md) · [网关路由](docs/api/gateway-routes.md) |
 | 前端 | [小程序教程](docs/frontend/miniprogram-guide.md) · [开发管理台](docs/frontend/dev-console.md) |
 | 测试 | [冒烟测试](docs/testing/smoke-tests.md) · [演示脚本](docs/testing/demo-script.md) |
-| 产品 | [用户故事](docs/product/user-stories.md) · [验收标准](docs/product/acceptance-criteria.md) |
+| 产品 | [产品说明书](docs/product/产品说明书.md) · [用户故事](docs/product/user-stories.md) · [验收标准](docs/product/acceptance-criteria.md) |

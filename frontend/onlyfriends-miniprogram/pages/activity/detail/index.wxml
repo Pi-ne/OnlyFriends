@@ -94,6 +94,21 @@
       </button>
     </view>
 
+    <view wx:if="{{activity.canCheckin}}" class="section card checkin-card">
+      <view class="section-title">活动签到</view>
+      <view class="desc muted">
+        {{activity.isOwner ? '生成签到码，供已报名参与者扫码或粘贴签到。' : (registered ? '你已完成报名，可在活动现场签到。' : '签到功能仅对已报名用户开放。')}}
+        {{activity.locationVerify ? ' 本活动需现场定位签到。' : ''}}
+      </view>
+      <button
+        class="btn {{activity.isOwner ? '' : 'secondary'}} block checkin-btn"
+        disabled="{{!activity.isOwner && !registered}}"
+        bindtap="openCheckin"
+      >
+        {{activity.isOwner ? '管理签到码' : (registered ? '去签到' : '请先报名')}}
+      </button>
+    </view>
+
     <view class="section card notice-card">
       <view class="section-title">安全须知</view>
       <view class="desc muted">请按活动说明准时到达，注意个人安全和随身物品。</view>

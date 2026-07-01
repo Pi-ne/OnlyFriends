@@ -18,12 +18,21 @@
 | [本地开发指南](getting-started/local-setup.md) | 从克隆到启动的完整流程 |
 | [数据库初始化](getting-started/database-init.md) | 五库初始化、演示数据、默认账号 |
 
+## 产品与需求
+
+| 文档 | 说明 |
+|------|------|
+| [产品说明书](product/产品说明书.md) | 综合产品说明：定位、功能、流程、实现状态与限制 |
+| [用户故事](product/user-stories.md) | Epic / Story 与优先级 |
+| [验收标准](product/acceptance-criteria.md) | SMART 验收条件 |
+| [发布计划](product/release-plan.md) | 迭代路线图 |
+| [缺失内容与后续任务](product/outstanding-tasks.md) | 待完成功能与迭代目标 |
+
 ## 架构设计
 
 | 文档 | 说明 |
 |------|------|
 | [系统设计 v3](architecture/system-design-v3.md) | 微服务拆分、数据库、API 契约、部署方案 |
-| [缺失内容与后续任务](product/outstanding-tasks.md) | 待完成功能与迭代目标 |
 
 ## 微服务文档
 
@@ -61,9 +70,6 @@
 | [冒烟测试](testing/smoke-tests.md) | 后端自动化冒烟脚本 |
 | [完整测试指南](testing/full-test-suite.md) | 单元测试、AI 测试与冒烟分层说明 |
 | [演示脚本](testing/demo-script.md) | 验收演示 curl 流程 |
-| [用户故事](product/user-stories.md) | Epic / Story 与优先级 |
-| [验收标准](product/acceptance-criteria.md) | SMART 验收条件 |
-| [发布计划](product/release-plan.md) | 迭代路线图 |
 
 ## 相关脚本
 

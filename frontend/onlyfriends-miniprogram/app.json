@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/search/index",
     "pages/activity/detail/index",
+    "pages/activity/checkin/index",
     "pages/activity/create/index",
     "pages/activity/map/index",
     "pages/location/picker/index",

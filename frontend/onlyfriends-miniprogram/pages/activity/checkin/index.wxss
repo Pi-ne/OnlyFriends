@@ -1,0 +1,113 @@
+.checkin-page {
+  padding-top: 12rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+}
+
+.state {
+  padding: 48rpx 32rpx;
+  text-align: center;
+  color: #8b939e;
+  font-size: 26rpx;
+}
+
+.state.error {
+  color: #c45c4a;
+  background: #fff6f4;
+}
+
+.hero-card,
+.qr-card,
+.action-card,
+.success-card {
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.hero-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1a1f28;
+}
+
+.hero-desc {
+  margin-top: 12rpx;
+  color: #667085;
+  font-size: 26rpx;
+  line-height: 1.65;
+}
+
+.hero-meta {
+  margin-top: 16rpx;
+  color: #1f7a5a;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qrcode-canvas {
+  width: 260px;
+  height: 260px;
+  border-radius: 16rpx;
+  background: #ffffff;
+  border: 1rpx solid #eef0f3;
+}
+
+.qr-placeholder {
+  margin: 40rpx 0;
+  color: #8b939e;
+  font-size: 26rpx;
+}
+
+.qr-card .btn-group {
+  width: 100%;
+  margin-top: 24rpx;
+}
+
+.action-card .btn {
+  margin-bottom: 16rpx;
+}
+
+.paste-box {
+  margin-top: 8rpx;
+}
+
+.paste-input {
+  width: 100%;
+  min-height: 180rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  border-radius: 16rpx;
+  border: 1rpx solid #e4e8ee;
+  background: #fafbfc;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.success-card {
+  text-align: center;
+  padding: 56rpx 28rpx;
+}
+
+.success-icon {
+  width: 96rpx;
+  height: 96rpx;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: rgba(31, 122, 90, 0.12);
+  color: #1f7a5a;
+  font-size: 48rpx;
+  line-height: 96rpx;
+  font-weight: 700;
+}
+
+.success-text {
+  margin-top: 20rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1f28;
+}

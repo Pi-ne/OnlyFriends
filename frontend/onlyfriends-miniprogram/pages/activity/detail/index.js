@@ -89,7 +89,9 @@ Page({
       desc: item.description || "暂无活动介绍",
       tags,
       isOwner: this.isOwner(item.creatorId),
-      canRegister: [2, 3].includes(item.status) && !this.isOwner(item.creatorId)
+      canRegister: [2, 3].includes(item.status) && !this.isOwner(item.creatorId),
+      canCheckin: [2, 3, 4, 5].includes(item.status),
+      locationVerify: item.locationVerify === true || item.locationVerify === 1
     };
   },
 
@@ -219,6 +221,21 @@ Page({
       this.setData({ followedOrganizer });
     }).catch(() => {
       this.setData({ followedOrganizer: false });
+    });
+  },
+
+  openCheckin() {
+    const activity = this.data.activity;
+    if (!activity || !activity.canCheckin) {
+      wx.showToast({ title: "当前不可签到", icon: "none" });
+      return;
+    }
+    if (!wx.getStorageSync("accessToken")) {
+      wx.navigateTo({ url: "/pages/auth/login/index" });
+      return;
+    }
+    wx.navigateTo({
+      url: `/pages/activity/checkin/index?id=${activity.id}&owner=${activity.isOwner ? 1 : 0}&title=${encodeURIComponent(activity.title)}`
     });
   }
 });

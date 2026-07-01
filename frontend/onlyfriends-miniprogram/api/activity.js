@@ -36,6 +36,14 @@ function planActivity(data) {
   return request({ url: "/ai/plan-activity", method: "POST", data });
 }
 
+function getCheckinQrcode(id) {
+  return request({ url: `/activities/${id}/checkin/qrcode` });
+}
+
+function checkinActivity(id, data) {
+  return request({ url: `/activities/${id}/checkin`, method: "POST", data });
+}
+
 module.exports = {
   listActivities,
   listRegisteredActivities,
@@ -43,6 +51,8 @@ module.exports = {
   createActivity,
   registerActivity,
   getMyRegistrationStatus,
+  getCheckinQrcode,
+  checkinActivity,
   listNotifications,
   markNotificationRead,
   planActivity

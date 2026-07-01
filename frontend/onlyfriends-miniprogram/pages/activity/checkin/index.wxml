@@ -1,0 +1,44 @@
+<view class="checkin-page page">
+  <view wx:if="{{loading}}" class="state card">正在加载...</view>
+  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+
+  <block wx:elif="{{isOwner}}">
+    <view class="card hero-card">
+      <view class="hero-title">发起人签到码</view>
+      <view class="hero-desc">请让已报名参与者扫描下方二维码，或在签到页粘贴签到码完成签到。</view>
+      <view wx:if="{{expiresAt}}" class="hero-meta">有效期至 {{expiresAt}}</view>
+    </view>
+
+    <view class="card qr-card">
+      <canvas canvas-id="checkinQrcode" class="qrcode-canvas" style="width: 260px; height: 260px;"></canvas>
+      <view wx:if="{{!qrcodeContent}}" class="qr-placeholder">正在生成签到码...</view>
+      <view class="btn-group split">
+        <button class="btn secondary" loading="{{generating}}" disabled="{{generating}}" bindtap="refreshQrcode">刷新签到码</button>
+        <button class="btn ghost" disabled="{{!qrcodeContent}}" bindtap="copyQrcode">复制签到码</button>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{registered}}">
+    <view class="card hero-card">
+      <view class="hero-title">{{checkedIn ? '签到成功' : '参与者签到'}}</view>
+      <view class="hero-desc">
+        {{checkedIn ? ('签到时间：' + checkinTime) : (locationVerify ? '请扫描发起人展示的二维码，并在现场授权定位。' : '请扫描发起人展示的二维码完成签到。')}}
+      </view>
+    </view>
+
+    <view wx:if="{{!checkedIn}}" class="card action-card">
+      <button class="btn block" loading="{{checkingIn}}" disabled="{{checkingIn}}" bindtap="scanCheckin">扫码签到</button>
+      <button class="btn secondary block" bindtap="togglePaste">{{showPaste ? '收起粘贴签到' : '粘贴签到码'}}</button>
+      <view wx:if="{{showPaste}}" class="paste-box">
+        <textarea class="paste-input" value="{{pasteCode}}" placeholder="粘贴发起人提供的签到码内容" bindinput="updatePasteCode" />
+        <button class="btn block" loading="{{checkingIn}}" disabled="{{checkingIn || !pasteCode}}" bindtap="submitPasteCheckin">确认签到</button>
+      </view>
+    </view>
+
+    <view wx:else class="card success-card">
+      <view class="success-icon">✓</view>
+      <view class="success-text">你已完成本次活动签到</view>
+    </view>
+  </block>
+</view>
