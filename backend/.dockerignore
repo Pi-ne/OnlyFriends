@@ -1,0 +1,7 @@
+**/target
+**/.idea
+**/.vscode
+**/*.iml
+**/node_modules
+**/__pycache__
+**/.git
