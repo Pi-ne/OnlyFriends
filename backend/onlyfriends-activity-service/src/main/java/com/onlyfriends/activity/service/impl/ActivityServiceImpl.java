@@ -1048,11 +1048,13 @@ public class ActivityServiceImpl implements ActivityService {
         record.setAiReason(review.getReason());
         record.setAiConfidence(confidence);
 
-        if ("pass".equals(result) && confidence.compareTo(AUTO_PASS_CONFIDENCE) >= 0 && !overAutoPassLimit) {
-            activity.setStatus(STATUS_PUBLISHED);
-            activity.setReviewType(REVIEW_TYPE_AI);
-            record.setFinalResult(0);
-            record.setReviewComment("AI auto pass");
+        if ("pass".equals(result) && confidence.compareTo(AUTO_PASS_CONFIDENCE) >= 0) {
+            activity.setStatus(STATUS_REVIEWING);
+            activity.setReviewType(REVIEW_TYPE_MANUAL);
+            record.setFinalResult(3);
+            record.setReviewComment(overAutoPassLimit
+                    ? "Large activity, transferred to manual review"
+                    : "AI pre-check passed, awaiting manual review");
         } else if ("reject".equals(result) && confidence.compareTo(AUTO_REJECT_CONFIDENCE) >= 0) {
             activity.setStatus(STATUS_REJECTED);
             activity.setReviewType(REVIEW_TYPE_AI);

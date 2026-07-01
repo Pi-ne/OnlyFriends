@@ -60,6 +60,13 @@
   margin-bottom: 0;
 }
 
+.field-help {
+  margin-top: 10rpx;
+  color: #77808f;
+  font-size: 22rpx;
+  line-height: 1.45;
+}
+
 .datetime-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

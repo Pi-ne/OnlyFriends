@@ -26,15 +26,38 @@
       </picker>
     </view>
     <view class="field">
-      <text class="field-label">时间</text>
+      <text class="field-label">开始时间</text>
       <view class="datetime-row">
-        <picker class="datetime-picker" mode="date" value="{{form.date}}" bindchange="updateDate">
-          <view class="picker-value {{ui.datePlaceholder ? 'placeholder' : ''}}">{{ui.dateText}}</view>
+        <picker class="datetime-picker" mode="date" value="{{form.startDate}}" bindchange="updateStartDate">
+          <view class="picker-value {{ui.startDatePlaceholder ? 'placeholder' : ''}}">{{ui.startDateText}}</view>
         </picker>
-        <picker class="datetime-picker" mode="time" value="{{form.clock}}" bindchange="updateClock">
-          <view class="picker-value {{ui.clockPlaceholder ? 'placeholder' : ''}}">{{ui.clockText}}</view>
+        <picker class="datetime-picker" mode="time" value="{{form.startClock}}" bindchange="updateStartClock">
+          <view class="picker-value {{ui.startClockPlaceholder ? 'placeholder' : ''}}">{{ui.startClockText}}</view>
         </picker>
       </view>
+    </view>
+    <view class="field">
+      <text class="field-label">结束时间</text>
+      <view class="datetime-row">
+        <picker class="datetime-picker" mode="date" value="{{form.endDate}}" bindchange="updateEndDate">
+          <view class="picker-value {{ui.endDatePlaceholder ? 'placeholder' : ''}}">{{ui.endDateText}}</view>
+        </picker>
+        <picker class="datetime-picker" mode="time" value="{{form.endClock}}" bindchange="updateEndClock">
+          <view class="picker-value {{ui.endClockPlaceholder ? 'placeholder' : ''}}">{{ui.endClockText}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="field">
+      <text class="field-label">报名截止时间</text>
+      <view class="datetime-row">
+        <picker class="datetime-picker" mode="date" value="{{form.regDate}}" bindchange="updateRegDate">
+          <view class="picker-value {{ui.regDatePlaceholder ? 'placeholder' : ''}}">{{ui.regDateText}}</view>
+        </picker>
+        <picker class="datetime-picker" mode="time" value="{{form.regClock}}" bindchange="updateRegClock">
+          <view class="picker-value {{ui.regClockPlaceholder ? 'placeholder' : ''}}">{{ui.regClockText}}</view>
+        </picker>
+      </view>
+      <view class="field-help">须早于开始时间</view>
     </view>
     <view class="field">
       <text class="field-label">地点</text>

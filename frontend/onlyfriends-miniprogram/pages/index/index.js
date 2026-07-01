@@ -30,8 +30,8 @@ Page({
     currentList: []
   },
 
-  onLoad() {
-    this.loadActivities("recommend");
+  onShow() {
+    this.loadActivities(this.data.activeTab);
   },
 
   switchTab(event) {
@@ -107,9 +107,6 @@ Page({
 
   refreshList(key, source) {
     let list = source || [];
-    if (key === "latest") {
-      list = [...list].reverse();
-    }
     if (key === "nearby") {
       list = [...list].sort((a, b) => a.distanceMeters - b.distanceMeters);
     }

@@ -20,9 +20,12 @@ function createEmptyForm() {
   return {
     title: "",
     category: "",
-    date: "",
-    clock: "",
-    time: "",
+    startDate: "",
+    startClock: "",
+    endDate: "",
+    endClock: "",
+    regDate: "",
+    regClock: "",
     location: "",
     locationDetail: "",
     locationLat: null,
@@ -36,14 +39,22 @@ function createUiHints(form) {
   const hasLocation = form.locationLat !== null;
   const categoryIndex = resolveCategoryIndex(form.category);
   return {
-    dateText: form.date || "选择日期",
-    clockText: form.clock || "选择时间",
+    startDateText: form.startDate || "选择日期",
+    startClockText: form.startClock || "选择时间",
+    endDateText: form.endDate || "选择日期",
+    endClockText: form.endClock || "选择时间",
+    regDateText: form.regDate || "选择日期",
+    regClockText: form.regClock || "选择时间",
     locationName: form.location || (hasLocation ? "已选择地图位置" : "从地图选择活动地点"),
     locationDetail: form.locationDetail || (hasLocation ? "请在下方填写具体地点名称" : "选择后会保存真实地图位置"),
     locationCta: hasLocation ? "重选" : "选择",
     categoryText: form.category || "请选择活动类型",
-    datePlaceholder: !form.date,
-    clockPlaceholder: !form.clock,
+    startDatePlaceholder: !form.startDate,
+    startClockPlaceholder: !form.startClock,
+    endDatePlaceholder: !form.endDate,
+    endClockPlaceholder: !form.endClock,
+    regDatePlaceholder: !form.regDate,
+    regClockPlaceholder: !form.regClock,
     categoryPlaceholder: !form.category,
     locationSelected: hasLocation,
     pickerCategoryIndex: categoryIndex < 0 ? 0 : categoryIndex
@@ -101,20 +112,52 @@ Page({
     this.syncFormState({ category });
   },
 
-  updateDate(event) {
-    this.syncFormState({ date: event.detail.value });
-    this.refreshTime();
+  updateStartDate(event) {
+    this.syncFormState({ startDate: event.detail.value });
+    this.applyStartTimeDefaults();
   },
 
-  updateClock(event) {
-    this.syncFormState({ clock: event.detail.value });
-    this.refreshTime();
+  updateStartClock(event) {
+    this.syncFormState({ startClock: event.detail.value });
+    this.applyStartTimeDefaults();
   },
 
-  refreshTime() {
+  updateEndDate(event) {
+    this.syncFormState({ endDate: event.detail.value });
+  },
+
+  updateEndClock(event) {
+    this.syncFormState({ endClock: event.detail.value });
+  },
+
+  updateRegDate(event) {
+    this.syncFormState({ regDate: event.detail.value });
+  },
+
+  updateRegClock(event) {
+    this.syncFormState({ regClock: event.detail.value });
+  },
+
+  applyStartTimeDefaults() {
+    const startTime = this.parseDateTime(this.data.form.startDate, this.data.form.startClock);
+    if (!startTime) {
+      return;
+    }
     const form = this.data.form;
-    const time = form.date && form.clock ? `${form.date} ${form.clock}` : "";
-    this.syncFormState({ time });
+    const patch = {};
+    if (!form.endDate || !form.endClock) {
+      const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
+      patch.endDate = this.formatDate(endTime);
+      patch.endClock = this.formatClock(endTime);
+    }
+    if (!form.regDate || !form.regClock) {
+      const regDeadline = new Date(startTime.getTime() - 24 * 60 * 60 * 1000);
+      patch.regDate = this.formatDate(regDeadline);
+      patch.regClock = this.formatClock(regDeadline);
+    }
+    if (Object.keys(patch).length) {
+      this.syncFormState(patch);
+    }
   },
 
   chooseActivityLocation() {
@@ -425,7 +468,7 @@ Page({
       wx.showToast({ title: "请先填写活动名称和地点", icon: "none" });
       return;
     }
-    const startTime = this.parseStartTime(this.data.form.time);
+    const startTime = this.parseDateTime(this.data.form.startDate, this.data.form.startClock);
     this.setData({ planning: true });
     activityApi.planActivity({
       theme: this.data.form.title,
@@ -480,8 +523,11 @@ Page({
       wx.navigateTo({ url: "/pages/auth/login/index" });
       return;
     }
-    if (!this.data.form.title || !this.data.form.category || !this.data.form.date || !this.data.form.clock ||
-      !this.data.form.location || !this.data.form.capacity || !this.data.form.desc) {
+    if (!this.data.form.title || !this.data.form.category
+      || !this.data.form.startDate || !this.data.form.startClock
+      || !this.data.form.endDate || !this.data.form.endClock
+      || !this.data.form.regDate || !this.data.form.regClock
+      || !this.data.form.location || !this.data.form.capacity || !this.data.form.desc) {
       wx.showToast({ title: "请补全必填项", icon: "none" });
       return;
     }
@@ -493,8 +539,9 @@ Page({
       wx.showToast({ title: "请填写具体地点名称", icon: "none" });
       return;
     }
-    if (!this.parseStartTime(this.data.form.time)) {
-      wx.showToast({ title: "请选择日期和时间", icon: "none" });
+    const timeError = this.validateActivityTimes();
+    if (timeError) {
+      wx.showToast({ title: timeError, icon: "none" });
       return;
     }
     this.setData({ saving: true });
@@ -516,9 +563,9 @@ Page({
   },
 
   buildPayload(isDraft) {
-    const startTime = this.parseStartTime(this.data.form.time);
-    const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
-    const regDeadline = new Date(startTime.getTime() - 24 * 60 * 60 * 1000);
+    const startTime = this.parseDateTime(this.data.form.startDate, this.data.form.startClock);
+    const endTime = this.parseDateTime(this.data.form.endDate, this.data.form.endClock);
+    const regDeadline = this.parseDateTime(this.data.form.regDate, this.data.form.regClock);
     return {
       title: this.data.form.title,
       description: this.data.form.desc,
@@ -550,22 +597,52 @@ Page({
       && !["已选择地图位置", "正在解析地点名称", "正在定位地点"].includes(location);
   },
 
-  parseStartTime(value) {
-    const now = new Date();
-    const text = value || "";
-    const fullMatch = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})\s+(\d{1,2}):(\d{2})$/);
-    if (fullMatch) {
-      return new Date(Number(fullMatch[1]), Number(fullMatch[2]) - 1, Number(fullMatch[3]), Number(fullMatch[4]), Number(fullMatch[5]), 0);
+  parseDateTime(date, clock) {
+    if (!date || !clock) {
+      return null;
     }
-    const match = text.match(/(\d{1,2})月(\d{1,2})日\s*(\d{1,2}):(\d{2})/);
-    if (match) {
-      return new Date(now.getFullYear(), Number(match[1]) - 1, Number(match[2]), Number(match[3]), Number(match[4]), 0);
+    const dateMatch = String(date).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    const clockMatch = String(clock).match(/^(\d{1,2}):(\d{2})$/);
+    if (!dateMatch || !clockMatch) {
+      return null;
     }
-    return null;
+    return new Date(
+      Number(dateMatch[1]),
+      Number(dateMatch[2]) - 1,
+      Number(dateMatch[3]),
+      Number(clockMatch[1]),
+      Number(clockMatch[2]),
+      0
+    );
+  },
+
+  validateActivityTimes() {
+    const startTime = this.parseDateTime(this.data.form.startDate, this.data.form.startClock);
+    const endTime = this.parseDateTime(this.data.form.endDate, this.data.form.endClock);
+    const regDeadline = this.parseDateTime(this.data.form.regDate, this.data.form.regClock);
+    if (!startTime || !endTime || !regDeadline) {
+      return "请完整选择开始、结束和报名截止时间";
+    }
+    if (endTime.getTime() <= startTime.getTime()) {
+      return "结束时间必须晚于开始时间";
+    }
+    if (regDeadline.getTime() >= startTime.getTime()) {
+      return "报名截止时间必须早于开始时间";
+    }
+    return "";
+  },
+
+  formatDate(date) {
+    const pad = (value) => String(value).padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  },
+
+  formatClock(date) {
+    const pad = (value) => String(value).padStart(2, "0");
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
   },
 
   formatDateTime(date) {
-    const pad = (value) => String(value).padStart(2, "0");
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
+    return `${this.formatDate(date)}T${this.formatClock(date)}:00`;
   }
 });

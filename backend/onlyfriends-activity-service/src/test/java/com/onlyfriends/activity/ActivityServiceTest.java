@@ -60,7 +60,7 @@ class ActivityServiceTest {
     private UserClient userClient;
 
     @Test
-    void createDraftUpdateAndSubmitPublishesSmallActivity() {
+    void createDraftUpdateAndSubmitGoesToManualReview() {
         when(userClient.isUserValid(anyLong())).thenReturn(true);
 
         ActivityCreateResponse draft = activityService.create(10001L, request(true, 20, "周末徒步"));
@@ -72,15 +72,17 @@ class ActivityServiceTest {
         assertThat(updated.getStatus()).isEqualTo(0);
 
         ActivityCreateResponse submitted = activityService.submit(draft.getActivityId(), 10001L);
-        assertThat(submitted.getStatus()).isEqualTo(2);
+        assertThat(submitted.getStatus()).isEqualTo(1);
+        assertThat(submitted.getStatusText()).isEqualTo("审核中");
 
         Activity saved = activityMapper.selectById(draft.getActivityId());
         assertThat(saved.getTitle()).isEqualTo("周末城市徒步");
-        assertThat(saved.getReviewType()).isZero();
+        assertThat(saved.getReviewType()).isEqualTo(1);
 
         ActivityReviewRecord record = latestReview(draft.getActivityId());
         assertThat(record.getAiResult()).isEqualTo("pass");
-        assertThat(record.getFinalResult()).isZero();
+        assertThat(record.getFinalResult()).isEqualTo(3);
+        assertThat(record.getReviewComment()).contains("awaiting manual review");
     }
 
     @Test
@@ -103,6 +105,8 @@ class ActivityServiceTest {
     void listDetailAndTemplatesWork() {
         when(userClient.isUserValid(anyLong())).thenReturn(true);
         ActivityCreateResponse response = activityService.create(10001L, request(false, 20, "桌游聚会"));
+        assertThat(response.getStatus()).isEqualTo(1);
+        publishForTest(response.getActivityId());
 
         ActivityQueryRequest query = new ActivityQueryRequest();
         query.setKeyword("桌游");
@@ -136,6 +140,7 @@ class ActivityServiceTest {
                     .toList();
         });
         ActivityCreateResponse created = activityService.create(10001L, request(false, 1, "小班桌游"));
+        publishForTest(created.getActivityId());
 
         ActivityRegistrationStatusResponse first = activityService.register(created.getActivityId(), 20001L);
         assertThat(first.getRegistrationStatusText()).isEqualTo("registered");
@@ -170,6 +175,7 @@ class ActivityServiceTest {
         when(userClient.getUserCredit(anyLong())).thenReturn(100);
 
         ActivityCreateResponse created = activityService.create(10001L, request(false, 20, "城市徒步签到"));
+        publishForTest(created.getActivityId());
         activityService.register(created.getActivityId(), 20001L);
 
         ActivityCheckinQrcodeResponse qrcode = activityService.generateCheckinQrcode(created.getActivityId(), 10001L);
@@ -209,6 +215,7 @@ class ActivityServiceTest {
         });
 
         ActivityCreateResponse created = activityService.create(10001L, request(false, 20, "总结评价活动"));
+        publishForTest(created.getActivityId());
         activityService.register(created.getActivityId(), 20001L);
         ActivityCheckinQrcodeResponse qrcode = activityService.generateCheckinQrcode(created.getActivityId(), 10001L);
         ActivityCheckinRequest checkinRequest = new ActivityCheckinRequest();
@@ -373,5 +380,11 @@ class ActivityServiceTest {
                 .eq(ActivityReviewRecord::getActivityId, activityId)
                 .orderByDesc(ActivityReviewRecord::getId)
                 .last("LIMIT 1"));
+    }
+
+    private void publishForTest(Long activityId) {
+        Activity activity = activityMapper.selectById(activityId);
+        activity.setStatus(2);
+        activityMapper.updateById(activity);
     }
 }
