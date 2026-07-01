@@ -1,5 +1,6 @@
 # Gateway 微信云托管镜像构建
-# 目标目录填 backend，Dockerfile 填 Dockerfile.gateway，监听端口 8080
+# 流水线配置：目标目录=backend，Dockerfile=Dockerfile.gateway，端口=8080
+# 注意：目标目录必须是 backend，不要用仓库根目录的 Dockerfile
 
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
