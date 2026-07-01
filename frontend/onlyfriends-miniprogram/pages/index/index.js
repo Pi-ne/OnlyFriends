@@ -40,23 +40,17 @@ Page({
   },
 
   loadActivities(key) {
+    if (key === "nearby") {
+      this.loadNearbyActivities();
+      return;
+    }
+
     this.setData({ activeTab: key, loading: true, error: "" });
-    const fetchList = (extra = {}) => activityApi.listActivities({
+    activityApi.listActivities({
       tab: key,
       page: 1,
-      size: 20,
-      ...extra
-    });
-
-    const request = key === "nearby"
-      ? this.getCurrentLocation().then((location) => fetchList({
-        lat: location.latitude,
-        lng: location.longitude,
-        radius: 5000
-      }))
-      : fetchList();
-
-    request.then((page) => {
+      size: 20
+    }).then((page) => {
       const list = (page.list || []).map((item, index) => this.normalizeActivity(item, index));
       this.refreshList(key, list);
     }).catch((err) => {
@@ -71,12 +65,42 @@ Page({
     });
   },
 
+  loadNearbyActivities() {
+    this.setData({ activeTab: "nearby", loading: true, error: "" });
+    this.getCurrentLocation()
+      .then((location) => activityApi.listActivities({
+        tab: "nearby",
+        page: 1,
+        size: 20,
+        lat: location.latitude,
+        lng: location.longitude,
+        radius: 50000
+      }))
+      .then((page) => {
+        const list = (page.list || []).map((item, index) => this.normalizeActivity(item, index));
+        this.refreshList("nearby", list);
+      })
+      .catch((err) => {
+        this.setData({
+          currentList: [],
+          activities: [],
+          showMapSuggestion: false,
+          error: err.message || "附近活动加载失败"
+        });
+      })
+      .finally(() => {
+        this.setData({ loading: false });
+      });
+  },
+
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
       wx.getLocation({
         type: "gcj02",
         success: resolve,
-        fail: () => reject(new Error("需要定位权限才能查看附近活动"))
+        fail: () => {
+          reject(new Error("无法获取当前位置，请开启定位权限后查看附近活动"));
+        }
       });
     });
   },
@@ -103,7 +127,9 @@ Page({
   normalizeActivity(item, index) {
     const maxParticipants = item.maxParticipants || 0;
     const fee = Number(item.fee || 0);
-    const distanceMeters = item.distanceMeters || 0;
+    const rawDistanceMeters = item.distanceMeters;
+    const distanceMeters = Number(rawDistanceMeters);
+    const hasDistance = rawDistanceMeters !== undefined && rawDistanceMeters !== null && Number.isFinite(distanceMeters);
     const status = item.statusText || "待开放";
     const tags = item.tags || [];
     const coverIndex = index % COVER_CLASSES.length;
@@ -117,8 +143,8 @@ Page({
       chipTone: CHIP_TONES[coverIndex],
       time: this.formatTime(item.startTime),
       location: item.locationName || item.locationDetail || "地点待定",
-      distance: distanceMeters ? `${(distanceMeters / 1000).toFixed(1)} km` : "距离待定",
-      distanceMeters,
+      distance: hasDistance ? `${(distanceMeters / 1000).toFixed(1)} km` : "",
+      distanceMeters: hasDistance ? distanceMeters : Number.MAX_SAFE_INTEGER,
       fee: fee > 0 ? `¥${fee}` : "免费",
       joined: item.currentCount || 0,
       capacity: maxParticipants > 0 ? maxParticipants : "不限",

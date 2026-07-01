@@ -66,6 +66,7 @@ Page({
   },
 
   onShow() {
+    this.consumePendingLocation();
     wx.pageScrollTo({
       scrollTop: 0,
       duration: 0
@@ -78,6 +79,15 @@ Page({
       form,
       ui: createUiHints(form)
     });
+  },
+
+  consumePendingLocation() {
+    const location = wx.getStorageSync("pendingActivityLocation");
+    if (!location) {
+      return;
+    }
+    wx.removeStorageSync("pendingActivityLocation");
+    this.applyChosenLocation(location);
   },
 
   updateField(event) {
@@ -108,6 +118,33 @@ Page({
   },
 
   chooseActivityLocation() {
+    const form = this.data.form;
+    const params = [];
+    if (Number.isFinite(Number(form.locationLat)) && Number.isFinite(Number(form.locationLng))) {
+      params.push(`latitude=${encodeURIComponent(form.locationLat)}`);
+      params.push(`longitude=${encodeURIComponent(form.locationLng)}`);
+    }
+    if (form.location) {
+      params.push(`name=${encodeURIComponent(form.location)}`);
+    }
+    if (form.locationDetail) {
+      params.push(`detail=${encodeURIComponent(form.locationDetail)}`);
+    }
+    wx.navigateTo({
+      url: `/pages/location/picker/index${params.length ? `?${params.join("&")}` : ""}`,
+      events: {
+        locationSelected: (location) => {
+          wx.removeStorageSync("pendingActivityLocation");
+          this.applyChosenLocation(location);
+        }
+      },
+      fail: () => {
+        this.openNativeLocationPicker();
+      }
+    });
+  },
+
+  openNativeLocationPicker() {
     wx.getLocation({
       type: "gcj02",
       success: (res) => {
@@ -141,26 +178,42 @@ Page({
   applyChosenLocation(res) {
     const chosen = this.normalizeChosenLocation(res);
     if (this.isSuspiciousDefaultLocation(chosen)) {
+      if (chosen.resolvedByText) {
+        this.resolveLocationByText(chosen);
+        return;
+      }
       this.clearChosenLocation();
       wx.showModal({
         title: "请重新选择地图位置",
-        content: "当前只拿到了地图默认中心点。请在地图页搜索地点并点选结果，或拖动红点到真实位置后再确认。",
+        content: "当前只拿到了地图默认中心点。请搜索地点并点选结果后再确认。",
         showCancel: false
       });
       return;
     }
+    if (!Number.isFinite(chosen.latitude) || !Number.isFinite(chosen.longitude)) {
+      this.clearChosenLocation();
+      wx.showModal({
+        title: "请重新选择地图位置",
+        content: "当前没有拿到有效经纬度。请在地图页搜索地点并点选结果，或拖动红点到真实位置后再确认。",
+        showCancel: false
+      });
+      return;
+    }
+    const fallbackName = chosen.name || "正在解析地点名称";
+    const fallbackDetail = chosen.detail || "正在通过腾讯地图解析地址";
     this.syncFormState({
-      location: chosen.name,
-      locationDetail: chosen.detail,
+      location: fallbackName,
+      locationDetail: fallbackDetail,
       locationLat: chosen.latitude,
       locationLng: chosen.longitude
     });
     this.setData({
       locationMarkers: this.createLocationMarkers(chosen)
     });
-    if (!chosen.resolvedByText) {
-      this.reverseGeocodeLocation(chosen.latitude, chosen.longitude);
+    if (chosen.resolvedByText) {
+      return;
     }
+    this.reverseGeocodeLocation(chosen.latitude, chosen.longitude, chosen);
   },
 
   normalizeChosenLocation(res) {
@@ -173,12 +226,14 @@ Page({
     const detail = this.cleanLocationText(
       res.address || res.formattedAddress || res.addr || res.name || res.poiName || res.title || res.locationName
     );
+    const source = this.cleanLocationText(res.source || res.resolveSource);
 
     return {
       name,
       detail,
       latitude,
       longitude,
+      source,
       resolvedByText: Boolean(name || detail)
     };
   },
@@ -198,14 +253,24 @@ Page({
   },
 
   isSuspiciousDefaultLocation(location) {
-    if (location.resolvedByText) {
+    if (["search", "geocode"].includes(location.source)) {
       return false;
+    }
+    if (location.resolvedByText) {
+      return this.isDefaultMapCenter(location.latitude, location.longitude);
     }
     if (!Number.isFinite(location.latitude) || !Number.isFinite(location.longitude)) {
       return true;
     }
-    return Math.abs(location.latitude - DEFAULT_WECHAT_MAP_CENTER.latitude) < 0.002
-      && Math.abs(location.longitude - DEFAULT_WECHAT_MAP_CENTER.longitude) < 0.002;
+    return this.isDefaultMapCenter(location.latitude, location.longitude);
+  },
+
+  isDefaultMapCenter(latitude, longitude) {
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      return true;
+    }
+    return Math.abs(latitude - DEFAULT_WECHAT_MAP_CENTER.latitude) < 0.002
+      && Math.abs(longitude - DEFAULT_WECHAT_MAP_CENTER.longitude) < 0.002;
   },
 
   createLocationMarkers(location) {
@@ -224,9 +289,10 @@ Page({
     return Boolean(err && err.errMsg && err.errMsg.includes("cancel"));
   },
 
-  reverseGeocodeLocation(latitude, longitude) {
+  reverseGeocodeLocation(latitude, longitude, chosen) {
     const key = app.globalData.tencentMapKey;
     if (!key || !Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      this.showLocationResolveFallback(chosen);
       return;
     }
     wx.request({
@@ -237,24 +303,119 @@ Page({
         key
       },
       success: (res) => {
+        if (res.data && res.data.status !== 0) {
+          console.warn("腾讯地图逆地址解析失败", res.data);
+          this.showLocationResolveFallback(chosen);
+          return;
+        }
         const result = res.data && res.data.result;
         if (!result) {
+          this.showLocationResolveFallback(chosen);
           return;
         }
         const poi = result.pois && result.pois.length ? result.pois[0] : null;
-        const name = this.cleanLocationText(poi && poi.title) || this.cleanLocationText(result.formatted_addresses && result.formatted_addresses.recommend) || this.cleanLocationText(result.address);
-        const detail = this.cleanLocationText(poi && poi.address) || this.cleanLocationText(result.address);
+        const name = this.cleanLocationText(chosen && chosen.name)
+          || this.cleanLocationText(poi && poi.title)
+          || this.cleanLocationText(result.formatted_addresses && result.formatted_addresses.recommend)
+          || this.cleanLocationText(result.address);
+        const detail = this.cleanLocationText(chosen && chosen.detail)
+          || this.cleanLocationText(poi && poi.address)
+          || this.cleanLocationText(result.address);
         if (!name && !detail) {
+          this.showLocationResolveFallback(chosen);
           return;
         }
         this.syncFormState({
           location: name || detail,
           locationDetail: detail || name
         });
+      },
+      fail: () => {
+        this.showLocationResolveFallback(chosen);
       }
     });
   },
 
+  resolveLocationByText(chosen) {
+    const key = app.globalData.tencentMapKey;
+    const keyword = this.cleanLocationText(`${chosen.name} ${chosen.detail}`);
+    if (!key || !keyword) {
+      this.clearChosenLocation();
+      wx.showModal({
+        title: "请重新选择地图位置",
+        content: "当前没有拿到真实坐标。请在选址页搜索地点并点选搜索结果。",
+        showCancel: false
+      });
+      return;
+    }
+    this.setData({
+      locationMarkers: []
+    });
+    this.syncFormState({
+      location: chosen.name || chosen.detail || "正在定位地点",
+      locationDetail: "正在根据地点名获取真实坐标",
+      locationLat: null,
+      locationLng: null
+    });
+    wx.request({
+      url: "https://apis.map.qq.com/ws/geocoder/v1/",
+      data: {
+        address: keyword,
+        key
+      },
+      success: (res) => {
+        if (res.data && res.data.status !== 0) {
+          console.warn("腾讯地图地址解析失败", res.data);
+          this.clearChosenLocation();
+          wx.showModal({
+            title: "地点坐标获取失败",
+            content: "当前地图接口没有返回真实坐标，请在选址页搜索地点并点选搜索结果后再确认。",
+            showCancel: false
+          });
+          return;
+        }
+        const result = res.data && res.data.result;
+        const location = result && result.location;
+        const latitude = Number(location && location.lat);
+        const longitude = Number(location && location.lng);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+          this.clearChosenLocation();
+          wx.showModal({
+            title: "地点坐标获取失败",
+            content: "当前地图接口没有返回有效经纬度，请重新搜索并点选地点。",
+            showCancel: false
+          });
+          return;
+        }
+        this.applyChosenLocation({
+          name: chosen.name || result.title || keyword,
+          detail: chosen.detail || result.address || keyword,
+          latitude,
+          longitude,
+          source: "geocode"
+        });
+      },
+      fail: () => {
+        this.clearChosenLocation();
+        wx.showModal({
+          title: "地点坐标获取失败",
+          content: "网络请求失败，请重新搜索并点选地点。",
+          showCancel: false
+        });
+      }
+    });
+  },
+
+  showLocationResolveFallback(chosen) {
+    if (chosen && chosen.resolvedByText) {
+      return;
+    }
+    this.syncFormState({
+      location: "已选择地图位置",
+      locationDetail: "腾讯地图暂未返回地点名，请在下方补充"
+    });
+    wx.showToast({ title: "已保存经纬度，请补充地点名称", icon: "none" });
+  },
   generateAiPlan() {
     if (!wx.getStorageSync("accessToken")) {
       wx.navigateTo({ url: "/pages/auth/login/index" });
@@ -385,7 +546,8 @@ Page({
 
   hasReadableLocationName() {
     const location = this.cleanLocationText(this.data.form.location);
-    return Boolean(location);
+    return Boolean(location)
+      && !["已选择地图位置", "正在解析地点名称", "正在定位地点"].includes(location);
   },
 
   parseStartTime(value) {

@@ -209,11 +209,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 20rpx;
+  gap: 16rpx;
   margin-bottom: 20rpx;
 }
 
-.map-head-text {
+.map-title-block {
   flex: 1;
   min-width: 0;
 }
@@ -228,9 +228,25 @@
   line-height: 1.5;
 }
 
-.map-head .btn {
-  flex-shrink: 0;
-  margin-top: 4rpx;
+.map-nav-btn {
+  flex: 0 0 92rpx;
+  width: 92rpx;
+  height: 52rpx;
+  margin-top: 2rpx;
+  border-radius: 999rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0faf5;
+  border: 1rpx solid rgba(31, 122, 90, 0.18);
+  color: #1f7a5a;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.map-nav-btn-active {
+  background: #e2f2ea;
 }
 
 .activity-map {

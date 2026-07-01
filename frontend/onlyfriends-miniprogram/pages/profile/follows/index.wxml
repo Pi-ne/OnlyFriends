@@ -10,9 +10,9 @@
     </view>
   </view>
 
-  <view wx:if="{{loading}}" class="follow-state card">正在加载关注列表...</view>
-  <view wx:elif="{{error}}" class="follow-state follow-error card">{{error}}</view>
-  <view wx:elif="{{users.length === 0}}" class="follow-state card">{{activeTab === "following" ? "暂无关注用户。" : "暂无粉丝。"}}</view>
+  <view wx:if="{{loading}}" class="state card">正在加载关注列表...</view>
+  <view wx:elif="{{error}}" class="state error card">{{error}}</view>
+  <view wx:elif="{{users.length === 0}}" class="state card">{{activeTab === "following" ? "暂无关注用户。" : "暂无粉丝。"}}</view>
 
   <view class="follow-list">
     <view wx:for="{{users}}" wx:key="id" class="follow-user card">

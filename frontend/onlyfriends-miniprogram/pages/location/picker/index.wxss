@@ -1,0 +1,155 @@
+.picker-page {
+  position: relative;
+  min-height: 100vh;
+  background: #f7f8fb;
+  overflow: hidden;
+}
+
+.picker-map {
+  width: 100%;
+  height: 100vh;
+}
+
+.search-panel {
+  position: fixed;
+  top: 24rpx;
+  left: 24rpx;
+  right: 24rpx;
+  z-index: 4;
+  padding: 18rpx;
+  border: 1rpx solid #e8ecf2;
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12rpx 34rpx rgba(25, 32, 43, 0.12);
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  height: 72rpx;
+  padding: 0 22rpx;
+  border-radius: 12rpx;
+  background: #f0f2f5;
+  color: #19202b;
+  font-size: 26rpx;
+}
+
+.clear-btn {
+  flex: 0 0 88rpx;
+  height: 72rpx;
+  border-radius: 12rpx;
+  background: #edf7f2;
+  color: #1f7a5a;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.state-line {
+  margin-top: 12rpx;
+  color: #626d7c;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.state-line.error {
+  color: #b5473f;
+}
+
+.suggestion-panel {
+  position: fixed;
+  top: 154rpx;
+  left: 24rpx;
+  right: 24rpx;
+  z-index: 4;
+  max-height: 520rpx;
+  padding: 4rpx 0;
+  overflow: hidden;
+}
+
+.suggestion-item {
+  padding: 20rpx 22rpx;
+  border-bottom: 1rpx solid #edf0f4;
+  background: #ffffff;
+}
+
+.suggestion-item:last-child {
+  border-bottom: 0;
+}
+
+.suggestion-title {
+  color: #19202b;
+  font-size: 28rpx;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.suggestion-detail {
+  margin-top: 8rpx;
+  color: #626d7c;
+  font-size: 23rpx;
+  line-height: 1.4;
+}
+
+.suggestion-coord {
+  margin-top: 8rpx;
+  color: #8b96a5;
+  font-size: 21rpx;
+  line-height: 1.3;
+}
+
+.bottom-panel {
+  position: fixed;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 34rpx;
+  z-index: 3;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 16rpx 42rpx rgba(25, 32, 43, 0.14);
+}
+
+.selected-block,
+.empty-block {
+  min-height: 122rpx;
+}
+
+.selected-name,
+.empty-title {
+  color: #19202b;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.selected-detail,
+.empty-detail {
+  margin-top: 8rpx;
+  color: #626d7c;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.selected-coord {
+  margin-top: 10rpx;
+  color: #1f7a5a;
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 180rpx 1fr;
+  gap: 18rpx;
+  margin-top: 22rpx;
+}
+
+.actions .btn {
+  width: 100%;
+}

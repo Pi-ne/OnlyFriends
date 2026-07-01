@@ -54,11 +54,13 @@
 
     <view wx:if="{{activity.hasLocation}}" class="section card map-card">
       <view class="map-head">
-        <view class="map-head-text">
+        <view class="map-title-block">
           <view class="section-title compact">活动地点</view>
           <view class="muted map-address">{{activity.locationDetail || activity.location}}</view>
         </view>
-        <button class="btn ghost small" bindtap="openNavigation">导航</button>
+        <view class="map-nav-btn" hover-class="map-nav-btn-active" bindtap="openNavigation">
+          <text>导航</text>
+        </view>
       </view>
       <map
         class="activity-map"
